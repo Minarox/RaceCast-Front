@@ -126,7 +126,6 @@
         }
         const vectorContext = getVectorContext(event);
         const elapsedRatio = elapsed / this.duration;
-        // radius will be 8 at start and 30 at end.
         const radius = easeOut(elapsedRatio) * 25 + 12;
         const opacity = easeOut(1 - elapsedRatio);
 
@@ -155,5 +154,7 @@
 <style lang="scss" scoped>
   article {
     flex: 1;
+    min-height: 260px;
+    overflow: hidden;
   }
 </style>

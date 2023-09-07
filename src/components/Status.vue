@@ -49,7 +49,7 @@
 
 <style lang="scss" scoped>
   article {
-    height: 52px;
+    height: 70px;
     padding: 0.8rem 0;
 
     p {

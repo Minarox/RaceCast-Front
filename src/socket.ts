@@ -26,7 +26,6 @@ export interface Mpu6050 {
   gyro: {
     x: number;
     y: number;
-    z: number;
   };
   accel: {
     x: number;

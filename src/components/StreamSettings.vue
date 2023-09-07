@@ -34,7 +34,6 @@
 <style lang="scss" scoped>
   article {
     padding: 0.4rem;
-    width: calc(100% - 0.8rem) !important;
 
     form {
       display: grid;

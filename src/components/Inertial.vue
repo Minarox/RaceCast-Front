@@ -116,20 +116,13 @@
     computed: {
       accelerometer(): { x: number; y: number; z: number } | null {
         if (state.data.mpu6050) {
-          return {
-            x: state.data.mpu6050.accel.x,
-            y: state.data.mpu6050.accel.z * -1,
-            z: state.data.mpu6050.accel.y,
-          };
+          return state.data.mpu6050.accel;
         }
         return null;
       },
       gyroscope(): { x: number; y: number } | null {
         if (state.data.mpu6050) {
-          return {
-            x: state.data.mpu6050.gyro.y,
-            y: state.data.mpu6050.gyro.x * -1,
-          };
+          return state.data.mpu6050.gyro;
         }
         return null;
       },
@@ -156,14 +149,11 @@
       });
       ["mousedown", "touchstart"].forEach((type) => {
         const element = document.getElementById("accel-chart");
-        if (element)
-          element.addEventListener(type, this.click, {
-            passive: true,
-          });
+        if (element) element.addEventListener(type, this.click, false);
       });
     },
     methods: {
-      click(event: MouseEvent | TouchEvent): void {
+      click(event): void {
         this.element = event.target;
         while (this.element.id !== "accel-chart") {
           this.element = this.element.parentNode;
@@ -175,12 +165,10 @@
         };
 
         ["mousemove", "touchmove"].forEach((type) => {
-          document.addEventListener(type, this.drag, {
-            passive: true,
-          });
+          document.addEventListener(type, this.drag, false);
         });
       },
-      drag(event: MouseEvent | TouchEvent): void {
+      drag(event): void {
         if (this.animation) {
           this.animation = false;
 
@@ -203,9 +191,7 @@
       },
       release(): void {
         ["mousemove", "touchmove"].forEach((type) => {
-          document.removeEventListener(type, this.drag, {
-            passive: true,
-          });
+          document.removeEventListener(type, this.drag, false);
         });
         this.pose = {
           x: 0,
@@ -235,6 +221,7 @@
     align-items: center;
     display: flex;
     flex-flow: column nowrap;
+    height: 240px;
     justify-content: center;
     padding-bottom: 0.4rem;
     width: 100%;

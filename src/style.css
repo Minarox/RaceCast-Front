@@ -14,6 +14,12 @@
     -webkit-text-size-adjust: 100%;
 }
 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 a {
     color: #646cff;
     font-weight: 500;
@@ -25,7 +31,6 @@ a:hover {
 }
 
 body {
-    margin: 0;
     overflow: hidden;
 }
 
@@ -34,19 +39,15 @@ h1 {
     line-height: 1.1;
 }
 
-p {
-    margin: 0;
-}
-
 button {
     background-color: #1a1a1a;
     border: 1px solid transparent;
     border-radius: 8px;
     cursor: pointer;
     font-family: inherit;
-    font-size: 1em;
+    font-size: 1.2em;
     font-weight: 500;
-    padding: 0.6em 1.2em;
+    padding: 1.2em 2.4em;
     transition: border-color 0.25s;
 }
 
@@ -64,6 +65,14 @@ button:focus-visible {
     width: 100vw;
 }
 
+video {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
 @media (prefers-color-scheme: light) {
     :root {
         background-color: #ffffff;
@@ -75,7 +84,7 @@ button:focus-visible {
     }
 
     button {
-        background-color: #f9f9f9;
+        background-color: #f1f1f1;
     }
 }
 

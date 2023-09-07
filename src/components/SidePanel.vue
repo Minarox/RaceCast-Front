@@ -1,7 +1,6 @@
 <script lang="ts">
   import Status from "@/components/Status.vue";
   import State from "@/components/State.vue";
-  import StreamSettings from "@/components/StreamSettings.vue";
   import OpenLayers from "@/components/OpenLayers.vue";
   import Speed from "@/components/Speed.vue";
   import Inertial from "@/components/Inertial.vue";
@@ -13,53 +12,72 @@
       Speedometer,
       Status,
       State,
-      StreamSettings,
       OpenLayers,
       Speed,
       Inertial,
     },
+    props: {
+      webrtc: {
+        type: Boolean,
+        default: false,
+        required: true,
+      },
+    },
+    emits: ["lock"],
     data() {
       return {
-        open: true,
+        open: false as boolean,
+        lock: false as boolean,
       };
+    },
+    watch: {
+      lock(boolean) {
+        if (boolean) this.open = true;
+        this.$emit("lock", boolean);
+      },
+    },
+    methods: {
+      toggle() {
+        if (this.lock) return;
+        this.open = !this.open;
+      },
     },
   };
 </script>
 
 <template>
   <aside :class="open ? 'opened' : ''">
-    <Status />
-    <State />
-    <StreamSettings />
-    <OpenLayers />
-    <Speed />
-    <Inertial />
-    <div id="arrow" @click.prevent="open = !open">
+    <div id="wrapper">
+      <Status />
+      <State :webrtc="webrtc" />
+      <OpenLayers />
+      <Speed />
+      <Inertial />
+    </div>
+    <div id="pin" @click.prevent="lock = !lock">
+      <Transition name="fade">
+        <img v-if="lock" alt="Locked" src="@/assets/lock-solid.svg" />
+        <img v-else alt="Unlocked" src="@/assets/unlock-solid.svg" />
+      </Transition>
+    </div>
+    <div id="arrow" @click.prevent="toggle">
       <img :class="open ? 'opened' : ''" alt="Arrow" src="@/assets/arrow.svg" />
     </div>
     <div id="speed">
       <Speedometer />
     </div>
+    <span v-if="open && !lock" id="close" @click.prevent="toggle" />
   </aside>
 </template>
 
 <style lang="scss" scoped>
   aside {
-    align-items: center;
-    backdrop-filter: blur(4px);
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
     bottom: 0;
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 0.8rem;
-    justify-content: flex-start;
-    margin: 1rem;
-    padding: 1rem;
+    margin: 0.8rem;
     position: absolute;
     right: 0;
     top: 0;
-    transform: translateX(calc(380px + 3rem));
+    transform: translateX(calc(380px + 0.8rem * 2));
     transition: transform 0.3s ease-in-out;
     width: 380px;
     z-index: 100;
@@ -68,40 +86,64 @@
       transform: translateX(0);
     }
 
-    > article {
+    > #wrapper {
       align-items: center;
-      background-color: rgba(255, 255, 255, 0.87);
-      border-radius: 6px;
-      color: #242424;
+      backdrop-filter: blur(4px);
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
       display: flex;
-      justify-content: center;
-      overflow: hidden;
-      width: 100%;
+      flex-flow: column nowrap;
+      gap: 0.8rem;
+      height: 100%;
+      justify-content: flex-start;
+      overflow-y: overlay;
+      padding: 1rem;
+
+      > article {
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.87);
+        border-radius: 6px;
+        color: #242424;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
     }
 
-    > #arrow {
+    > #arrow,
+    > #pin {
       align-items: center;
       border-radius: 8px;
       cursor: pointer;
       display: flex;
-      height: 36px;
       justify-content: center;
       padding: 14rem 0.6rem 14rem 2rem;
       position: absolute;
-      right: calc(380px + 2rem);
+      right: calc(380px + 0.8rem);
       top: 50%;
       transform: translateY(-50%);
-      width: 36px;
 
       img {
-        height: 100%;
+        height: 40px;
         transform: rotate(180deg);
         transition: transform 180ms ease-in-out;
-        width: 100%;
+        width: 40px;
 
         &.opened {
           transform: rotate(0deg);
         }
+      }
+    }
+
+    > #pin {
+      padding: 0.6rem 0.8rem 2rem 2rem;
+      top: 0;
+      transform: translateY(0);
+
+      img {
+        height: 26px;
+        transform: rotate(0deg);
+        width: 26px;
       }
     }
 
@@ -114,8 +156,17 @@
       justify-content: center;
       pointer-events: none;
       position: absolute;
-      right: calc(380px + 3rem);
+      right: calc(380px + 0.8rem);
       width: 260px;
+    }
+
+    #close {
+      height: 100vh;
+      position: absolute;
+      right: calc(380px + 0.8rem);
+      top: -0.8rem;
+      width: calc(100vw - 380px - 0.8rem * 2);
+      z-index: -1;
     }
   }
 </style>
