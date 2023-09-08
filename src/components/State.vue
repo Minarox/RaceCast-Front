@@ -31,8 +31,8 @@
     display: grid !important;
     gap: 0.4rem;
     grid-template-columns: repeat(3, 1fr);
-    height: 41px;
     justify-items: center;
+    min-height: 41px;
     padding: 0.4rem;
 
     p {

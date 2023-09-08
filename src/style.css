@@ -75,8 +75,8 @@ video {
 
 @media (prefers-color-scheme: light) {
     :root {
-        background-color: #ffffff;
-        color: #213547;
+        /*background-color: #ffffff;*/
+        /*color: #213547;*/
     }
 
     a:hover {

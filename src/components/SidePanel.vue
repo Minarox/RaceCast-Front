@@ -55,10 +55,10 @@
       <Inertial />
     </div>
     <div id="pin" @click.prevent="lock = !lock">
-      <Transition name="fade">
+      <TransitionGroup name="fade">
         <img v-if="lock" alt="Locked" src="@/assets/lock-solid.svg" />
         <img v-else alt="Unlocked" src="@/assets/unlock-solid.svg" />
-      </Transition>
+      </TransitionGroup>
     </div>
     <div id="arrow" @click.prevent="toggle">
       <img :class="open ? 'opened' : ''" alt="Arrow" src="@/assets/arrow.svg" />

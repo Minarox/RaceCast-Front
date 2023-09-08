@@ -115,6 +115,7 @@
 
   #wrapper {
     height: 100%;
+    position: relative;
     transition: width 0.3s ease-in-out;
     width: 100%;
 

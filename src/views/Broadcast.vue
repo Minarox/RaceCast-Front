@@ -9,16 +9,24 @@
         room: Room,
         interval: null,
         url: "wss://racecast-ix8aqrct.livekit.cloud" as string,
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTQxMzg1NzIsImlzcyI6IkFQSWZ2YVdZNUt1UEdaUiIsIm5iZiI6MTY5NDAzNzc3Miwic3ViIjoiUmFjZWNhciIsInZpZGVvIjp7ImNhblB1Ymxpc2giOnRydWUsImNhblB1Ymxpc2hEYXRhIjp0cnVlLCJjYW5TdWJzY3JpYmUiOnRydWUsInJvb20iOiJMaXZlIiwicm9vbUpvaW4iOnRydWV9fQ._wljfHH_Hqzgcaz31LvPi8I1g-QLkrspq57T23ZU3rc" as string,
+        token: "" as string,
       };
     },
     mounted() {
       socket.close();
-      this.launch();
+      this.requestToken();
     },
     methods: {
-      async launch() {
+      requestToken() {
+        console.log("requesting token");
+        fetch(`https://rallye.minarox.fr/getBroadcastToken`)
+          .then((res) => res.json())
+          .then((data) => {
+            this.token = data.token;
+            this.start();
+          });
+      },
+      async start() {
         // creates a new room with options
         this.room = new Room({
           // automatically manage subscribed video quality
@@ -46,13 +54,13 @@
             videoCodec: "vp9",
             videoEncoding: {
               maxFramerate: 30,
-              maxBitrate: 2_000_000,
+              maxBitrate: 1_700_000,
             },
             backupCodec: {
               codec: "h264",
               encoding: {
                 maxFramerate: 30,
-                maxBitrate: 2_000_000,
+                maxBitrate: 1_700_000,
               },
             },
             audioPreset: {
@@ -85,8 +93,8 @@
         console.log("disconnected from room");
         if (this.interval) return;
         this.interval = setInterval(() => {
-          this.launch();
-        }, 8000);
+          this.requestToken();
+        }, 6000);
       },
     },
   };
