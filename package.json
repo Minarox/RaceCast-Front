@@ -43,7 +43,7 @@
     "vite": "^4.4.5",
     "vite-plugin-pwa": "^0.16.5",
     "vue-eslint-parser": "9.3.1",
-    "vue-tsc": "^1.8.14"
+    "vue-tsc": "^1.8.15"
   },
   "bugs": {
     "url": "https://github.com/RaceCast/Front-End/issues",
