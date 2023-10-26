@@ -38,7 +38,7 @@
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-vue": "9.18.0",
     "prettier": "3.0.3",
-    "sass": "1.69.4",
+    "sass": "1.69.5",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
     "vite-plugin-pwa": "^0.16.5",
