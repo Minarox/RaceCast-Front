@@ -29,7 +29,7 @@
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@types/node": "20.9.2",
+    "@types/node": "20.9.3",
     "@types/socket.io-client": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "6.11.0",
     "@typescript-eslint/parser": "6.11.0",
