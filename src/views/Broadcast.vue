@@ -8,7 +8,7 @@
       return {
         room: Room,
         interval: null,
-        url: "wss://racecast-ix8aqrct.livekit.cloud" as string,
+        url: "wss://racecast-54au9qa5.livekit.cloud" as string,
         token: "" as string,
       };
     },
