@@ -1,5 +1,4 @@
 import { reactive } from "vue";
-import io from "socket.io-client";
 
 // Define interfaces
 export interface Data {
@@ -40,7 +39,6 @@ export interface Mpu6050 {
 }
 
 export interface Status {
-  socket: string | null;
   online: boolean;
   latency: number | null;
   lastConnection: number | null;
@@ -48,7 +46,6 @@ export interface Status {
 
 // Define global variables
 const status: Status = {
-  socket: null,
   online: false,
   latency: null,
   lastConnection: null,
@@ -68,43 +65,4 @@ export const state = reactive({
   online: false,
   status,
   data,
-});
-
-export const socket = io("https://rallye.minarox.fr", {
-  reconnectionDelay: 2000,
-  reconnectionDelayMax: 2000,
-  timeout: 2000,
-  retries: Infinity,
-});
-
-socket.on("connect", (): void => {
-  state.online = true;
-});
-
-socket.on("disconnect", (): void => {
-  state.online = false;
-});
-
-socket.on("status", (status: Status): void => {
-  state.status = status;
-});
-
-socket.on("latency", (latency: number): void => {
-  state.status.latency = latency;
-});
-
-socket.on("mpu6050", (sensor_data: Mpu6050): void => {
-  state.data.mpu6050 = sensor_data;
-});
-
-socket.on("gps", (sensor_data: Gps): void => {
-  state.data.gps = sensor_data;
-});
-
-socket.on("state", (state_data: State): void => {
-  state.data.state = state_data;
-});
-
-socket.on("lastData", (data: Data): void => {
-  state.data = data;
 });

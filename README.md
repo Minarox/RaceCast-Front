@@ -6,14 +6,14 @@
     <img src="https://avatars.githubusercontent.com/u/134273283?s=80" alt="Logo" width="auto" height="80" style="border-radius: 8px">
 </a>
 
-<h3 align="center">Front-End</h3>
+<h3 align="center">User</h3>
 
-![Project Version](https://img.shields.io/github/package-json/v/RaceCast/Front-End?label=Version)&nbsp;
-![Project License](https://img.shields.io/github/license/RaceCast/Front-End?label=Licence)&nbsp;
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/RaceCast/Front-End/node.js.yml?label=Build)
+![Project Version](https://img.shields.io/github/package-json/v/RaceCast/User?label=Version)&nbsp;
+![Project License](https://img.shields.io/github/license/RaceCast/User?label=Licence)&nbsp;
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/RaceCast/User/node.js.yml?label=Build)
 
   <p align="center">
-    Interface for displaying race car data.
+    Interface for displaying race car datas and stream.
     <br />
     <a href="https://rallye.minarox.fr/"><strong>rallye.minarox.fr »</strong></a>
   </p>
@@ -50,7 +50,6 @@ User interface gathering the information and the video stream returned by the on
 
 - User connection status
 - System connection status with latency
-- Shutter status of the camera
 - GPS location of the car
 - Speed of the car
 - Temperature of the car's interior
@@ -64,9 +63,9 @@ User interface gathering the information and the video stream returned by the on
     - [EsLint](https://eslint.org/)
     - [Prettier](https://prettier.io/)
     - [Register Service Worker](https://www.npmjs.com/package/register-service-worker)
-- [Socket.io](https://socket.io/)
 - [OpenLayers](https://openlayers.org/)
 - [Chart.js](https://www.chartjs.org/)
+- [LiveKit](https://livekit.io/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

@@ -8,9 +8,5 @@ export default createRouter({
       path: "/",
       component: Home,
     },
-    {
-      path: "/broadcast",
-      component: () => import("@/views/Broadcast.vue"),
-    },
   ],
 });

@@ -14,7 +14,7 @@
     data() {
       return {
         play: false as boolean,
-        url: "wss://racecast-54au9qa5.livekit.cloud" as string,
+        url: "wss://live.minarox.fr" as string,
         token: "" as string,
       };
     },
@@ -34,11 +34,8 @@
 
         // creates a new room with options
         const room = new Room({
-          // automatically manage subscribed video quality
           adaptiveStream: true,
-
-          // optimize publishing bandwidth and CPU for published tracks
-          dynacast: true,
+          dynacast: false,
         });
 
         // pre-warm connection, this can be called as early as your page is loaded

@@ -1,5 +1,5 @@
 {
-  "name": "front-end",
+  "name": "racecast-user",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -24,13 +24,11 @@
     "highcharts-vue": "^1.4.3",
     "livekit-client": "^2.0.7",
     "ol": "^9.0.0",
-    "socket.io-client": "4.7.4",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@types/node": "20.11.27",
-    "@types/socket.io-client": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "7.2.0",
     "@typescript-eslint/parser": "7.2.0",
     "@vitejs/plugin-vue": "^5.0.4",
@@ -46,18 +44,13 @@
     "vue-tsc": "^2.0.6"
   },
   "bugs": {
-    "url": "https://github.com/RaceCast/Front-End/issues",
+    "url": "https://github.com/RaceCast/User/issues",
     "email": "contact@minarox.fr"
   },
-  "engineStrict": false,
-  "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=6.0.0"
-  },
-  "homepage": "https://github.com/RaceCast/Front-End#readme",
+  "homepage": "https://github.com/RaceCast/User#readme",
   "readme": "./README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RaceCast/Front-End.git"
+    "url": "https://github.com/RaceCast/User.git"
   }
 }
