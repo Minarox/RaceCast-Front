@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { State, state } from "../socket";
-
   export default {
     name: "SpeedGraph",
     data() {
@@ -19,6 +17,7 @@
         },
       };
       return {
+        speed: 0 as number,
         speedometer: {
           ...options,
           chart: {
@@ -110,15 +109,16 @@
         },
       };
     },
-    computed: {
-      speed(): number | null {
-        if (state.data.gps) return state.data.gps.speed;
-        return null;
-      },
-      state(): State {
-        return state.data.state;
-      },
-    },
+    // computed: {
+    //   speed(): number | null {
+    //     if (state.data.gps) return state.data.gps.speed;
+    //     return null;
+    //   },
+    //   state() {
+    //     return state.data.state;
+    //     return null;
+    //   },
+    // },
     watch: {
       speed: {
         deep: true,
@@ -127,12 +127,25 @@
         },
       },
     },
+    mounted() {
+      window.addEventListener('data', this.dataEvent);
+    },
+    beforeUnmount() {
+      window.removeEventListener('data', this.dataEvent);
+    },
+    methods: {
+      dataEvent(event: CustomEvent) {
+        if (event?.detail?.data?.modem?.GPS?.speed) {
+          this.speed = event.detail.data.modem.GPS.speed;
+        }
+      },
+    },
   };
 </script>
 
 <template>
   <Transition name="fade">
-    <highcharts v-if="state.gps" :options="speedometer" />
+    <highcharts v-if="true" :options="speedometer" />
   </Transition>
 </template>
 

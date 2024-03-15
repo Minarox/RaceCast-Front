@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { state } from "../socket";
-
   export default {
     name: "InertialData",
     data() {
@@ -115,21 +113,21 @@
     },
     computed: {
       accelerometer(): { x: number; y: number; z: number } | null {
-        if (state.data.mpu6050) {
-          return state.data.mpu6050.accel;
-        }
+        // if (state.data.mpu6050) {
+        //   return state.data.mpu6050.accel;
+        // }
         return null;
       },
       gyroscope(): { x: number; y: number } | null {
-        if (state.data.mpu6050) {
-          return state.data.mpu6050.gyro;
-        }
+        // if (state.data.mpu6050) {
+        //   return state.data.mpu6050.gyro;
+        // }
         return null;
       },
       temperature(): number | null {
-        if (state.data.mpu6050) {
-          return state.data.mpu6050.temp;
-        }
+        // if (state.data.mpu6050) {
+        //   return state.data.mpu6050.temp;
+        // }
         return null;
       },
     },

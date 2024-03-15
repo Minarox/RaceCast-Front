@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { state, State } from "../socket";
-
   export default {
     name: "DataSate",
     props: {
@@ -11,8 +9,9 @@
       },
     },
     computed: {
-      state(): State {
-        return state.data.state;
+      state() {
+        // return state.data.state;
+        return null;
       },
     },
   };

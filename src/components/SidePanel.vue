@@ -1,28 +1,22 @@
 <script lang="ts">
-  import Status from "@/components/Status.vue";
-  import State from "@/components/State.vue";
+  // import Status from "@/components/Status.vue";
+  // import State from "@/components/State.vue";
   import OpenLayers from "@/components/OpenLayers.vue";
   import Speed from "@/components/Speed.vue";
-  import Inertial from "@/components/Inertial.vue";
+  // import Inertial from "@/components/Inertial.vue";
   import Speedometer from "@/components/Speedometer.vue";
 
   export default {
     name: "SidePanel",
     components: {
       Speedometer,
-      Status,
-      State,
+      // Status,
+      // State,
       OpenLayers,
       Speed,
-      Inertial,
+      // Inertial,
     },
-    props: {
-      webrtc: {
-        type: Boolean,
-        default: false,
-        required: true,
-      },
-    },
+    // eslint-disable-next-line vue/require-prop-types
     emits: ["lock"],
     data() {
       return {
@@ -48,11 +42,11 @@
 <template>
   <aside :class="open ? 'opened' : ''">
     <div id="wrapper">
-      <Status />
-      <State :webrtc="webrtc" />
+      <!--<Status />-->
+      <!--<State :webrtc="webrtc" />-->
       <OpenLayers />
       <Speed />
-      <Inertial />
+      <!--<Inertial />-->
     </div>
     <div id="pin" @click.prevent="lock = !lock">
       <TransitionGroup name="fade">

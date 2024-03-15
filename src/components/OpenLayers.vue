@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { state } from "../socket";
   import { Feature, Map, View } from "ol/index";
   import { OSM, Vector as VectorSource } from "ol/source";
   import { Point } from "ol/geom";
@@ -18,6 +17,12 @@
 
   export default {
     name: "OpenLayers",
+    props: {
+      carData: {
+        type: Object,
+        default: null,
+      },
+    },
     data() {
       return {
         map: null,
@@ -29,17 +34,21 @@
         flashGeom: null,
         listenerKey: null,
         interval: null,
+        location: [0, 0],
       };
     },
-    computed: {
-      location(): [number, number] {
-        if (state.data.gps) {
-          return [state.data.gps.longitude, state.data.gps.latitude];
-        }
-        return [0, 0];
-      },
-    },
+    // computed: {
+    //   location(): [number, number] {
+    //     if (state.data.gps) {
+    //       return [state.data.gps.longitude, state.data.gps.latitude];
+    //     }
+    //     return [0, 0];
+    //   },
+    // },
     watch: {
+      carData: function(newVal, oldVal) { // watch it
+        console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      },
       location(position: [number, number]) {
         this.map
           .getLayers()
@@ -57,6 +66,8 @@
       },
     },
     mounted() {
+      window.addEventListener('data', this.dataEvent);
+
       useGeographic();
       this.createMap();
 
@@ -66,9 +77,18 @@
       }, 3000);
     },
     beforeUnmount() {
+      window.removeEventListener('data', this.dataEvent);
       clearInterval(this.interval);
     },
     methods: {
+      dataEvent(event: CustomEvent) {
+        if (event?.detail?.data?.modem?.GPS) {
+          this.location = [
+            event.detail.data.modem.GPS.longitude,
+            event.detail.data.modem.GPS.latitude,
+          ];
+        }
+      },
       createMap(): void {
         this.tileLayer = new TileLayer({
           source: new OSM({

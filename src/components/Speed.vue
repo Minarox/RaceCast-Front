@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { state } from "../socket";
-
   export default {
     name: "SpeedData",
     data() {
@@ -19,6 +17,7 @@
         },
       };
       return {
+        speed: 0 as number,
         histogram: {
           ...options,
           chart: {
@@ -67,12 +66,12 @@
         },
       };
     },
-    computed: {
-      speed(): number | null {
-        if (state.data.gps) return state.data.gps.speed;
-        return null;
-      },
-    },
+    // computed: {
+    //   speed(): number | null {
+    //     if (state.data.gps) return state.data.gps.speed;
+    //     return null;
+    //   },
+    // },
     watch: {
       speed: {
         deep: true,
@@ -85,6 +84,19 @@
             this.histogram.series[0].data.shift();
           }
         },
+      },
+    },
+    mounted() {
+        window.addEventListener('data', this.dataEvent);
+    },
+    beforeUnmount() {
+      window.removeEventListener('data', this.dataEvent);
+    },
+    methods: {
+      dataEvent(event: CustomEvent) {
+        if (event?.detail?.data?.modem?.GPS?.speed) {
+          this.speed = event.detail.data.modem.GPS.speed;
+        }
       },
     },
   };

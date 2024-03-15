@@ -1,21 +1,21 @@
 <script lang="ts">
-  import { state, Status } from "../socket";
-
   export default {
     name: "SystemStatus",
     computed: {
       online(): boolean {
-        return state.online;
+        // return state.online;
+        return null;
       },
-      status(): Status {
-        return state.status;
+      status() {
+        // return state.status;
+        return null;
       },
       lastConnection(): string[] | null {
-        if (state.status.lastConnection) {
-          return new Date(state.status.lastConnection)
-            .toLocaleString()
-            .split(" ");
-        }
+        // if (state.status.lastConnection) {
+        //   return new Date(state.status.lastConnection)
+        //     .toLocaleString()
+        //     .split(" ");
+        // }
         return null;
       },
     },
