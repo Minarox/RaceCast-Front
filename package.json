@@ -24,7 +24,7 @@
     "highcharts-vue": "^1.4.3",
     "livekit-client": "^2.0.7",
     "ol": "^9.0.0",
-    "socket.io-client": "4.7.4",
+    "socket.io-client": "4.7.5",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
