@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "highcharts": "^11.4.0",
-    "highcharts-vue": "^1.4.3",
+    "highcharts-vue": "^2.0.1",
     "livekit-client": "^2.0.7",
     "ol": "^9.0.0",
     "socket.io-client": "4.7.5",
