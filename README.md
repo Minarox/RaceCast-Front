@@ -2,18 +2,18 @@
 <br />
 
 <div align="center">
-<a href="https://github.com/RaceCar/Front-End">
+<a href="https://github.com/RaceCar/Interface">
     <img src="https://avatars.githubusercontent.com/u/134273283?s=80" alt="Logo" width="auto" height="80" style="border-radius: 8px">
 </a>
 
-<h3 align="center">Front-End</h3>
+<h3 align="center">Interface</h3>
 
-![Project Version](https://img.shields.io/github/package-json/v/RaceCast/Front-End?label=Version)&nbsp;
-![Project License](https://img.shields.io/github/license/RaceCast/Front-End?label=Licence)&nbsp;
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/RaceCast/Front-End/node.js.yml?label=Build)
+![Project Version](https://img.shields.io/github/package-json/v/RaceCast/Interface?label=Version)&nbsp;
+![Project License](https://img.shields.io/github/license/RaceCast/Interface?label=Licence)&nbsp;
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/RaceCast/Interface/node.js.yml?label=Build)
 
   <p align="center">
-    Interface for displaying race car data.
+    Interface for displaying race car data from the receiver.
     <br />
     <a href="https://rallye.minarox.fr/"><strong>rallye.minarox.fr »</strong></a>
   </p>
@@ -44,7 +44,7 @@
 
 ## About The Project
 
-User interface gathering the information and the video stream returned by the onboard system from the race car.
+User interface gathering the information and the video stream returned by the emitter from the race car to the receiver.
 
 ### Features
 

@@ -1,5 +1,5 @@
 {
-  "name": "front-end",
+  "name": "racecast-interface",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -46,7 +46,7 @@
     "vue-tsc": "^2.0.6"
   },
   "bugs": {
-    "url": "https://github.com/RaceCast/Front-End/issues",
+    "url": "https://github.com/RaceCast/Interface/issues",
     "email": "contact@minarox.fr"
   },
   "engineStrict": false,
@@ -54,10 +54,10 @@
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
   },
-  "homepage": "https://github.com/RaceCast/Front-End#readme",
+  "homepage": "https://github.com/RaceCast/Interface#readme",
   "readme": "./README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RaceCast/Front-End.git"
+    "url": "https://github.com/RaceCast/Interface.git"
   }
 }
