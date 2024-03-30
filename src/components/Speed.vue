@@ -94,8 +94,8 @@
     },
     methods: {
       dataEvent(event: CustomEvent) {
-        if (event?.detail?.data?.modem?.GPS?.speed) {
-          this.speed = event.detail.data.modem.GPS.speed;
+        if (event?.detail?.data?.gps) {
+          this.speed = event.detail.data.gps.speed;
         }
       },
     },

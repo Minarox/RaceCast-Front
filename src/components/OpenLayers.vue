@@ -82,10 +82,10 @@
     },
     methods: {
       dataEvent(event: CustomEvent) {
-        if (event?.detail?.data?.modem?.GPS) {
+        if (event?.detail?.data?.gps) {
           this.location = [
-            event.detail.data.modem.GPS.longitude,
-            event.detail.data.modem.GPS.latitude,
+            event.detail.data.gps.longitude,
+            event.detail.data.gps.latitude,
           ];
         }
       },
