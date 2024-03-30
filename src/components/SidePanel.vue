@@ -3,7 +3,7 @@
   // import State from "@/components/State.vue";
   import OpenLayers from "@/components/OpenLayers.vue";
   import Speed from "@/components/Speed.vue";
-  // import Inertial from "@/components/Inertial.vue";
+  import Inertial from "@/components/Inertial.vue";
   import Speedometer from "@/components/Speedometer.vue";
 
   export default {
@@ -14,7 +14,7 @@
       // State,
       OpenLayers,
       Speed,
-      // Inertial,
+      Inertial,
     },
     // eslint-disable-next-line vue/require-prop-types
     emits: ["lock"],
@@ -46,7 +46,7 @@
       <!--<State :webrtc="webrtc" />-->
       <OpenLayers />
       <Speed />
-      <!--<Inertial />-->
+      <Inertial />
     </div>
     <div id="pin" @click.prevent="lock = !lock">
       <TransitionGroup name="fade">

@@ -21,6 +21,8 @@
         },
       };
       return {
+        temperature: null,
+        gyroscope: [0, 0],
         element: null,
         pose: {
           x: 0,
@@ -33,67 +35,20 @@
             height: null,
             spacing: [10, 10, 4, 10],
             backgroundColor: "transparent",
-            type: "scatter3d",
-            animation: false,
-            options3d: {
-              enabled: true,
-              alpha: 10,
-              beta: 20,
-              depth: 300,
-              // fitToPlot: false,
-            },
-          },
-          title: {
-            text: "Accéléromètre",
-          },
-          yAxis: {
-            min: -2.5,
-            max: 2.5,
-            title: null,
-          },
-          xAxis: {
-            min: -2.5,
-            max: 2.5,
-            gridLineWidth: 1,
-          },
-          zAxis: {
-            min: -2.5,
-            max: 2.5,
-            showFirstLabel: false,
-          },
-          series: [
-            {
-              name: "data",
-              data: [[0, 0, 0]],
-              color: "#FF0000",
-            },
-            {
-              name: "origin",
-              data: [[0, 0, 0]],
-              color: "#888888",
-            },
-          ],
-        },
-        gyroChart: {
-          ...options,
-          chart: {
-            height: null,
-            spacing: [10, 10, 4, 10],
-            backgroundColor: "transparent",
             type: "scatter",
             animation: false,
           },
           title: {
-            text: "Gyroscope",
+            text: "Accélération",
           },
           yAxis: {
-            min: -260,
-            max: 260,
+            min: -3,
+            max: 3,
             title: null,
           },
           xAxis: {
-            min: -260,
-            max: 260,
+            min: -3,
+            max: 3,
             gridLineWidth: 1,
           },
           series: [
@@ -111,7 +66,7 @@
         },
       };
     },
-    computed: {
+    /* computed: {
       accelerometer(): { x: number; y: number; z: number } | null {
         // if (state.data.mpu6050) {
         //   return state.data.mpu6050.accel;
@@ -130,72 +85,27 @@
         // }
         return null;
       },
-    },
+    }, */
     watch: {
-      accelerometer(value): void {
-        this.accelChart.series[0].data = [value];
-      },
       gyroscope(value): void {
-        this.gyroChart.series[0].data = [value];
+        this.accelChart.series[0].data = [value];
       },
     },
     mounted(): void {
-      ["mouseup", "touchend"].forEach((type) => {
-        document.addEventListener(type, this.release, {
-          passive: true,
-        });
-      });
-      ["mousedown", "touchstart"].forEach((type) => {
-        const element = document.getElementById("accel-chart");
-        if (element) element.addEventListener(type, this.click, false);
-      });
+      window.addEventListener('data', this.dataEvent);
+    },
+    beforeUnmount() {
+      window.removeEventListener('data', this.dataEvent);
     },
     methods: {
-      click(event): void {
-        this.element = event.target;
-        while (this.element.id !== "accel-chart") {
-          this.element = this.element.parentNode;
+      dataEvent(event: CustomEvent) {
+        if (event?.detail?.data?.sensor) {
+          this.temperature = event.detail.data.sensor.temp;
+          this.gyroscope = [
+            event.detail.data.sensor.accel.x,
+            event.detail.data.sensor.accel.y,
+          ];
         }
-
-        this.pose = {
-          x: event.pageX,
-          y: event.pageY,
-        };
-
-        ["mousemove", "touchmove"].forEach((type) => {
-          document.addEventListener(type, this.drag, false);
-        });
-      },
-      drag(event): void {
-        if (this.animation) {
-          this.animation = false;
-
-          if (this.element.id === "accel-chart") {
-            this.accelChart.chart.options3d.alpha +=
-              (event.pageY - this.pose.y) / 2;
-            this.accelChart.chart.options3d.beta -=
-              (event.pageX - this.pose.x) / 2;
-          }
-
-          this.pose = {
-            x: event.pageX,
-            y: event.pageY,
-          };
-
-          requestAnimationFrame(() => {
-            this.animation = true;
-          });
-        }
-      },
-      release(): void {
-        ["mousemove", "touchmove"].forEach((type) => {
-          document.removeEventListener(type, this.drag, false);
-        });
-        this.pose = {
-          x: 0,
-          y: 0,
-        };
-        this.element = null;
       },
     },
   };
@@ -204,13 +114,9 @@
 <template>
   <article>
     <section>
-      <highcharts id="accel-chart" :options="accelChart" />
-      <highcharts :options="gyroChart" />
+      <highcharts :options="accelChart" />
     </section>
-    <hr />
-    <section>
-      <p>Température : {{ temperature }}</p>
-    </section>
+    <p>Température : {{ temperature }}</p>
   </article>
 </template>
 
@@ -228,8 +134,6 @@
       width: 100%;
 
       &:first-child {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
         height: 190px;
 
         > * {
@@ -241,14 +145,6 @@
       &:last-child {
         text-align: center;
       }
-    }
-
-    hr {
-      border: none;
-      border-bottom: 2px solid #888888;
-      border-radius: 100%;
-      margin: 0.4rem 0;
-      width: 80%;
     }
   }
 </style>
