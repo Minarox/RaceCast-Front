@@ -2,15 +2,15 @@
 <br />
 
 <div align="center">
-<a href="https://github.com/RaceCar/Front-End">
+<a href="https://github.com/RaceCar/Interface">
     <img src="https://avatars.githubusercontent.com/u/134273283?s=80" alt="Logo" width="auto" height="80" style="border-radius: 8px">
 </a>
 
-<h3 align="center">User</h3>
+<h3 align="center">Interface</h3>
 
-![Project Version](https://img.shields.io/github/package-json/v/RaceCast/User?label=Version)&nbsp;
-![Project License](https://img.shields.io/github/license/RaceCast/User?label=Licence)&nbsp;
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/RaceCast/User/node.js.yml?label=Build)
+![Project Version](https://img.shields.io/github/package-json/v/RaceCast/Interface?label=Version)&nbsp;
+![Project License](https://img.shields.io/github/license/RaceCast/Interface?label=Licence)&nbsp;
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/RaceCast/Interface/node.js.yml?label=Build)
 
   <p align="center">
     Interface for displaying race car datas and stream.

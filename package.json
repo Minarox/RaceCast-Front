@@ -1,5 +1,5 @@
 {
-  "name": "racecast-user",
+  "name": "racecast-interface",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "highcharts": "^11.4.0",
-    "highcharts-vue": "^1.4.3",
+    "highcharts-vue": "^2.0.1",
     "livekit-client": "^2.0.7",
     "livekit-server-sdk": "^2.1.1",
     "ol": "^9.0.0",
@@ -40,18 +40,18 @@
     "sass": "1.72.0",
     "typescript": "^5.4.2",
     "vite": "^5.1.6",
-    "vite-plugin-pwa": "^0.19.2",
+    "vite-plugin-pwa": "^0.19.4",
     "vue-eslint-parser": "9.4.2",
     "vue-tsc": "^2.0.6"
   },
   "bugs": {
-    "url": "https://github.com/RaceCast/User/issues",
+    "url": "https://github.com/RaceCast/Interface/issues",
     "email": "contact@minarox.fr"
   },
-  "homepage": "https://github.com/RaceCast/User#readme",
+  "homepage": "https://github.com/RaceCast/Interface#readme",
   "readme": "./README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RaceCast/User.git"
+    "url": "https://github.com/RaceCast/Interface.git"
   }
 }
