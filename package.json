@@ -12,7 +12,7 @@
   "license": "GPL-3.0-only",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "npx vue-tsc && vite build",
     "preview": "vite preview",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
