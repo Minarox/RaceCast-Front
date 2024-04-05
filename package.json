@@ -20,7 +20,7 @@
     "lint:check": "eslint --ext .js,.ts,.vue --ignore-path .gitignore src/"
   },
   "dependencies": {
-    "highcharts": "^11.4.0",
+    "highcharts": "^11.4.1",
     "highcharts-vue": "^2.0.1",
     "livekit-client": "^2.0.10",
     "livekit-server-sdk": "^2.1.2",
