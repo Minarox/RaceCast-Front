@@ -1,7 +1,14 @@
 {
-  "name": "",
+  "name": "racecast",
+  "private": true,
   "type": "module",
   "version": "0.0.1",
+  "description": "Interface for displaying race car data.",
+  "author": {
+    "name": "Mathis Serrieres Maniecki",
+    "email": "contact@minarox.fr",
+    "url": "https://minarox.fr/"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -13,5 +20,15 @@
     "astro": "^4.5.18",
     "@astrojs/check": "^0.5.10",
     "typescript": "^5.4.4"
+  },
+  "bugs": {
+    "url": "https://github.com/Minarox/RaceCast/issues",
+    "email": "contact@minarox.fr"
+  },
+  "homepage": "https://github.com/Minarox/RaceCast#readme",
+  "readme": "./README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Minarox/RaceCast.git"
   }
 }
