@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import arrow from '../assets/arrow.svg'
+---
+
+<aside>
+	<section>
+		<div id="arrow">
+			<Image src={arrow} alt="Flèche" />
+		</div>
+	</section>
+
+	<section>
+		<slot />
+	</section>
+</aside>
+
+<script>
+	const aside: HTMLElement = document.querySelector('aside');
+	const arrow: HTMLElement = document.getElementById('arrow');
+	const arrowImg: HTMLElement = arrow.querySelector('img');
+
+	arrow.addEventListener('click', (): void => {
+		arrowImg.style.transform = arrowImg.style.transform === 'rotate(0deg)' ? 'rotate(180deg)' : 'rotate(0deg)';
+		aside.style.right = aside.style.right === '0px' ? '-350px' : '0px';
+	});
+</script>
+
+<style>
+	aside {
+		position: absolute;
+		top: 0;
+		right: -350px;
+		bottom: 0;
+		display: grid;
+		grid-template-columns: max-content 350px;
+		grid-gap: 0.6rem;
+		transition: right 0.3s ease-in-out;
+
+		section:first-child {
+			position: relative;
+
+			#arrow {
+				padding: 14rem 0 14rem 2rem;
+				cursor: pointer;
+				position: absolute;
+				right: 0;
+				top: 50%;
+				transform: translateY(-50%);
+
+				img {
+					height: 40px;
+					transform: rotate(180deg);
+					transition: transform 180ms ease-in-out;
+					width: 40px;
+				}
+			}
+		}
+
+		section:last-child {
+			margin: 1rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.6rem;
+			padding: 1rem;
+			backdrop-filter: blur(4px);
+			background-color: rgba(0, 0, 0, 0.5);
+			border-radius: 8px;
+		}
+	}
+</style>
