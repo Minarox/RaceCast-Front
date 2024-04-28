@@ -2,7 +2,7 @@
   "name": "racecast",
   "private": true,
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Interface for displaying race car data.",
   "author": {
     "name": "Mathis Serrieres Maniecki",
