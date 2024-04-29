@@ -1,4 +1,10 @@
-<div class="container">
+---
+const container: HTMLElement = document.getElementById("status");
+const title: HTMLElement = container.querySelector('p')[0];
+const subTitle: HTMLElement = container.querySelector('p')[1];
+---
+
+<div id="status" class="container">
 	<p>Déconnecté</p>
 	<p></p>
 </div>
