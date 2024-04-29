@@ -1,15 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import arrow from '../assets/arrow.svg';
-
-const aside: HTMLElement = document.querySelector('aside');
-const arrow: HTMLElement = document.getElementById('arrow');
-const arrowImg: HTMLElement = arrow.querySelector('img');
-
-arrow.addEventListener('click', (): void => {
-	arrowImg.style.transform = arrowImg.style.transform === 'rotate(0deg)' ? 'rotate(180deg)' : 'rotate(0deg)';
-	aside.style.right = aside.style.right === '0px' ? '-350px' : '0px';
-});
 ---
 
 <aside>
@@ -23,6 +14,17 @@ arrow.addEventListener('click', (): void => {
 		<slot />
 	</section>
 </aside>
+
+<script>
+	const aside: HTMLElement = document.querySelector('aside');
+	const arrow: HTMLElement = document.getElementById('arrow');
+	const arrowImg: HTMLElement = arrow.querySelector('img');
+
+	arrow.addEventListener('click', (): void => {
+		arrowImg.style.transform = arrowImg.style.transform === 'rotate(0deg)' ? 'rotate(180deg)' : 'rotate(0deg)';
+		aside.style.right = aside.style.right === '0px' ? '-350px' : '0px';
+	});
+</script>
 
 <style>
 	aside {

@@ -1,15 +1,15 @@
----
-const container: HTMLElement = document.getElementById("state");
-const gopro: HTMLElement = container.querySelector('p')[0];
-const gps: HTMLElement = container.querySelector('p')[1];
-const mpu: HTMLElement = container.querySelector('p')[2];
----
-
 <div id="state" class="container">
 	<p>GoPro</p>
 	<p>GPS</p>
 	<p>MPU</p>
 </div>
+
+<script>
+	const container: HTMLElement = document.getElementById("state");
+	const gopro: HTMLElement = container.querySelector('p')[0];
+	const gps: HTMLElement = container.querySelector('p')[1];
+	const mpu: HTMLElement = container.querySelector('p')[2];
+</script>
 
 <style>
 	.container {
