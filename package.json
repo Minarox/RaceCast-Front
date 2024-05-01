@@ -17,8 +17,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.5.10",
     "astro": "^4.5.18",
+    "@astrojs/check": "^0.5.10",
     "typescript": "^5.4.4"
   },
   "bugs": {
@@ -30,8 +30,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Minarox/RaceCast.git"
-  },
-  "devDependencies": {
-    "@vite-pwa/astro": "^0.3.1"
   }
 }

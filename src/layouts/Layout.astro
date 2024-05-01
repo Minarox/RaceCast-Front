@@ -1,7 +1,3 @@
----
-import { pwaInfo } from 'virtual:pwa-info';
----
-
 <!doctype html>
 <html lang="fr">
 	<head>
@@ -15,8 +11,6 @@ import { pwaInfo } from 'virtual:pwa-info';
 			content="Interface d'affichage des données de la voiture de course."
 			name="description"
 		/>
-		<script src="/src/pwa.ts"></script>
-		{ pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
 	</head>
 	<body>
 		<slot />
