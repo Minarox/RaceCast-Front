@@ -1,26 +1,141 @@
-<section>
-	<button type="button">
+<div>
+	<button type="button" id="start">
 		Lancer le direct
 	</button>
-</section>
+	<div id="player" />
+</div>
 
 <script>
-	const button: HTMLElement = document.querySelector('button');
+	import { RemoteTrack, Room, RoomEvent, Track } from "livekit-client";
 
-	button.addEventListener('click', (): void => {
-		console.log('Lancement du direct')
-	});
+	const button: HTMLElement = document.getElementById('start');
+
+	/**
+	 * Dispatch a custom event
+	 * @param {string} name - Event name
+	 * @param {any} data - Event data
+	 * @returns {void}
+	 */
+	function dispatchEvent(name: string, data: any): void {
+		const event: CustomEvent = new CustomEvent(name, {
+			detail: data
+		});
+		document.dispatchEvent(event);
+	}
+
+	/**
+	 * Get a Livekit token from the server
+	 * @returns {Promise<string>}
+	 */
+	async function getLivekitToken(): Promise<string> {
+		const response: Response = await fetch('/livekit-token');
+		return await response.json();
+	}
+
+	/**
+	 * Handle track subscribed event
+	 * @param {RemoteTrack} track
+	 * @returns {void}
+	 */
+	function handleTrackSubscribed(track: RemoteTrack): void {
+		if ([Track.Kind.Video, Track.Kind.Audio].includes(track.kind as any)) {
+			// attach it to a new HTMLVideoElement or HTMLAudioElement
+			const player: HTMLElement = document.getElementById("player");
+			const element: HTMLMediaElement = track.attach();
+			player.appendChild(element);
+			player.style.display = "flex";
+
+			// Check if video and audio is present
+			if (
+				document.getElementsByTagName("video").length > 0 &&
+				document.getElementsByTagName("audio").length > 0
+			) {
+				button.remove();
+			}
+		}
+	}
+
+	/**
+	 * Handle track unsubscribed event
+	 * @param {RemoteTrack} track
+	 * @returns {void}
+	 */
+	function handleTrackUnsubscribed(track: RemoteTrack): void {
+		track.detach();
+	}
+
+	/**
+	 * Handle disconnect event
+	 * @returns {void}
+	 */
+	function handleData(event): void {
+		const data = JSON.parse(new TextDecoder().decode(event));
+		dispatchEvent("data", data);
+	}
+
+	/**
+	 * Handle disconnect event
+	 * @returns {void}
+	 */
+	function handleDisconnect(): void {
+		dispatchEvent("status", "disconnected");
+
+		const wrapper: HTMLElement = document.getElementById("wrapper");
+		wrapper.innerHTML = "";
+		wrapper.style.display = "none";
+	}
+
+	/**
+	 * Connect and show camera feed
+	 * @returns {Promise<void>}
+	 */
+	async function startLive(): Promise<void> {
+		dispatchEvent("status", "connecting")
+		const token: string = await getLivekitToken();
+
+		// creates a new room with options
+		const room: Room = new Room({
+			adaptiveStream: true,
+			dynacast: false,
+			reconnectPolicy: {
+				nextRetryDelayInMs: (context): number => {
+					console.log(`Retrying connection n°${context.retryCount} (after ${context.elapsedMs}ms)`,);
+					return 200;
+				}
+			}
+		});
+
+		// pre-warm connection, this can be called as early as your page is loaded
+		await room.prepareConnection(import.meta.env.PUBLIC_LIVEKIT_URL, token);
+
+		// set up event listeners
+		room
+			.on(RoomEvent.Connected, () => dispatchEvent("status", "connected"))
+			.on(RoomEvent.Reconnecting, () => dispatchEvent("status", "reconnecting"))
+			.on(RoomEvent.Reconnected, () => dispatchEvent("status", "connected"))
+			.on(RoomEvent.Disconnected, handleDisconnect)
+			.on(RoomEvent.TrackSubscribed, handleTrackSubscribed)
+			.on(RoomEvent.TrackUnsubscribed, handleTrackUnsubscribed)
+			.on(RoomEvent.DataReceived, handleData);
+
+		// connect to room
+		await room.connect(import.meta.env.PUBLIC_LIVEKIT_URL, token);
+	}
+
+	// Event listener for the button
+	button.addEventListener('click',startLive);
 </script>
 
 <style>
-	section	{
+	div {
 		width: 100%;
 		height: 100%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		position: relative;
 
-		button {
+		> button {
 			padding: 1.4rem 2.4rem;
 			backdrop-filter: blur(4px);
 			background-color: rgba(0, 0, 0, 0.5);
@@ -33,6 +148,21 @@
 			&:hover {
 				background-color: rgba(0, 0, 0, 0.7);
 				outline: 1px solid white;
+			}
+		}
+
+		#player {
+			display: none;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-color: rgba(0, 0, 0, 0.5);
+
+			> video {
+				width: 100%;
+				height: 100%;
 			}
 		}
 	}
