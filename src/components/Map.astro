@@ -1,3 +1,11 @@
 <div class="container">
-	Map
+  Map
 </div>
+
+<script>
+	document.addEventListener("data", (event: CustomEvent): void => {
+		if (event.detail?.gps) {
+			console.log(event.detail.gps);
+		}
+	});
+</script>

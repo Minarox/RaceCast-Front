@@ -1,3 +1,11 @@
-<div class="container">
-	Mpu
+<div id="mpu" class="container">
+  Mpu
 </div>
+
+<script>
+	document.addEventListener("data", (event: CustomEvent): void => {
+		if (event.detail?.sensor) {
+			console.log(event.detail.sensor);
+		}
+	});
+</script>
