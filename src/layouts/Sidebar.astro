@@ -4,112 +4,115 @@ import Speed from "@components/Speed.astro";
 ---
 
 <aside>
-	<section>
-		<button type="button" id="lock">
-			<Icon name="material-symbols:lock-open-right-outline" />
-			<Icon name="material-symbols:lock" />
-		</button>
-		<button type="button" id="open">
-			<Icon name="material-symbols:arrow-back-ios-rounded" />
-		</button>
-		<Speed />
-	</section>
+  <section>
+    <button type="button" id="lock">
+      <Icon name="material-symbols:lock-open-right-outline" />
+      <Icon name="material-symbols:lock" />
+    </button>
+    <button type="button" id="open">
+      <Icon name="material-symbols:arrow-back-ios-rounded" />
+    </button>
+    <Speed />
+  </section>
 
-	<section>
-		<slot />
-	</section>
+  <section>
+    <slot />
+  </section>
 </aside>
 
 <script>
-	const aside: HTMLElement = document.querySelector("aside") as HTMLElement;
-	const openSvg: SVGElement = document.querySelector("#open svg") as SVGElement;
-	const lockSvg: NodeListOf<HTMLElement> = document.querySelectorAll("#lock svg") as NodeListOf<HTMLElement>;
-	let isLocked: boolean = false;
+    const aside: HTMLElement = document.querySelector("aside") as HTMLElement;
+    const openSvg: SVGElement = document.querySelector("#open svg") as SVGElement;
+    const lockSvg: NodeListOf<HTMLElement> = document.querySelectorAll("#lock svg") as NodeListOf<HTMLElement>;
+    let isLocked: boolean = false;
 
-	document.getElementById("open")
-		?.addEventListener("click", (): void => {
-			if (isLocked) return;
-			openSvg.style.transform = openSvg.style.transform === "rotate(180deg)" ? "rotate(0deg)" : "rotate(180deg)";
-			aside.style.right = aside.style.right === "0px" ? "-350px" : "0px";
-		});
-
-	document.getElementById("lock")
+    document.getElementById("open")
         ?.addEventListener("click", (): void => {
-			isLocked = !isLocked;
-			aside.style.right = "0";
-			openSvg.style.transform = "rotate(180deg)";
-			lockSvg[0].style.display = isLocked ? "none" : "block";
-			lockSvg[1].style.display = isLocked ? "block" : "none";
-		});
+            if (isLocked) return;
+            openSvg.style.transform = openSvg.style.transform === "rotate(180deg)" ? "rotate(0deg)" : "rotate(180deg)";
+            aside.style.right = aside.style.right === "0px" ? "-350px" : "0px";
+        });
+
+    document.getElementById("lock")
+        ?.addEventListener("click", (): void => {
+            isLocked = !isLocked;
+            aside.style.right = "0";
+            openSvg.style.transform = "rotate(180deg)";
+            lockSvg[0].style.display = isLocked ? "none" : "block";
+            lockSvg[1].style.display = isLocked ? "block" : "none";
+
+            const event: CustomEvent = new CustomEvent("sidebar", { detail: isLocked });
+            document.dispatchEvent(event);
+        });
 </script>
 
 <style>
-	aside {
-		pointer-events: none;
-		position: absolute;
-		top: 0;
-		right: -350px;
-		bottom: 0;
-		display: grid;
-		grid-template-columns: max-content 350px;
-		grid-gap: 0.6rem;
-		transition: right 0.3s ease-in-out;
+    aside {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        right: -350px;
+        bottom: 0;
+        display: grid;
+        grid-template-columns: max-content 350px;
+        grid-gap: 0.6rem;
+        transition: right 0.3s ease-in-out;
 
-		> section:first-child {
-			margin: 1rem 0;
-			display: grid;
-			grid-template-rows: 50px 1fr 50px;
-			justify-items: flex-end;
-			grid-gap: 1rem;
+        > section:first-child {
+            margin: 1rem 0;
+            display: grid;
+            grid-template-rows: 50px 1fr 50px;
+            justify-items: flex-end;
+            grid-gap: 1rem;
 
-			> button {
-				pointer-events: auto;
-				background-color: transparent;
-				border: none;
-				outline: none;
-				cursor: pointer;
-				font-size: 1.2rem;
-				display: flex;
-				align-items: center;
-				justify-content: flex-end;
-				padding-left: 1rem;
+            > button {
+                pointer-events: auto;
+                background-color: transparent;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                font-size: 1.2rem;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                padding-left: 1rem;
 
-				&:first-of-type {
-					align-items: flex-start;
+                &:first-of-type {
+                    align-items: flex-start;
 
-					> svg:last-of-type {
-						display: none;
-					}
-				}
+                    > svg:last-of-type {
+                        display: none;
+                    }
+                }
 
-				> svg {
-					height: 36px;
-					width: 36px;
-					color: white;
-				}
-			}
+                > svg {
+                    height: 36px;
+                    width: 36px;
+                    color: white;
+                }
+            }
 
-			> p {
-				display: flex;
-				align-items: flex-end;
-				justify-content: flex-end;
-			}
+            > p {
+                display: flex;
+                align-items: flex-end;
+                justify-content: flex-end;
+            }
 
-			#open > svg {
-				transition: transform 180ms ease-in-out;
-			}
-		}
+            #open > svg {
+                transition: transform 180ms ease-in-out;
+            }
+        }
 
-		> section:last-child {
-			pointer-events: auto;
-			margin: 1rem;
-			display: flex;
-			flex-direction: column;
-			gap: 0.6rem;
-			padding: 1rem;
-			backdrop-filter: blur(6px);
-			background-color: rgba(0, 0, 0, 0.5);
-			border-radius: 8px;
-		}
-	}
+        > section:last-child {
+            pointer-events: auto;
+            margin: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            padding: 1rem;
+            backdrop-filter: blur(6px);
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+    }
 </style>

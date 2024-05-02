@@ -118,6 +118,15 @@
 
     // Event listener for the button
     button.addEventListener("click", startLive);
+
+    // Event listener for the sidebar
+    document.addEventListener("sidebar", (event: any): void => {
+        if (event.detail) {
+            player.parentElement.style.width = "calc(100% - 350px)";
+        } else {
+            player.parentElement.style.width = "100%";
+        }
+    });
 </script>
 
 <style>
@@ -128,6 +137,7 @@
         justify-content: center;
         align-items: center;
         position: relative;
+        transition: width 0.3s ease-in-out;
 
         > button {
             padding: 1.4rem 2.4rem;
@@ -152,7 +162,6 @@
             position: absolute;
             top: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, 0.5);
 
             > video {
                 width: 100%;
