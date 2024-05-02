@@ -1,5 +1,7 @@
 import { AccessToken } from "livekit-server-sdk";
 
+export const prerender = false;
+
 /**
  * @description Generate a token for LiveKit
  * @endpoint GET /livekit-token
@@ -12,7 +14,7 @@ export async function GET(): Promise<Response> {
         import.meta.env.LIVEKIT_SECRET,
         {
             identity: `User-${Math.random().toString(36).substring(7)}`,
-        }
+        },
     );
 
     // Set permissions
@@ -30,13 +32,13 @@ export async function GET(): Promise<Response> {
         canUpdateOwnMetadata: false,
         hidden: true,
         recorder: false,
-        agent: false
+        agent: false,
     });
 
     // Return the token
     return new Response(
         JSON.stringify(
-            await accessToken.toJwt()
-        )
-    )
+            await accessToken.toJwt(),
+        ),
+    );
 }
