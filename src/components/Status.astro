@@ -1,24 +1,69 @@
-<div id="status" class="container">
-	<p>Déconnecté</p>
-	<p></p>
-</div>
+<p id="status" class="container red-border">
+  Déconnecté
+</p>
 
 <script>
-	const container: HTMLElement = document.getElementById("status");
-	const title: HTMLElement = container.querySelector('p')[0];
-	const subTitle: HTMLElement = container.querySelector('p')[1];
+    document.addEventListener("status", (event: CustomEvent): void => {
+        const status: HTMLElement = document.getElementById("status");
+        switch (event.detail) {
+            case "connecting":
+                status.innerText = "Connection en cours...";
+              status.classList.remove("green-border", "red-border");
+              status.classList.add("orange-border");
+                break;
+            case "connected":
+                status.innerText = "Connecté";
+                status.classList.remove("red-border", "orange-border");
+                status.classList.add("green-border");
+                break;
+            case "reconnecting":
+                status.innerText = "Reconnection en cours...";
+                status.classList.remove("green-border", "red-border");
+                status.classList.add("orange-border");
+                break;
+            case "disconnected":
+                status.innerText = "Déconnecté";
+                status.classList.remove("green-border", "orange-border");
+                status.classList.add("red-border");
+                break;
+        }
+    });
 </script>
 
 <style>
-	div {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+    p {
+        font-size: 1.2em;
+        font-weight: bold;
+        text-align: center;
+    }
 
-		p:first-child {
-			font-size: 1.2em;
-			font-weight: bold;
-		}
-	}
+    .green-border {
+        box-shadow: inset 0 0 14px green;
+    }
+
+    .orange-border {
+        animation: pulse-orange 2s linear infinite alternate;
+    }
+
+    .red-border {
+        animation: pulse-red 2s linear infinite alternate;
+    }
+
+    @keyframes pulse-orange {
+        from {
+            box-shadow: inset 0 0 0 3px orange;
+        }
+        to {
+            box-shadow: inset 0 0 14px 3px orange;
+        }
+    }
+
+    @keyframes pulse-red {
+        from {
+            box-shadow: inset 0 0 0 3px #d20000;
+        }
+        to {
+            box-shadow: inset 0 0 14px 3px #d20000;
+        }
+    }
 </style>
