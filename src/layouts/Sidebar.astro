@@ -1,13 +1,18 @@
 ---
-import { Image } from 'astro:assets';
-import arrow from '../assets/arrow.svg';
+import { Icon } from 'astro-icon/components';
+import Speed from '../components/Speed.astro';
 ---
 
 <aside>
 	<section>
-		<div id="arrow">
-			<Image src={arrow} alt="Flèche" />
-		</div>
+		<button type="button" id="lock">
+			<Icon id="unlocked" name="material-symbols:lock-open-right-outline" />
+			<Icon id="locked" name="material-symbols:lock" />
+		</button>
+		<button type="button" id="open">
+			<Icon name="material-symbols:arrow-back-ios-rounded" />
+		</button>
+		<Speed />
 	</section>
 
 	<section>
@@ -17,17 +22,31 @@ import arrow from '../assets/arrow.svg';
 
 <script>
 	const aside: HTMLElement = document.querySelector('aside');
-	const arrow: HTMLElement = document.getElementById('arrow');
-	const arrowImg: HTMLElement = arrow.querySelector('img');
+	const openSvg: SVGElement = document.querySelector('#open svg');
+	const lockedSvg: HTMLElement = document.getElementById('locked');
+	const unlockedSvg: HTMLElement = document.getElementById('unlocked');
+	let isLocked: boolean = false;
 
-	arrow.addEventListener('click', (): void => {
-		arrowImg.style.transform = arrowImg.style.transform === 'rotate(0deg)' ? 'rotate(180deg)' : 'rotate(0deg)';
-		aside.style.right = aside.style.right === '0px' ? '-350px' : '0px';
-	});
+	document.getElementById('open')
+		.addEventListener('click', (): void => {
+			if (isLocked) return;
+			openSvg.style.transform = openSvg.style.transform === 'rotate(0deg)' ? 'rotate(180deg)' : 'rotate(0deg)';
+			aside.style.right = aside.style.right === '0px' ? '-350px' : '0px';
+		});
+
+	document.getElementById('lock')
+		.addEventListener('click', (): void => {
+			isLocked = !isLocked;
+			aside.style.right = '0';
+			openSvg.style.transform = 'rotate(180deg)';
+			lockedSvg.style.display = isLocked ? 'block' : 'none';
+			unlockedSvg.style.display = isLocked ? 'none' : 'block';
+		});
 </script>
 
 <style>
 	aside {
+		pointer-events: none;
 		position: absolute;
 		top: 0;
 		right: -350px;
@@ -37,33 +56,60 @@ import arrow from '../assets/arrow.svg';
 		grid-gap: 0.6rem;
 		transition: right 0.3s ease-in-out;
 
-		section:first-child {
-			position: relative;
+		> section:first-child {
+			margin: 1rem 0;
+			display: grid;
+			grid-template-rows: 50px 1fr 50px;
+			justify-items: flex-end;
+			grid-gap: 1rem;
 
-			#arrow {
-				padding: 14rem 0 14rem 2rem;
+			> button {
+				pointer-events: auto;
+				background-color: transparent;
+				border: none;
+				outline: none;
 				cursor: pointer;
-				position: absolute;
-				right: 0;
-				top: 50%;
-				transform: translateY(-50%);
+				font-size: 1.2rem;
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				padding-left: 1rem;
 
-				img {
-					height: 40px;
-					transform: rotate(180deg);
-					transition: transform 180ms ease-in-out;
-					width: 40px;
+				&:first-of-type {
+					align-items: flex-start;
 				}
+
+				> svg {
+					height: 36px;
+					width: 36px;
+					color: white;
+
+					&#locked {
+						display: none;
+					}
+				}
+			}
+
+			> p {
+				display: flex;
+				align-items: flex-end;
+				justify-content: flex-end;
+			}
+
+			#open > svg {
+				transform: rotate(180deg);
+				transition: transform 180ms ease-in-out;
 			}
 		}
 
-		section:last-child {
+		> section:last-child {
+			pointer-events: auto;
 			margin: 1rem;
 			display: flex;
 			flex-direction: column;
 			gap: 0.6rem;
 			padding: 1rem;
-			backdrop-filter: blur(4px);
+			backdrop-filter: blur(6px);
 			background-color: rgba(0, 0, 0, 0.5);
 			border-radius: 8px;
 		}
