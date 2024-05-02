@@ -12,17 +12,18 @@
             case State.CONNECTING:
             case State.RECONNECTING:
                 status.innerText = `${event.detail === "connecting" ? "Connection" : "Reconnection"} en cours...`;
-                status.classList.remove("green-border", "red-border");
+                status.classList.remove("green-border", "red-border", "hidden");
                 status.classList.add("orange-border");
                 break;
             case State.CONNECTED:
                 status.innerText = "Connecté";
-                status.classList.remove("red-border", "orange-border");
+                status.classList.remove("red-border", "orange-border", "hidden");
                 status.classList.add("green-border");
+                setTimeout(() => status.classList.add("hidden"), 4000);
                 break;
             case State.DISCONNECTED:
                 status.innerText = "Déconnecté";
-                status.classList.remove("green-border", "orange-border");
+                status.classList.remove("green-border", "orange-border", "hidden");
                 status.classList.add("red-border");
                 break;
         }
@@ -39,6 +40,12 @@
         font-weight: bold;
         text-align: center;
         padding: 0.8rem 2rem;
+        transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+    }
+
+    .hidden {
+        opacity: 0;
+        top: -100px;
     }
 
     .green-border {
