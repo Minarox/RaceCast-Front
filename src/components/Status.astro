@@ -1,3 +1,7 @@
+---
+import { State } from "@types/state.ts";
+---
+
 <p id="status" class="container red-border">
   Déconnecté
 </p>
@@ -6,18 +10,18 @@
     document.addEventListener("status", (event: CustomEvent): void => {
         const status: HTMLElement = document.getElementById("status");
         switch (event.detail) {
-            case "connecting":
-            case "reconnecting":
+            case State.CONNECTING:
+            case State.RECONNECTING:
                 status.innerText = `${event.detail === "connecting" ? "Connection" : "Reconnection"} en cours...`;
                 status.classList.remove("green-border", "red-border");
                 status.classList.add("orange-border");
                 break;
-            case "connected":
+            case State.CONNECTED:
                 status.innerText = "Connecté";
                 status.classList.remove("red-border", "orange-border");
                 status.classList.add("green-border");
                 break;
-            case "disconnected":
+            case State.DISCONNECTED:
                 status.innerText = "Déconnecté";
                 status.classList.remove("green-border", "orange-border");
                 status.classList.add("red-border");

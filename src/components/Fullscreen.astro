@@ -1,5 +1,5 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 ---
 
 <button type="button" id="fullscreen">
@@ -8,10 +8,10 @@ import { Icon } from 'astro-icon/components';
 </button>
 
 <script>
-    const icons: NodeListOf<HTMLElement> = document.querySelectorAll('#fullscreen svg');
+    const icons: NodeListOf<HTMLElement> = document.querySelectorAll("#fullscreen svg");
 
-    document.getElementById('fullscreen')
-        .addEventListener('click', (): void => {
+    document.getElementById("fullscreen")
+        .addEventListener("click", (): void => {
             if (document.fullscreenElement) {
                 document.exitFullscreen();
             } else {
@@ -19,9 +19,9 @@ import { Icon } from 'astro-icon/components';
             }
         });
 
-    document.addEventListener('fullscreenchange', (): void => {
-        icons[0].style.display = document.fullscreenElement ? 'none' : 'block';
-        icons[1].style.display = document.fullscreenElement ? 'block' : 'none';
+    document.addEventListener("fullscreenchange", (): void => {
+        icons[0].style.display = document.fullscreenElement ? "none" : "block";
+        icons[1].style.display = document.fullscreenElement ? "block" : "none";
     });
 </script>
 

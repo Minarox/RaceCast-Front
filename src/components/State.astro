@@ -1,3 +1,7 @@
+---
+import { Network, Signal } from "@types/modem.ts";
+---
+
 <div id="state" class="container">
   State
 </div>
@@ -5,7 +9,8 @@
 <script>
 	document.addEventListener("data", (event: CustomEvent): void => {
 		if (event.detail?.network || event.detail?.signal) {
-			console.log(event.detail);
+			const data: Network | Signal = event.detail?.network || event.detail?.signal
+			console.log(data);
 		}
 	});
 </script>

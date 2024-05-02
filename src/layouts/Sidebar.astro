@@ -1,6 +1,6 @@
 ---
-import { Icon } from 'astro-icon/components';
-import Speed from '../components/Speed.astro';
+import { Icon } from "astro-icon/components";
+import Speed from "@components/Speed.astro";
 ---
 
 <aside>
@@ -21,25 +21,25 @@ import Speed from '../components/Speed.astro';
 </aside>
 
 <script>
-	const aside: HTMLElement = document.querySelector('aside');
-	const openSvg: SVGElement = document.querySelector('#open svg');
-	const lockSvg: NodeListOf<HTMLElement> = document.querySelectorAll('#lock svg');
+	const aside: HTMLElement = document.querySelector("aside");
+	const openSvg: SVGElement = document.querySelector("#open svg");
+	const lockSvg: NodeListOf<HTMLElement> = document.querySelectorAll("#lock svg");
 	let isLocked: boolean = false;
 
-	document.getElementById('open')
-		.addEventListener('click', (): void => {
+	document.getElementById("open")
+		.addEventListener("click", (): void => {
 			if (isLocked) return;
-			openSvg.style.transform = openSvg.style.transform === 'rotate(0deg)' ? 'rotate(180deg)' : 'rotate(0deg)';
-			aside.style.right = aside.style.right === '0px' ? '-350px' : '0px';
+			openSvg.style.transform = openSvg.style.transform === "rotate(0deg)" ? "rotate(180deg)" : "rotate(0deg)";
+			aside.style.right = aside.style.right === "0px" ? "-350px" : "0px";
 		});
 
-	document.getElementById('lock')
-		.addEventListener('click', (): void => {
+	document.getElementById("lock")
+		.addEventListener("click", (): void => {
 			isLocked = !isLocked;
-			aside.style.right = '0';
-			openSvg.style.transform = 'rotate(180deg)';
-			lockSvg[0].style.display = isLocked ? 'none' : 'block';
-			lockSvg[1].style.display = isLocked ? 'block' : 'none';
+			aside.style.right = "0";
+			openSvg.style.transform = "rotate(180deg)"";
+			lockSvg[0].style.display = isLocked ? "none" : "block";
+			lockSvg[1].style.display = isLocked ? "block" : "none";
 		});
 </script>
 

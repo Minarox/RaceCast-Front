@@ -8,7 +8,7 @@
 <script>
 	import { RemoteTrack, Room, RoomEvent, Track } from "livekit-client";
 
-	const button: HTMLElement = document.getElementById('start');
+	const button: HTMLElement = document.getElementById("start");
 
 	/**
 	 * Dispatch a custom event
@@ -28,7 +28,7 @@
 	 * @returns {Promise<string>}
 	 */
 	async function getLivekitToken(): Promise<string> {
-		const response: Response = await fetch('/livekit-token');
+		const response: Response = await fetch("/livekit-token");
 		return await response.json();
 	}
 
@@ -80,9 +80,9 @@
 	function handleDisconnect(): void {
 		dispatchEvent("status", "disconnected");
 
-		const wrapper: HTMLElement = document.getElementById("wrapper");
-		wrapper.innerHTML = "";
-		wrapper.style.display = "none";
+		const player: HTMLElement = document.getElementById("player");
+		player.innerHTML = "";
+		player.style.display = "none";
 	}
 
 	/**
@@ -99,7 +99,7 @@
 			dynacast: false,
 			reconnectPolicy: {
 				nextRetryDelayInMs: (context): number => {
-					console.log(`Retrying connection n°${context.retryCount} (after ${context.elapsedMs}ms)`,);
+					console.log(`Retrying connection n°${context.retryCount} (after ${context.elapsedMs}ms)`);
 					return 200;
 				}
 			}
@@ -123,11 +123,11 @@
 	}
 
 	// Event listener for the button
-	button.addEventListener('click',startLive);
+	button.addEventListener("click",startLive);
 </script>
 
 <style>
-	div {
+	> div {
 		width: 100%;
 		height: 100%;
 		display: flex;
