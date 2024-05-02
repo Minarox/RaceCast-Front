@@ -1,0 +1,55 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<button type="button" id="fullscreen">
+    <Icon id="maximized" name="material-symbols:fullscreen-rounded" />
+    <Icon id="windowed" name="material-symbols:fullscreen-exit-rounded" />
+</button>
+
+<script>
+    const container: HTMLElement = document.getElementById('fullscreen');
+    const maximized: HTMLElement = document.getElementById('maximized');
+    const windowed: HTMLElement = document.getElementById('windowed');
+
+    container.addEventListener('click', () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else {
+            document.documentElement.requestFullscreen();
+        }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            maximized.style.display = 'none';
+            windowed.style.display = 'block';
+        } else {
+            maximized.style.display = 'block';
+            windowed.style.display = 'none';
+        }
+    });
+</script>
+
+<style>
+    button {
+        background-color: transparent;
+        border: none;
+        z-index: 1000;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 1rem;
+        color: white;
+
+        svg {
+            width: 36px;
+            height: 36px;
+
+            &:nth-of-type(2) {
+                display: none;
+            }
+        }
+    }
+</style>
+
