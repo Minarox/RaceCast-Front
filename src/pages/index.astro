@@ -8,28 +8,30 @@ import Status from "@components/Status.astro";
 import Stage from "@components/Stage.astro";
 import Map from "@components/Map.astro";
 import Mpu from "@components/Mpu.astro";
-import State from "@components/State.astro";
+import Temperature from "@components/Temperature.astro";
+import Network from "@components/Network.astro";
 ---
 
 <Layout>
-	<Status />
-    <Fullscreen />
-	<Player />
+  <Status />
+  <Fullscreen />
+  <Player />
 
-	<Sidebar>
-		<Stage />
-		<Map />
-		<Mpu />
-		<State />
-	</Sidebar>
+  <Sidebar>
+    <Stage />
+    <Map />
+    <Mpu />
+    <Temperature />
+    <Network />
+  </Sidebar>
 </Layout>
 
 <style>
-	body {
-		margin: 0;
-		width: 100vw;
-		height: 100vh;
-		position: relative;
-		overflow: hidden;
-	}
+    body {
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
 </style>

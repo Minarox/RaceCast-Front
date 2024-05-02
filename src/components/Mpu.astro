@@ -8,7 +8,7 @@
     document.addEventListener("data", (event: any): void => {
         if (event.detail?.sensor) {
             const sensor: Sensor = event.detail.sensor;
-            console.log(sensor);
+            console.log(sensor.accel);
         }
     });
 </script>

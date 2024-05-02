@@ -1,0 +1,41 @@
+<div class="container">
+  <header>Réseau</header>
+  <p><span id="network">Inconnu</span> <span id="signal"></span></p>
+</div>
+
+<script>
+    import type { Network, Signal } from "../types/modem.ts";
+
+    const network: HTMLElement = document.getElementById("network") as HTMLElement;
+    const signal: HTMLElement = document.getElementById("signal") as HTMLElement;
+
+    document.addEventListener("data", (event: any): void => {
+        if (event.detail?.network) {
+            const data: Network = event.detail.network;
+            network.textContent = data.type;
+        }
+
+        if (event.detail?.signal) {
+            const data: Signal = event.detail.signal;
+            signal.textContent = `(${data.strength})`;
+        }
+    });
+</script>
+
+<style>
+    div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+
+        header {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        p {
+            text-align: center;
+        }
+    }
+</style>

@@ -1,0 +1,35 @@
+<div class="container">
+  <header>Température</header>
+  <p id="degree">Inconnu</p>
+</div>
+
+<script>
+    import type { Sensor } from "../types/sensor.ts";
+
+    const degree: HTMLElement = document.getElementById("degree") as HTMLElement;
+
+    document.addEventListener("data", (event: any): void => {
+        if (event.detail?.sensor) {
+            const sensor: Sensor = event.detail.sensor;
+            degree.textContent = `${sensor.temp}°C`;
+        }
+    });
+</script>
+
+<style>
+    div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+
+        header {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        p {
+            text-align: center;
+        }
+    }
+</style>
