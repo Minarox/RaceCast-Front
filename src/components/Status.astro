@@ -7,19 +7,15 @@
         const status: HTMLElement = document.getElementById("status");
         switch (event.detail) {
             case "connecting":
-                status.innerText = "Connection en cours...";
-              status.classList.remove("green-border", "red-border");
-              status.classList.add("orange-border");
+            case "reconnecting":
+                status.innerText = `${event.detail === "connecting" ? "Connection" : "Reconnection"} en cours...`;
+                status.classList.remove("green-border", "red-border");
+                status.classList.add("orange-border");
                 break;
             case "connected":
                 status.innerText = "Connecté";
                 status.classList.remove("red-border", "orange-border");
                 status.classList.add("green-border");
-                break;
-            case "reconnecting":
-                status.innerText = "Reconnection en cours...";
-                status.classList.remove("green-border", "red-border");
-                status.classList.add("orange-border");
                 break;
             case "disconnected":
                 status.innerText = "Déconnecté";

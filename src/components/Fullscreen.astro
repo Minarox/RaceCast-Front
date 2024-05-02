@@ -1,33 +1,27 @@
----
+---²
 import { Icon } from 'astro-icon/components';
 ---
 
-<button type="button" id="fullscreen">
+<button type="button" onclick="toggleFullscreen">
     <Icon id="maximized" name="material-symbols:fullscreen-rounded" />
     <Icon id="windowed" name="material-symbols:fullscreen-exit-rounded" />
 </button>
 
 <script>
-    const container: HTMLElement = document.getElementById('fullscreen');
     const maximized: HTMLElement = document.getElementById('maximized');
     const windowed: HTMLElement = document.getElementById('windowed');
 
-    container.addEventListener('click', () => {
+    function toggleFullscreen() {
         if (document.fullscreenElement) {
             document.exitFullscreen();
         } else {
             document.documentElement.requestFullscreen();
         }
-    });
+    }
 
     document.addEventListener('fullscreenchange', () => {
-        if (document.fullscreenElement) {
-            maximized.style.display = 'none';
-            windowed.style.display = 'block';
-        } else {
-            maximized.style.display = 'block';
-            windowed.style.display = 'none';
-        }
+        maximized.style.display = document.fullscreenElement ? 'none' : 'block';
+        windowed.style.display = document.fullscreenElement ? 'block' : 'none';
     });
 </script>
 
