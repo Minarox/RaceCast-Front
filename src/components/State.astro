@@ -1,16 +1,14 @@
----
-import { Network, Signal } from "@types/modem.ts";
----
-
 <div id="state" class="container">
   State
 </div>
 
 <script>
-	document.addEventListener("data", (event: CustomEvent): void => {
-		if (event.detail?.network || event.detail?.signal) {
-			const data: Network | Signal = event.detail?.network || event.detail?.signal
-			console.log(data);
-		}
-	});
+    import type { Network, Signal } from "../types/modem.ts";
+
+    document.addEventListener("data", (event: any): void => {
+        if (event.detail?.network || event.detail?.signal) {
+            const data: Network | Signal = event.detail?.network || event.detail?.signal;
+            console.log(data);
+        }
+    });
 </script>

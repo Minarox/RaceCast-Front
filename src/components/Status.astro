@@ -1,14 +1,13 @@
----
-import { State } from "@types/state.ts";
----
-
 <p id="status" class="container red-border">
   Déconnecté
 </p>
 
 <script>
-    document.addEventListener("status", (event: CustomEvent): void => {
-        const status: HTMLElement = document.getElementById("status");
+    import { State } from "../types/state.ts";
+
+    const status: HTMLElement = document.getElementById("status") as HTMLElement;
+
+    document.addEventListener("status", (event: any): void => {
         switch (event.detail) {
             case State.CONNECTING:
             case State.RECONNECTING:
@@ -39,6 +38,7 @@ import { State } from "@types/state.ts";
         font-size: 1.2em;
         font-weight: bold;
         text-align: center;
+        padding: 0.8rem 2rem;
     }
 
     .green-border {

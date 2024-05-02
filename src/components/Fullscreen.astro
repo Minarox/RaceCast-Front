@@ -8,10 +8,10 @@ import { Icon } from "astro-icon/components";
 </button>
 
 <script>
-    const icons: NodeListOf<HTMLElement> = document.querySelectorAll("#fullscreen svg");
+    const icons: NodeListOf<HTMLElement> = document.querySelectorAll("#fullscreen svg") as NodeListOf<HTMLElement>;
 
     document.getElementById("fullscreen")
-        .addEventListener("click", (): void => {
+        ?.addEventListener("click", (): void => {
             if (document.fullscreenElement) {
                 document.exitFullscreen();
             } else {

@@ -1,16 +1,14 @@
----
-import { GPS } from "@types/modem.ts";
----
-
 <div class="container">
   Map
 </div>
 
 <script>
-	document.addEventListener("data", (event: CustomEvent): void => {
-		if (event.detail?.gps) {
-			const gps: GPS = event.detail.gps;
-			console.log(gps);
-		}
-	});
+    import type { GPS } from "../types/modem.ts";
+
+    document.addEventListener("data", (event: any): void => {
+        if (event.detail?.gps) {
+            const gps: GPS = event.detail.gps;
+            console.log(gps);
+        }
+    });
 </script>

@@ -1,32 +1,30 @@
----
-import { State } from "@types/state.ts";
-import { GPS } from "@types/modem.ts";
----
-
 <p id="speed">
   0 Km/h
 </p>
 
 <script>
-  const speed: HTMLElement = document.getElementById("speed");
+    import { State } from "../types/state.ts";
+    import type { GPS } from "../types/modem.ts";
 
-  document.addEventListener("status", (event: CustomEvent): void => {
-    speed.style.opacity = event.detail === State.CONNECTED ? 1 : 0;
-  });
+    const speed: HTMLElement = document.getElementById("speed") as HTMLElement;
 
-	document.addEventListener("data", (event: CustomEvent): void => {
-		if (event.detail?.gps) {
-      const gps: GPS = event.detail.gps;
-      speed.innerText = `${gps.speed} Km/h`;
-		}
-	});
+    document.addEventListener("status", (event: any): void => {
+        speed.style.opacity = event.detail === State.CONNECTED ? "1" : "0";
+    });
+
+    document.addEventListener("data", (event: any): void => {
+        if (event.detail?.gps) {
+            const gps: GPS = event.detail.gps;
+            speed.innerText = `${gps.speed} Km/h`;
+        }
+    });
 </script>
 
 <style>
-  p {
-    font-size: 2.2rem;
-    color: white;
-    font-weight: bold;
-    transition: opacity 0.3s linear;
-  }
+    p {
+        font-size: 2.2rem;
+        color: white;
+        font-weight: bold;
+        transition: opacity 0.3s linear;
+    }
 </style>

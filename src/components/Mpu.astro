@@ -1,16 +1,14 @@
----
-import { Sensor } from "@types/sensor.ts";
----
-
 <div id="mpu" class="container">
   Mpu
 </div>
 
 <script>
-	document.addEventListener("data", (event: CustomEvent): void => {
-		if (event.detail?.sensor) {
-			const sensor: Sensor = event.detail.sensor;
-			console.log(sensor);
-		}
-	});
+    import type { Sensor } from "../types/sensor.ts";
+
+    document.addEventListener("data", (event: any): void => {
+        if (event.detail?.sensor) {
+            const sensor: Sensor = event.detail.sensor;
+            console.log(sensor);
+        }
+    });
 </script>
