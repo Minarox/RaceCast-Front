@@ -1,0 +1,11 @@
+<div id="state" class="container">
+  State
+</div>
+
+<script>
+	document.addEventListener("data", (event: CustomEvent): void => {
+		if (event.detail?.network || event.detail?.signal) {
+			console.log(event.detail);
+		}
+	});
+</script>
