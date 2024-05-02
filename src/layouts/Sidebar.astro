@@ -6,8 +6,8 @@ import Speed from '../components/Speed.astro';
 <aside>
 	<section>
 		<button type="button" id="lock">
-			<Icon id="unlocked" name="material-symbols:lock-open-right-outline" />
-			<Icon id="locked" name="material-symbols:lock" />
+			<Icon name="material-symbols:lock-open-right-outline" />
+			<Icon name="material-symbols:lock" />
 		</button>
 		<button type="button" id="open">
 			<Icon name="material-symbols:arrow-back-ios-rounded" />
@@ -23,8 +23,7 @@ import Speed from '../components/Speed.astro';
 <script>
 	const aside: HTMLElement = document.querySelector('aside');
 	const openSvg: SVGElement = document.querySelector('#open svg');
-	const lockedSvg: HTMLElement = document.getElementById('locked');
-	const unlockedSvg: HTMLElement = document.getElementById('unlocked');
+	const lockSvg: NodeListOf<HTMLElement> = document.querySelectorAll('#lock svg');
 	let isLocked: boolean = false;
 
 	document.getElementById('open')
@@ -39,8 +38,8 @@ import Speed from '../components/Speed.astro';
 			isLocked = !isLocked;
 			aside.style.right = '0';
 			openSvg.style.transform = 'rotate(180deg)';
-			lockedSvg.style.display = isLocked ? 'block' : 'none';
-			unlockedSvg.style.display = isLocked ? 'none' : 'block';
+			lockSvg[0].style.display = isLocked ? 'none' : 'block';
+			lockSvg[1].style.display = isLocked ? 'block' : 'none';
 		});
 </script>
 
@@ -77,16 +76,16 @@ import Speed from '../components/Speed.astro';
 
 				&:first-of-type {
 					align-items: flex-start;
+
+					> svg:last-of-type {
+						display: none;
+					}
 				}
 
 				> svg {
 					height: 36px;
 					width: 36px;
 					color: white;
-
-					&#locked {
-						display: none;
-					}
 				}
 			}
 
