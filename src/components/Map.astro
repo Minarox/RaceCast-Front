@@ -1,6 +1,4 @@
-<div class="container">
-  <div id="map"></div>
-</div>
+<div id="map" class="container" />
 
 <script>
     import { State } from "../types/state.ts";
@@ -17,7 +15,7 @@
     import { unByKey } from "ol/Observable.js";
     import "ol/ol.css";
 
-    const map: any = document.getElementById("map");
+    let map: any = null;
     let tileLayer: any = null;
     let source: any = null;
     let vector: any = null;
@@ -33,7 +31,7 @@
      * @param {Array<number>} position - Position of the pin
      * @returns {void}
      */
-    function location(position: [number, number]): void {
+    function setLocation(position: [number, number]): void {
         map.getLayers()
             .getArray()[1]
             .getSource()
@@ -76,7 +74,7 @@
         });
 
         map = new Map({
-            target: map,
+            target: document.getElementById("map"),
             controls: defaultControls({ attribution: false, zoom: true })
                 .extend([
                     new ScaleLine({
@@ -146,7 +144,7 @@
     document.addEventListener("data", (event: any): void => {
         if (event.detail?.gps) {
             const gps: GPS = event.detail.gps;
-            location([
+            setLocation([
                 gps.longitude,
                 gps.latitude
             ])
@@ -168,8 +166,8 @@
 
 <style>
     #map {
-        flex: 1;
-        min-height: 260px;
+        padding: 0;
+        min-height: 400px;
         overflow: hidden;
     }
 </style>
