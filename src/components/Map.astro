@@ -1,14 +1,175 @@
 <div class="container">
-  Map
+  <div id="map"></div>
 </div>
 
 <script>
+    import { State } from "../types/state.ts";
     import type { GPS } from "../types/modem.ts";
+    import { Feature, Map, View } from "ol/index";
+    import { OSM, Vector as VectorSource } from "ol/source";
+    import { Point } from "ol/geom";
+    import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
+    import { useGeographic } from "ol/proj";
+    import { defaults as defaultControls, FullScreen, ScaleLine } from "ol/control.js";
+    import { Circle as CircleStyle, Stroke, Style } from "ol/style.js";
+    import { easeOut } from "ol/easing.js";
+    import { getVectorContext } from "ol/render.js";
+    import { unByKey } from "ol/Observable.js";
+    import "ol/ol.css";
+
+    const map: any = document.getElementById("map");
+    let tileLayer: any = null;
+    let source: any = null;
+    let vector: any = null;
+    let duration: number = 3000;
+    let start: any = null;
+    let flashGeom: any = null;
+    let listenerKey: any = null;
+    let interval: any = null;
+    let location: Array<number> = [0, 0];
+
+    /**
+     * @description Update pin location on map
+     * @param {Array<number>} position - Position of the pin
+     * @returns {void}
+     */
+    function location(position: [number, number]): void {
+        map.getLayers()
+            .getArray()[1]
+            .getSource()
+            .getFeatures()[0]
+            .getGeometry()
+            .setCoordinates(position);
+
+        setTimeout(() => {
+            map.getView().animate({
+                center: position,
+                duration: 300,
+            });
+        }, 1);
+    }
+
+    /**
+     * @description Create and display a map
+     * @returns {void}
+     */
+    function createMap(): void {
+        tileLayer = new TileLayer({
+            source: new OSM({
+                wrapX: false,
+            }),
+        });
+
+        source = new VectorSource({
+            wrapX: false,
+            features: [new Feature(new Point(location))],
+        });
+
+        vector = new VectorLayer({
+            source: source,
+            style: {
+                "circle-radius": 12,
+                "circle-fill-color": "rgba(255,255,255,0.6)",
+                "circle-stroke-color": "#3399CC",
+                "circle-stroke-width": 1.8,
+            },
+        });
+
+        map = new Map({
+            target: map,
+            controls: defaultControls({ attribution: false, zoom: true })
+                .extend([
+                    new ScaleLine({
+                        units: "metric",
+                    }),
+                    new FullScreen(),
+                ]),
+            layers: [tileLayer, vector],
+            view: new View({
+                center: location,
+                zoom: 15,
+            }),
+        });
+    }
+
+    /**
+     * @description Add red ring around the pin
+     * @returns {void}
+     */
+    function flash(): void {
+        start = Date.now();
+        flashGeom = map
+            .getLayers()
+            .getArray()[1]
+            .getSource()
+            .getFeatures()[0]
+            .getGeometry()
+            .clone();
+        listenerKey = tileLayer.on("postrender", animate);
+    }
+
+    /**
+     * @description Animate the red ring
+     * @param {any} event - Event
+     * @returns {void}
+     */
+    function animate(event: any): void {
+        const frameState = event.frameState;
+        const elapsed = frameState.time - start;
+        if (elapsed >= duration) {
+            unByKey(listenerKey);
+            return;
+        }
+        const vectorContext = getVectorContext(event);
+        const elapsedRatio = elapsed / duration;
+        const radius = easeOut(elapsedRatio) * 25 + 12;
+        const opacity = easeOut(1 - elapsedRatio);
+
+        const style = new Style({
+            image: new CircleStyle({
+                radius: radius,
+                stroke: new Stroke({
+                    color: "rgba(255, 0, 0, " + opacity + ")",
+                    width: 0.25 + opacity,
+                }),
+            }),
+        });
+
+        vectorContext.setStyle(style);
+        vectorContext.drawGeometry(flashGeom);
+        map.render();
+    }
+
+    useGeographic();
+    createMap();
 
     document.addEventListener("data", (event: any): void => {
         if (event.detail?.gps) {
             const gps: GPS = event.detail.gps;
-            console.log(gps);
+            location([
+                gps.longitude,
+                gps.latitude
+            ])
+        }
+    });
+
+    document.addEventListener("status", (event: any): void => {
+        if (event.detail === State.CONNECTED) {
+            flash();
+            interval = setInterval(() => {
+                flash();
+            }, 3000);
+        } else {
+            clearInterval(interval);
+            interval = null;
         }
     });
 </script>
+
+<style>
+    #map {
+        flex: 1;
+        min-height: 260px;
+        overflow: hidden;
+    }
+</style>
