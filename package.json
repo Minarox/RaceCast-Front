@@ -23,6 +23,7 @@
     "astro-icon": "^1.1.0",
     "livekit-client": "^2.1.1",
     "livekit-server-sdk": "^2.2.0",
+    "ol": "^9.1.0",
     "typescript": "^5.4.4"
   },
   "bugs": {
