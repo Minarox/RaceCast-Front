@@ -1,0 +1,35 @@
+<div class="container">
+  <header>Altitude</header>
+  <p id="altitude">Inconnu</p>
+</div>
+
+<script>
+    import type { GPS } from "../types/modem.ts";
+
+    const degree: HTMLElement = document.getElementById("altitude") as HTMLElement;
+
+    document.addEventListener("data", (event: any): void => {
+        if (event.detail?.gps) {
+            const gps: GPS = event.detail.gps;
+            degree.textContent = `${gps.altitude} mètres`;
+        }
+    });
+</script>
+
+<style>
+    div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+
+        header {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        p {
+            text-align: center;
+        }
+    }
+</style>
