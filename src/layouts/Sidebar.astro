@@ -30,7 +30,7 @@ import Speed from "@components/Speed.astro";
         ?.addEventListener("click", (): void => {
             if (isLocked) return;
             openSvg.style.transform = openSvg.style.transform === "rotate(180deg)" ? "rotate(0deg)" : "rotate(180deg)";
-            aside.style.right = aside.style.right === "0px" ? "-350px" : "0px";
+            aside.style.right = aside.style.right === "0px" ? "-400px" : "0px";
         });
 
     document.getElementById("lock")
@@ -51,10 +51,10 @@ import Speed from "@components/Speed.astro";
         pointer-events: none;
         position: absolute;
         top: 0;
-        right: -350px;
+        right: -400px;
         bottom: 0;
         display: grid;
-        grid-template-columns: max-content 350px;
+        grid-template-columns: max-content 400px;
         grid-gap: 0.6rem;
         transition: right 0.3s ease-in-out;
 
