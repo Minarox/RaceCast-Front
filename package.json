@@ -21,6 +21,7 @@
     "@astrojs/cloudflare": "^10.2.4",
     "astro": "^4.5.18",
     "astro-icon": "^1.1.0",
+    "highcharts": "^11.4.1",
     "livekit-client": "^2.1.1",
     "livekit-server-sdk": "^2.2.0",
     "ol": "^9.1.0",
