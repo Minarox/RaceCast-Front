@@ -1,14 +1,82 @@
-<div id="mpu" class="container">
-  Mpu
-</div>
+<div id="mpu" class="container" />
 
 <script>
     import type { Sensor } from "../types/sensor.ts";
+    import Highcharts from 'highcharts';
+    import HighchartsExporting from 'highcharts/modules/exporting';
+
+    HighchartsExporting(Highcharts);
+    Highcharts.chart('mpu', {
+        accessibility: {
+            enabled: false
+        },
+        lang: {
+            noData: "Aucune donnée"
+        },
+        credits: {
+            enabled: false
+        },
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                marker: {
+                    radius: 6
+                }
+            }
+        },
+        chart: {
+            height: null,
+            spacing: [10, 10, 4, 10],
+            backgroundColor: "transparent",
+            type: "scatter",
+            animation: {
+                duration: 100
+            }
+        },
+        title: {
+            text: ""
+        },
+        yAxis: {
+            min: -4,
+            max: 4,
+            title: null
+        },
+        xAxis: {
+            min: -4,
+            max: 4,
+            gridLineWidth: 1
+        },
+        series: [
+            {
+                name: "Accélération",
+                color: "#FF0000"
+            },
+            {
+                name: "origin",
+                data: [[0, 0]],
+                color: "#888888",
+                enableMouseTracking: false
+            }
+        ]
+    });
 
     document.addEventListener("data", (event: any): void => {
         if (event.detail?.sensor) {
             const sensor: Sensor = event.detail.sensor;
-            console.log(sensor.accel);
+            Highcharts.charts[0].series[0].setData([[sensor.accel.x, sensor.accel.y]]);
         }
     });
 </script>
+
+<style>
+  #mpu {
+      padding: 0.5rem 0.2rem 0.3rem;
+      aspect-ratio: 1;
+      min-height: 200px;
+  }
+</style>
