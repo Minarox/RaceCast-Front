@@ -62,12 +62,20 @@
     }
 
     /**
-     * Handle disconnect event
+     * Handle data
      * @returns {void}
      */
     function handleData(event: any): void {
         const data = JSON.parse(new TextDecoder().decode(event));
         dispatchEvent("data", data);
+    }
+
+    /**
+     * Handle metadata event
+     * @returns {void}
+     */
+    function handleMetadata(metadata: string): void {
+        dispatchEvent("metadata", metadata);
     }
 
     /**
@@ -110,10 +118,12 @@
             .on(RoomEvent.Disconnected, handleDisconnect)
             .on(RoomEvent.TrackSubscribed, handleTrackSubscribed)
             .on(RoomEvent.TrackUnsubscribed, handleTrackUnsubscribed)
-            .on(RoomEvent.DataReceived, handleData);
+            .on(RoomEvent.DataReceived, handleData)
+            .on(RoomEvent.RoomMetadataChanged, handleMetadata);
 
         // connect to room
         await room.connect(import.meta.env.PUBLIC_LIVEKIT_URL, token);
+        handleMetadata(room.metadata);
     }
 
     // Event listener for the button

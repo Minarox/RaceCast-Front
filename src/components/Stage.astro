@@ -1,3 +1,71 @@
-<div class="container">
-  Stage
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div id="stage" class="container">
+  <header>En attente de connection...</header>
+  <div />
+  <a href="">Classement <Icon name="material-symbols:tab-move" /></a>
 </div>
+
+<script>
+    const stage: HTMLElement = document.getElementById('stage') as HTMLElement;
+    const title: HTMLElement = stage.querySelector('header') as HTMLElement;
+    const stages: HTMLElement = stage.querySelector('div') as HTMLElement;
+    const link: HTMLElement = stage.querySelector('a') as HTMLElement;
+
+    // header.innerHTML = `<a href="https://example.com">coucou</a>`;
+    document.addEventListener("metadata", (event: any): void => {
+        const metadata = JSON.parse(event.detail);
+        title.textContent = metadata.name;
+        stages.innerHTML = '';
+        for (const _stage of metadata.stages) {
+            const name: HTMLElement = document.createElement('p');
+            const time: HTMLElement = document.createElement('p');
+            name.textContent = `${_stage.name} : `;
+            time.textContent = _stage.time || 'en attente';
+            stages.append(name, time);
+        }
+        link.setAttribute('href', metadata.link);
+
+        stages.style.display = 'grid';
+        link.style.display = 'flex';
+    });
+</script>
+
+<style>
+    div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.7rem;
+
+        header {
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        > div {
+            display: none;
+            width: 100%;
+            grid-template-columns: max-content 1fr;
+            align-items: baseline;
+            gap: 0.3rem;
+
+            p:nth-child(odd) {
+                font-weight: bold;
+            }
+        }
+
+        > a {
+            padding-top: 0.3rem;
+            display: none;
+            gap: 0.2rem;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            width: 100%;
+        }
+    }
+</style>
