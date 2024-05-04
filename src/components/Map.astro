@@ -74,7 +74,7 @@
         });
 
         map = new Map({
-            target: document.getElementById("map"),
+            target: document.getElementById("map") as HTMLElement,
             controls: defaultControls({ attribution: false, zoom: true })
                 .extend([
                     new ScaleLine({

@@ -123,7 +123,7 @@
 
         // connect to room
         await room.connect(import.meta.env.PUBLIC_LIVEKIT_URL, token);
-        handleMetadata(room.metadata);
+        handleMetadata(room.metadata as string);
     }
 
     // Event listener for the button
@@ -132,9 +132,9 @@
     // Event listener for the sidebar
     document.addEventListener("sidebar", (event: any): void => {
         if (event.detail) {
-            player.parentElement.style.width = "calc(100% - 400px)";
+            player.parentElement!.style.width = "calc(100% - 400px)";
         } else {
-            player.parentElement.style.width = "100%";
+            player.parentElement!.style.width = "100%";
         }
     });
 </script>

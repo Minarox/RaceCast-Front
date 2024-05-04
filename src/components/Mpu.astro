@@ -5,8 +5,9 @@
     import Highcharts from 'highcharts';
     import HighchartsExporting from 'highcharts/modules/exporting';
 
-    HighchartsExporting(Highcharts);
-    Highcharts.chart('mpu', {
+    const highcharts: any = Highcharts;
+    HighchartsExporting(highcharts);
+    highcharts.chart('mpu', {
         accessibility: {
             enabled: false
         },
@@ -68,7 +69,7 @@
     document.addEventListener("data", (event: any): void => {
         if (event.detail?.sensor) {
             const sensor: Sensor = event.detail.sensor;
-            Highcharts.charts[0].series[0].setData([[sensor.accel.x, sensor.accel.y]]);
+            highcharts.charts[0].series[0].setData([[sensor.accel.x, sensor.accel.y]]);
         }
     });
 </script>

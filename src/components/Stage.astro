@@ -9,6 +9,8 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
+    import type { Metadata } from "../types/metadata.ts";
+
     const stage: HTMLElement = document.getElementById('stage') as HTMLElement;
     const title: HTMLElement = stage.querySelector('header') as HTMLElement;
     const stages: HTMLElement = stage.querySelector('div') as HTMLElement;
@@ -16,20 +18,25 @@ import { Icon } from "astro-icon/components";
 
     // header.innerHTML = `<a href="https://example.com">coucou</a>`;
     document.addEventListener("metadata", (event: any): void => {
-        const metadata = JSON.parse(event.detail);
-        title.textContent = metadata.name;
-        stages.innerHTML = '';
-        for (const _stage of metadata.stages) {
-            const name: HTMLElement = document.createElement('p');
-            const time: HTMLElement = document.createElement('p');
-            name.textContent = `${_stage.name} : `;
-            time.textContent = _stage.time || 'en attente';
-            stages.append(name, time);
-        }
-        link.setAttribute('href', metadata.link);
+        if (event.detail) {
+            const metadata: Metadata = JSON.parse(event.detail);
+            title.textContent = metadata.name;
+            stages.innerHTML = '';
+            for (const _stage of metadata.stages) {
+                const name: HTMLElement = document.createElement('p');
+                const time: HTMLElement = document.createElement('p');
+                name.textContent = `${_stage.name} : `;
+                time.textContent = _stage.time || 'en attente';
+                stages.append(name, time);
+            }
+            link.setAttribute('href', metadata.link);
 
-        stages.style.display = 'grid';
-        link.style.display = 'flex';
+            stages.style.display = 'grid';
+            link.style.display = 'flex';
+            stage.style.display = 'flex';
+        } else {
+            stage.style.display = 'none';
+        }
     });
 </script>
 
