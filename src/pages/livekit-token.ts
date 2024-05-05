@@ -4,14 +4,16 @@ export const prerender = false;
 
 /**
  * @description Generate a token for LiveKit
+ * @method GET
+ * @param {any} context - Request context
  * @endpoint GET /livekit-token
  * @returns {Promise<Response>} Token
  */
-export async function GET(): Promise<Response> {
+export async function GET(context: any): Promise<Response> {
     // Generate a new token
     let accessToken: AccessToken = new AccessToken(
-        import.meta.env.LIVEKIT_KEY,
-        import.meta.env.LIVEKIT_SECRET,
+        context?.env?.LIVEKIT_KEY || import.meta.env.LIVEKIT_KEY,
+        context?.env?.LIVEKIT_SECRET || import.meta.env.LIVEKIT_SECRET,
         {
             identity: `User-${Math.random().toString(36).substring(7)}`,
         },
@@ -24,7 +26,7 @@ export async function GET(): Promise<Response> {
         roomList: false,
         roomRecord: false,
         roomAdmin: false,
-        room: import.meta.env.LIVEKIT_ROOM,
+        room: context?.env?.LIVEKIT_ROOM || import.meta.env.LIVEKIT_ROOM,
         ingressAdmin: false,
         canPublish: false,
         canSubscribe: true,
