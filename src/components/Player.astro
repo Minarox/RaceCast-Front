@@ -53,29 +53,12 @@
     }
 
     /**
-     * Handle track unsubscribed event
-     * @param {RemoteTrack} track
-     * @returns {void}
-     */
-    function handleTrackUnsubscribed(track: RemoteTrack): void {
-        track.detach();
-    }
-
-    /**
      * Handle data
      * @returns {void}
      */
     function handleData(event: any): void {
         const data = JSON.parse(new TextDecoder().decode(event));
         dispatchEvent("data", data);
-    }
-
-    /**
-     * Handle metadata event
-     * @returns {void}
-     */
-    function handleMetadata(metadata: string): void {
-        dispatchEvent("metadata", metadata);
     }
 
     /**
@@ -96,6 +79,7 @@
     async function startLive(): Promise<void> {
         dispatchEvent("status", "connecting");
         const token: string = await getLivekitToken();
+        let nbParticipants: number | null = null;
 
         // creates a new room with options
         const room: Room = new Room({
@@ -112,18 +96,21 @@
 
         // set up event listeners
         room
-            .on(RoomEvent.Connected, () => dispatchEvent("status", "connected"))
-            .on(RoomEvent.Reconnecting, () => dispatchEvent("status", "reconnecting"))
-            .on(RoomEvent.Reconnected, () => dispatchEvent("status", "connected"))
+            .on(RoomEvent.Connected, (): void => dispatchEvent("status", "connected"))
+            .on(RoomEvent.Reconnecting, (): void => dispatchEvent("status", "reconnecting"))
+            .on(RoomEvent.Reconnected, (): void => dispatchEvent("status", "connected"))
             .on(RoomEvent.Disconnected, handleDisconnect)
             .on(RoomEvent.TrackSubscribed, handleTrackSubscribed)
-            .on(RoomEvent.TrackUnsubscribed, handleTrackUnsubscribed)
+            .on(RoomEvent.TrackUnsubscribed, (track: RemoteTrack): void => track.detach())
             .on(RoomEvent.DataReceived, handleData)
-            .on(RoomEvent.RoomMetadataChanged, handleMetadata);
+            .on(RoomEvent.RoomMetadataChanged, (metadata: string): void => dispatchEvent("metadata", metadata))
+            .on(RoomEvent.ParticipantConnected, (): void => dispatchEvent("participants", room.remoteParticipants))
+            .on(RoomEvent.ParticipantDisconnected, (): void => dispatchEvent("participants", room.remoteParticipants));
 
         // connect to room
         await room.connect(import.meta.env.PUBLIC_LIVEKIT_URL, token);
-        handleMetadata(room.metadata as string);
+        dispatchEvent("metadata", room.metadata)
+        dispatchEvent("participants", room.remoteParticipants)
     }
 
     // Event listener for the button
