@@ -1,7 +1,10 @@
-<div class="container">
-  <header>Réseau</header>
+---
+import Card from "@layouts/Card.astro";
+---
+
+<Card header="Réseau">
   <p><span id="network">Inconnu</span> <span id="signal"></span></p>
-</div>
+</Card>
 
 <script>
     import type { Network, Signal } from "../types/modem.ts";
@@ -21,21 +24,3 @@
         }
     });
 </script>
-
-<style>
-    div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-
-        header {
-            font-size: 1.1rem;
-            font-weight: bold;
-        }
-
-        p {
-            text-align: center;
-        }
-    }
-</style>

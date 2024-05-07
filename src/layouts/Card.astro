@@ -1,0 +1,30 @@
+---
+interface Props {
+  header: string;
+}
+
+const { header } = Astro.props;
+---
+
+<div class="container">
+  <header>{ header }</header>
+  <slot />
+</div>
+
+<style>
+    div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+
+        header {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        p {
+            text-align: center;
+        }
+    }
+</style>
