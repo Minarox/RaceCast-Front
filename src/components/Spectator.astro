@@ -1,0 +1,15 @@
+---
+import Card from "@layouts/Card.astro";
+---
+
+<Card header="Spectateurs">
+  <p id="spectator">Inconnu</p>
+</Card>
+
+<script>
+    const spectator: HTMLElement = document.getElementById("spectator") as HTMLElement;
+
+    document.addEventListener("participants", (event: any): void => {
+        console.table(JSON.stringify(event.detail, null, 4));
+    });
+</script>
