@@ -32,7 +32,7 @@ export async function GET(context: any): Promise<Response> {
         canSubscribe: true,
         canPublishData: false,
         canUpdateOwnMetadata: false,
-        hidden: true,
+        hidden: false,
         recorder: false,
         agent: false,
     });
