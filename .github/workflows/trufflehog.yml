@@ -1,4 +1,4 @@
-name: Scan for secrets
+name: secret-scan
 
 on:
   pull_request:
