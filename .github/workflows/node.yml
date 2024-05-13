@@ -1,4 +1,4 @@
-name: Check Astro project
+name: node-build
 
 on:
   pull_request:
