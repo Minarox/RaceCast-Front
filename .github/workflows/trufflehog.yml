@@ -1,3 +1,5 @@
+name: Scan for secrets
+
 on:
   pull_request:
     branches: [ main ]
