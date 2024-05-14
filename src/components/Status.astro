@@ -11,7 +11,7 @@
         switch (event.detail) {
             case State.CONNECTING:
             case State.RECONNECTING:
-                status.innerText = `${event.detail === "connecting" ? "Connection" : "Reconnection"} en cours...`;
+                status.innerText = `${event.detail === "connecting" ? "Connexion" : "Reconnexion"} en cours...`;
                 status.classList.remove("green-border", "red-border", "hidden");
                 status.classList.add("orange-border");
                 break;
