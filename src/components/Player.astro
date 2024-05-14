@@ -100,7 +100,7 @@
         // creates a new room with options
         const room: Room = new Room({
             adaptiveStream: true, dynacast: false, reconnectPolicy: {
-                nextRetryDelayInMs: (context): number => {
+                nextRetryDelayInMs: (): number => {
                     return 1000;
                 },
             },
