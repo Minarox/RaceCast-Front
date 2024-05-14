@@ -1,19 +1,44 @@
+---
+import { SEO } from "astro-seo";
+---
+
 <!doctype html>
 <html lang="fr">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta
-			name="viewport"
-			content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"
-		/>
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>RaceCast</title>
-		<meta
-			content="Interface d'affichage des données de la voiture de course."
-			name="description"
-		/>
+        <SEO
+            title="RaceCast"
+            description="Flux en direct de la voiture de course de Kevin CORBIER."
+            charset="UTF-8"
+            openGraph={{
+                basic: {
+                    title: "Caméra embarquée de Kevin CORBIER",
+                    type: "website",
+                    image: "https://user-images.githubusercontent.com/5182256/131216951-8f74f425-f775-463d-a11b-0e01ad9fce8d.png",
+                },
+                optional: {
+                    siteName: "RaceCast",
+                    locale: "fr_FR",
+                },
+            }}
+            twitter={{
+                card: "summary_large_image",
+                site: "https://minarox.fr",
+                creator: "@Minarox_",
+                title: "RaceCast",
+                description: "Flux en direct de la voiture de course de Kevin CORBIER.",
+                image: "https://user-images.githubusercontent.com/5182256/131216951-8f74f425-f775-463d-a11b-0e01ad9fce8d.png"
+            }}
+            extend={{
+                link: [
+                    { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }
+                ],
+                meta: [
+                    { name: "theme-color", content: "#242424" },
+                    { name: "generator", content: Astro.generator },
+                    { name: "viewport", content: "width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" }
+                ]
+            }}
+        />
 	</head>
 
 	<body>
