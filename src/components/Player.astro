@@ -101,7 +101,6 @@
         const room: Room = new Room({
             adaptiveStream: true, dynacast: false, reconnectPolicy: {
                 nextRetryDelayInMs: (context): number => {
-                    console.log(`Retrying connection n°${context.retryCount} (after ${context.elapsedMs}ms)`);
                     return 1000;
                 },
             },
