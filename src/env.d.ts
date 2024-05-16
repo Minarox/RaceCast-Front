@@ -2,7 +2,7 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
-    readonly LIVEKIT_SOCKET_URL: string;
+    readonly LIVEKIT_WS_URL: string;
     readonly LIVEKIT_API: string;
     readonly LIVEKIT_SECRET: string;
     readonly LIVEKIT_ROOM: string;

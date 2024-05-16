@@ -107,7 +107,7 @@
         });
 
         // pre-warm connection, this can be called as early as your page is loaded
-        await room.prepareConnection(import.meta.env.LIVEKIT_SOCKET_URL, token);
+        await room.prepareConnection(import.meta.env.LIVEKIT_WS_URL, token);
 
         // set up event listeners
         room
@@ -121,7 +121,7 @@
             .on(RoomEvent.RoomMetadataChanged, handleMetadata);
 
         // connect to room
-        await room.connect(import.meta.env.LIVEKIT_SOCKET_URL, token);
+        await room.connect(import.meta.env.LIVEKIT_WS_URL, token);
         handleMetadata(room.metadata as string);
     }
 
