@@ -32,10 +32,13 @@ import Speed from "@components/Speed.astro";
         if (window.innerWidth > 1200) {
             aside.style.right = isLocked ? "0" : "-400px";
             components.style.height = "100%";
-        } else if (window.innerWidth > 900) {
+        } else if (window.innerWidth > 768) {
             aside.style.right = isLocked ? "0" : "-300px";
             components.style.height = "100%";
         } else {
+            if (isLocked) {
+                document.getElementById("lock")?.click();
+            }
             aside.style.right = "0";
             if (player) {
                 components.style.height = `calc(100dvh - ${player.offsetHeight}px)`;
@@ -62,7 +65,7 @@ import Speed from "@components/Speed.astro";
             document.dispatchEvent(event);
         });
 
-    if (player && window.innerWidth <= 900) {
+    if (player && window.innerWidth <= 768) {
         components.style.height = `calc(100dvh - ${player.offsetHeight}px)`;
     }
 </script>
@@ -152,7 +155,7 @@ import Speed from "@components/Speed.astro";
             }
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 768px) {
             position: unset;
             display: flex;
             flex-direction: column;

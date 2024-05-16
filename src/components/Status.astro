@@ -19,7 +19,7 @@
                 status.innerText = "Connecté";
                 status.classList.remove("red-border", "orange-border", "hidden");
                 status.classList.add("green-border");
-                setTimeout(() => status.classList.add("hidden"), 4000);
+                setTimeout(() => status.classList.add("hidden"), 2800);
                 break;
             case State.DISCONNECTED:
                 status.innerText = "Déconnecté";
@@ -41,6 +41,11 @@
         text-align: center;
         padding: 0.8rem 2rem;
         transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+
+        @media (max-width: 768px) {
+            left: 50%;
+            transform: translateX(-50%);
+        }
     }
 
     .hidden {
