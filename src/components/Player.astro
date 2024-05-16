@@ -12,7 +12,7 @@
     const player: HTMLElement = document.getElementById("player") as HTMLElement;
 
     window.addEventListener("resize", (): void => {
-        const video: HTMLVideoElement[] = document.getElementsByTagName("video") as HTMLVideoElement[];
+        const video: HTMLCollectionOf<HTMLVideoElement> = document.getElementsByTagName("video") as HTMLCollectionOf<HTMLVideoElement>;
         if (video.length > 0) {
             video[0].controls = window.innerWidth <= 900;
         }
