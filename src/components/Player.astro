@@ -14,7 +14,7 @@
     window.addEventListener("resize", (): void => {
         const video: HTMLCollectionOf<HTMLVideoElement> = document.getElementsByTagName("video") as HTMLCollectionOf<HTMLVideoElement>;
         if (video.length > 0) {
-            video[0].controls = window.innerWidth <= 900;
+            video[0].controls = window.innerWidth <= 768;
         }
     });
 
@@ -52,7 +52,7 @@
             player.appendChild(element);
             player.style.display = "flex";
 
-            if (element instanceof HTMLVideoElement && window.innerWidth <= 900) {
+            if (element instanceof HTMLVideoElement && window.innerWidth <= 768) {
                 element.controls = true;
             }
 
@@ -175,11 +175,11 @@
             }
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 768px) {
             width: unset;
-            height: 100vh;
-            min-height: 10vh;
-            max-height: 40vh;
+            height: 56vw;
+            min-height: 28vh;
+            max-height: 45vh;
         }
     }
 </style>
