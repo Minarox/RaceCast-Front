@@ -12,7 +12,7 @@
 ![Website status](https://img.shields.io/website?url=https%3A%2F%2Frallye.minarox.fr&style=flat&label=Website)
 
   <p align="center">
-    Interface Web du projet RaceCast de diffusion en direct de données depuis une voiture de rallye.
+    Web interface for the RaceCast project to broadcast live data from a rally car.
     <br />
     <a href="https://rallye.minarox.fr/"><strong>rallye.minarox.fr »</strong></a>
   </p>
@@ -28,18 +28,16 @@
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
     - [Deployment](#deployment)
-- [Roadmap](#roadmap)
-- [Support](#support)
 - [Author](#author)
 </details>
 
 ## About
 
-Le projet RaceCast est un ensemble de solutions matérielles et logicielles permettant de diffuser en direct une multitude de données utiles pour les spectateurs suivant le déroulement de la course.
+The RaceCast project is a set of hardware and software solutions enabling a multitude of useful data to be broadcast live to spectators following the race.
 <br>
-Ce dépot contient l'interface Web qui s'occupe de réceptionner et afficher les données émises depuis la voiture, comme le flux audio / vidéo de la caméra embarquée et les données de télémétrie et GPS.
+This repository contains the Web interface that receives and displays data transmitted from the car, such as the audio/video stream from the onboard camera, and telemetry and GPS data.
 
-<img src="docs/images/screenshot.png" title="Home Page" width="100%">
+<img style="border-radius: 6px" src="public/preview.webp" title="Preview" width="100%">
 
 ### Build With
 
@@ -80,12 +78,12 @@ LIVEKIT_ROOM="room"
   npm run dev
 ```
 
-The server should start on [localhost:4123](http://localhost:8080/).
+The development server should start on [localhost:4321](http://localhost:4321/).
 
 ### Deployment
 
-Le projet est configuré pour être déployé automatiquement sur Cloudflare Pages. <br />
-Pour compiler localement le projet, exécutez la commande suivante :
+The project is configured to be automatically deployed on Cloudflare Pages. <br />
+To compile the project locally, run the following command:
 ```bash
   npm run build
 ```
