@@ -1,54 +1,95 @@
-# Astro Starter Kit: Basics
+<h1 align="center">
+    <a href="https://github.com/Chartreuse-Gaming/Website">
+        <img src="public/favicon.svg" alt="Logo" width="80" height="80">
+    </a>
+</h1>
+<div align="center">
+    <h3 align="center">RaceCast</h3>
 
-```sh
-npm create astro@latest -- --template basics
+![Website version](https://img.shields.io/github/package-json/v/Minarox/RaceCast/main?style=flat&label=Version)&nbsp;
+![Project license](https://img.shields.io/github/license/Minarox/RaceCast?style=flat&label=License)&nbsp;
+![Code size](https://img.shields.io/github/languages/code-size/Minarox/RaceCast?style=flat&label=Code%20size)&nbsp;
+![Website status](https://img.shields.io/website?url=https%3A%2F%2Frallye.minarox.fr&style=flat&label=Website)
+
+  <p align="center">
+    Web interface for the RaceCast project to broadcast live data from a rally car.
+    <br />
+    <a href="https://rallye.minarox.fr/"><strong>rallye.minarox.fr »</strong></a>
+  </p>
+</div>
+<br />
+
+<details>
+  <summary>Table of Contents</summary>
+
+- [About](#about)
+    - [Built With](#built-with)
+- [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Deployment](#deployment)
+- [Author](#author)
+</details>
+
+## About
+
+The RaceCast project is a set of hardware and software solutions enabling a multitude of useful data to be broadcast live to spectators following the race.
+<br>
+This repository contains the Web interface that receives and displays data transmitted from the car, such as the audio/video stream from the onboard camera, and telemetry and GPS data.
+
+<img style="border-radius: 6px" src="public/preview.webp" title="Preview" width="100%">
+
+### Build With
+
+- [Astro](https://astro.build/)
+- [LiveKit](https://livekit.io/)
+- [Highcharts](https://www.highcharts.com/)
+
+## Getting Started
+
+### Prerequisites
+
+- NodeJS 20.x or higher
+- npm 7.x or higher
+
+### Installation
+
+1. Clone the project
+```bash
+  git clone https://github.com/Minarox/RaceCast
+  cd RaceCast
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+2. Install dependencies
+```bash
+  npm install
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+3. Create `.env` file at the root of the project with these variables:
+```dotenv
+PUBLIC_LIVEKIT_WS_URL="wss://example.com"
+LIVEKIT_KEY="key"
+LIVEKIT_SECRET="secret"
+LIVEKIT_ROOM="room"
+```
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+4. Start the server
+```bash
+  npm run dev
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+The development server should start on [localhost:4321](http://localhost:4321/).
 
-## 🧞 Commands
+### Deployment
 
-All commands are run from the root of the project, from a terminal:
+The project is configured to be automatically deployed on Cloudflare Pages. <br />
+To compile the project locally, run the following command:
+```bash
+  npm run build
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+A new `dist` folder will appear containing the entire compiled website.
 
-## 👀 Want to learn more?
+## Author
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+[@Minarox](https://www.github.com/Minarox)

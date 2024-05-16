@@ -85,12 +85,12 @@
             adaptiveStream: true, dynacast: false, reconnectPolicy: {
                 nextRetryDelayInMs: (): number => {
                     return 1000;
-                },
-            },
+                }
+            }
         });
 
         // pre-warm connection, this can be called as early as your page is loaded
-        await room.prepareConnection(import.meta.env.PUBLIC_LIVEKIT_URL, token);
+        await room.prepareConnection(import.meta.env.PUBLIC_LIVEKIT_WS_URL, token);
 
         // set up event listeners
         room
@@ -106,9 +106,9 @@
             .on(RoomEvent.ParticipantDisconnected, (): void => dispatchEvent("participants", room.numParticipants));
 
         // connect to room
-        await room.connect(import.meta.env.PUBLIC_LIVEKIT_URL, token);
-        dispatchEvent("metadata", room.metadata)
-        dispatchEvent("participants", room.numParticipants)
+        await room.connect(import.meta.env.PUBLIC_LIVEKIT_WS_URL, token);
+        dispatchEvent("metadata", room.metadata);
+        dispatchEvent("participants", room.numParticipants);
     }
 
     // Event listener for the button
