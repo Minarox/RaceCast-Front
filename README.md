@@ -67,13 +67,13 @@ Ce dépot contient l'interface Web qui s'occupe de réceptionner et afficher les
   npm install
 ```
 
-3. Add `.env` file at the root of the project with these variables:
-````dotenv
+3. Create `.env` file at the root of the project with these variables:
+```dotenv
 LIVEKIT_WS_URL="wss://example.com"
 LIVEKIT_KEY="key"
 LIVEKIT_SECRET="secret"
 LIVEKIT_ROOM="room"
-````
+```
 
 4. Start the server
 ```bash
