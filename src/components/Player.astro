@@ -79,7 +79,6 @@
     async function startLive(): Promise<void> {
         dispatchEvent("status", "connecting");
         const token: string = await getLivekitToken();
-        let nbParticipants: number | null = null;
 
         // creates a new room with options
         const room: Room = new Room({
