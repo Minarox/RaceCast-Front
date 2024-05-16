@@ -44,6 +44,14 @@ This repository contains the Web interface that receives and displays data trans
 - [Astro](https://astro.build/)
 - [LiveKit](https://livekit.io/)
 - [Highcharts](https://www.highcharts.com/)
+* [![Next][Next.js]][Next-url]
+* [![React][React.js]][React-url]
+* [![Vue][Vue.js]][Vue-url]
+* [![Angular][Angular.io]][Angular-url]
+* [![Svelte][Svelte.dev]][Svelte-url]
+* [![Laravel][Laravel.com]][Laravel-url]
+* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
+* [![JQuery][JQuery.com]][JQuery-url]
 
 ## Getting Started
 
