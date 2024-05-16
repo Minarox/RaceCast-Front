@@ -69,7 +69,7 @@ Ce dépot contient l'interface Web qui s'occupe de réceptionner et afficher les
 
 3. Add `.env` file at the root of the project with these variables:
 ````dotenv
-LIVEKIT_SOCKET_URL="wss://example.com"
+LIVEKIT_WS_URL="wss://example.com"
 LIVEKIT_KEY="key"
 LIVEKIT_SECRET="secret"
 LIVEKIT_ROOM="room"
