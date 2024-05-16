@@ -1,7 +1,10 @@
-<div class="container">
-  <header>Température</header>
+---
+import Card from "@layouts/Card.astro";
+---
+
+<Card header="Température">
   <p id="degree">Inconnu</p>
-</div>
+</Card>
 
 <script>
     import type { Sensor } from "../types/sensor.ts";
@@ -15,21 +18,3 @@
         }
     });
 </script>
-
-<style>
-    div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-
-        header {
-            font-size: 1.1rem;
-            font-weight: bold;
-        }
-
-        p {
-            text-align: center;
-        }
-    }
-</style>
