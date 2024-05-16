@@ -7,9 +7,16 @@ import Card from "@layouts/Card.astro";
 </Card>
 
 <script>
+    import { State } from "../types/state";
+
     const spectator: HTMLElement = document.getElementById("spectator") as HTMLElement;
+    let status: boolean = false;
 
     document.addEventListener("participants", (event: any): void => {
-        console.table(JSON.stringify(event.detail, null, 4));
+        spectator.textContent = `${event.detail} ${status ? "en ligne" : "en attente"}`;
+    });
+
+    document.addEventListener("status", (event: any): void => {
+        status = event.detail === State.CONNECTED;
     });
 </script>
