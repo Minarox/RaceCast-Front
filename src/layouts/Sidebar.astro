@@ -38,7 +38,7 @@ import Speed from "@components/Speed.astro";
         } else {
             aside.style.right = "0";
             if (player) {
-                components.style.height = `calc(100vh - ${player.offsetHeight}px)`;
+                components.style.height = `calc(100dvh - ${player.offsetHeight}px)`;
             }
         }
     });
@@ -63,7 +63,7 @@ import Speed from "@components/Speed.astro";
         });
 
     if (player && window.innerWidth <= 900) {
-        components.style.height = `calc(100vh - ${player.offsetHeight}px)`;
+        components.style.height = `calc(100dvh - ${player.offsetHeight}px)`;
     }
 </script>
 
