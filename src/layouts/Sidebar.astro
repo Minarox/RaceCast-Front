@@ -15,7 +15,7 @@ import Speed from "@components/Speed.astro";
     <Speed />
   </section>
 
-  <section>
+  <section id="aside-components">
     <slot />
   </section>
 </aside>
@@ -24,13 +24,30 @@ import Speed from "@components/Speed.astro";
     const aside: HTMLElement = document.querySelector("aside") as HTMLElement;
     const openSvg: SVGElement = document.querySelector("#open svg") as SVGElement;
     const lockSvg: NodeListOf<HTMLElement> = document.querySelectorAll("#lock svg") as NodeListOf<HTMLElement>;
+    const player: HTMLElement = document.getElementById("player-wrapper") as HTMLElement;
+    const components: HTMLElement = document.getElementById("aside-components") as HTMLElement;
     let isLocked: boolean = false;
+
+    window.addEventListener("resize", (): void => {
+        if (window.innerWidth > 1200) {
+            aside.style.right = isLocked ? "0" : "-400px";
+            components.style.height = "100%";
+        } else if (window.innerWidth > 900) {
+            aside.style.right = isLocked ? "0" : "-300px";
+            components.style.height = "100%";
+        } else {
+            aside.style.right = "0";
+            if (player) {
+                components.style.height = `calc(100vh - ${player.offsetHeight}px)`;
+            }
+        }
+    });
 
     document.getElementById("open")
         ?.addEventListener("click", (): void => {
             if (isLocked) return;
             openSvg.style.transform = openSvg.style.transform === "rotate(180deg)" ? "rotate(0deg)" : "rotate(180deg)";
-            aside.style.right = aside.style.right === "0px" ? "-400px" : "0px";
+            aside.style.right = aside.style.right === "0px" ? window.innerWidth > 1200 ? "-400px" : "-300px" : "0";
         });
 
     document.getElementById("lock")
@@ -44,6 +61,10 @@ import Speed from "@components/Speed.astro";
             const event: CustomEvent = new CustomEvent("sidebar", { detail: isLocked });
             document.dispatchEvent(event);
         });
+
+    if (player && window.innerWidth <= 900) {
+        components.style.height = `calc(100vh - ${player.offsetHeight}px)`;
+    }
 </script>
 
 <style>
@@ -114,6 +135,63 @@ import Speed from "@components/Speed.astro";
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
             overflow-y: auto;
+        }
+
+        @media (max-width: 1200px) {
+            right: -300px;
+            grid-template-columns: max-content 300px;
+
+            > section:first-child {
+                > button {
+                    font-size: 1rem;
+                }
+            }
+
+            > section:last-child {
+                padding: 0.6rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            position: unset;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(-44px);
+
+            #lock,
+            #open {
+                display: none;
+            }
+
+            > section:first-child {
+                margin: 0 0 0 0.4rem;
+                display: flex;
+
+                > p {
+                    padding: 4px 12px;
+                    font-size: 1.4em;
+                    backdrop-filter: blur(6px);
+                    background-color: rgba(0, 0, 0, 0.5);
+                    border-radius: 8px;
+                }
+            }
+
+            > section:last-child {
+                width: 100vw;
+                margin: 0;
+                padding: 0.6rem;
+                border-radius: 0;
+                flex-flow: row wrap;
+                align-content: flex-start;
+
+                > * {
+                    flex: 1 1 45%;
+
+                    @media (max-width: 500px) {
+                        flex: 1 1 100%;
+                    }
+                }
+            }
         }
     }
 </style>

@@ -78,6 +78,13 @@
   #mpu {
       padding: 0.5rem 0.2rem 0.3rem;
       aspect-ratio: 1;
+      width: 100%;
+      height: 100%;
       min-height: 200px;
+
+      @media (max-width: 900px) {
+          pointer-events: none;
+          height: unset;
+      }
   }
 </style>
