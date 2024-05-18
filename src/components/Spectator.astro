@@ -13,7 +13,13 @@ import Card from "@layouts/Card.astro";
     let status: boolean = false;
 
     document.addEventListener("participants", (event: any): void => {
-        spectator.textContent = `${event.detail} ${status ? "en ligne" : "en attente"}`;
+        let count: number = parseInt(event.detail);
+        if (isNaN(count) || count === 0) {
+            count = 1;
+        } else {
+            count--;
+        }
+        spectator.textContent = `${count} ${status ? `en ligne${count > 1 ? 's' : ''}` : `en attente${count > 1 ? 's' : ''}`}`;
     });
 
     document.addEventListener("status", (event: any): void => {
