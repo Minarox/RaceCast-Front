@@ -64,6 +64,20 @@
     }
 
     /**
+     * Handle track unsubscribed event
+     * @param {RemoteTrack} track
+     * @returns {void}
+     */
+    function handleTrackUnsubscribed(track: RemoteTrack): void {
+        const elements: HTMLCollection = document
+            .getElementsByTagName((track.kind as any) === Track.Kind.Video ? "video" : "audio");
+        track.detach();
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].remove();
+        }
+    }
+
+    /**
      * Handle data
      * @returns {void}
      */
@@ -110,7 +124,7 @@
             .on(RoomEvent.Reconnected, (): void => dispatchEvent("status", "connected"))
             .on(RoomEvent.Disconnected, handleDisconnect)
             .on(RoomEvent.TrackSubscribed, handleTrackSubscribed)
-            .on(RoomEvent.TrackUnsubscribed, (track: RemoteTrack): HTMLMediaElement[] => track.detach())
+            .on(RoomEvent.TrackUnsubscribed, handleTrackUnsubscribed)
             .on(RoomEvent.DataReceived, handleData)
             .on(RoomEvent.RoomMetadataChanged, (metadata: string): void => dispatchEvent("metadata", metadata))
             .on(RoomEvent.ParticipantConnected, (): void => dispatchEvent("participants", room.numParticipants))
