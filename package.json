@@ -29,7 +29,7 @@
     "highcharts": "^11.4.1",
     "livekit-client": "^2.1.1",
     "livekit-server-sdk": "^2.3.0",
-    "ol": "^9.1.0",
+    "ol": "^9.2.2",
     "typescript": "^5.4.4"
   },
   "bugs": {
