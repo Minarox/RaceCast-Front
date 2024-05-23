@@ -5,7 +5,7 @@ export interface Metadata {
     name: string;
     link: string;
     stages: Stage[];
-    car: any;
+    car: Car;
 }
 
 /**
