@@ -43,7 +43,6 @@ This repository contains the Web interface that receives and displays data trans
 
 - [Astro](https://astro.build/)
 - [LiveKit](https://livekit.io/)
-- [Highcharts](https://www.highcharts.com/)
 
 ## Getting Started
 
