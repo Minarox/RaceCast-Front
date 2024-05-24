@@ -2,7 +2,6 @@
 
 <script>
     import { State } from "../types/state.ts";
-    import type { GPS } from "../types/modem.ts";
     import { Feature, Map, View } from "ol/index";
     import { OSM, Vector as VectorSource } from "ol/source";
     import { Point } from "ol/geom";
@@ -14,6 +13,7 @@
     import { getVectorContext } from "ol/render.js";
     import { unByKey } from "ol/Observable.js";
     import "ol/ol.css";
+    import type { GPS, Metadata } from "../types/metadata";
 
     let map: any = null;
     let tileLayer: any = null;
@@ -141,13 +141,13 @@
     useGeographic();
     createMap();
 
-    document.addEventListener("data", (event: any): void => {
-        if (event.detail?.gps) {
-            const gps: GPS = event.detail.gps;
-            setLocation([
-                gps.longitude,
-                gps.latitude
-            ])
+    document.addEventListener("metadata", (event: any): void => {
+        if (event.detail) {
+            const metadata: Metadata = JSON.parse(event.detail);
+            if (metadata?.car?.gps) {
+                const gps: GPS = metadata.car.gps;
+                setLocation([gps.longitude, gps.latitude]);
+            }
         }
     });
 
@@ -167,11 +167,13 @@
 <style>
     #map {
         padding: 0;
-        min-height: 400px;
+        min-height: 300px;
         overflow: hidden;
+        flex: 1;
 
         @media (max-width: 768px) {
             min-height: 250px;
+            min-width: 49.4%;
         }
     }
 </style>

@@ -7,14 +7,17 @@ import Card from "@layouts/Card.astro";
 </Card>
 
 <script>
-    import type { GPS } from "../types/modem.ts";
+    import type { Metadata, GPS } from "../types/metadata.ts";
 
     const degree: HTMLElement = document.getElementById("altitude") as HTMLElement;
 
-    document.addEventListener("data", (event: any): void => {
-        if (event.detail?.gps) {
-            const gps: GPS = event.detail.gps;
-            degree.textContent = `${gps.altitude} mètres`;
+    document.addEventListener("metadata", (event: any): void => {
+        if (event.detail) {
+            const metadata: Metadata = JSON.parse(event.detail);
+            if (metadata?.car?.gps) {
+                const gps: GPS = metadata.car.gps;
+                degree.textContent = `${gps.altitude} mètres`;
+            }
         }
     });
 </script>
