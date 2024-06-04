@@ -28,7 +28,7 @@
     "astro-sitemap": "^1.0.0",
     "livekit-client": "^2.2.0",
     "livekit-server-sdk": "^2.3.0",
-    "ol": "^9.2.2",
+    "ol": "^9.2.4",
     "typescript": "^5.4.4"
   },
   "bugs": {
