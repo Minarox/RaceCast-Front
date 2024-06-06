@@ -70,6 +70,9 @@ PUBLIC_LIVEKIT_WS_URL="wss://example.com"
 LIVEKIT_KEY="key"
 LIVEKIT_SECRET="secret"
 LIVEKIT_ROOM="room"
+
+PUBLIC_ACKEE_URL="https://example.com/tracker.js"
+ACKEE_DOMAIN="abcdef0123-a0b1-0a12-0a12-012a345b6789"
 ```
 
 4. Start the server

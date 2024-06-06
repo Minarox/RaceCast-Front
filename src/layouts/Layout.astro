@@ -5,6 +5,10 @@ const url: string = Astro.request.url;
 const title: string = "RaceCast";
 const description: string = "Diffusion en direct de la voiture de course de Kevin CORBIER.";
 const ogDescription: string = "Caméra embarquée de Kevin CORBIER.";
+
+const ackeeSrc: string = import.meta.env.PUBLIC_ACKEE_URL || '';
+const ackeeServer: string = ackee.split('/').splice(0, 3).join('/') || '';
+const ackeeDomain: string = context?.locals?.runtime?.env?.ACKEE_DOMAIN || import.meta.env.ACKEE_DOMAIN || '';
 ---
 
 <!doctype html>
@@ -50,15 +54,15 @@ const ogDescription: string = "Caméra embarquée de Kevin CORBIER.";
 
 	<body>
 		<slot />
-	</body>
 
-	<script
-		is:inline
-		src="https://stats.minarox.fr/data.js"
-		data-ackee-server="https://stats.minarox.fr"
-		data-ackee-domain-id="50857e64-dd4c-41c6-a339-051ec2284e60"
-        data-ackee-opts='{ "detailed": true, "ignoreOwnVisits": false }'
-	/>
+        <script
+            is:inline
+            src={ackeeSrc}
+            data-ackee-server={ackeeServer}
+            data-ackee-domain-id={ackeeDomain}
+            data-ackee-opts='{ "detailed": true, "ignoreOwnVisits": false }'
+        />
+	</body>
 </html>
 
 <style is:global>
