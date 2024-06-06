@@ -7,7 +7,7 @@ interface ImportMetaEnv {
     readonly LIVEKIT_SECRET: string;
     readonly LIVEKIT_ROOM: string;
     readonly PUBLIC_ACKEE_URL: string;
-    readonly ACKEE_DOMAIN: string;
+    readonly PUBLIC_ACKEE_DOMAIN: string;
 }
 
 interface ImportMeta {

@@ -7,8 +7,8 @@ const description: string = "Diffusion en direct de la voiture de course de Kevi
 const ogDescription: string = "Caméra embarquée de Kevin CORBIER.";
 
 const ackeeSrc: string = import.meta.env.PUBLIC_ACKEE_URL || '';
-const ackeeServer: string = ackee.split('/').splice(0, 3).join('/') || '';
-const ackeeDomain: string = context?.locals?.runtime?.env?.ACKEE_DOMAIN || import.meta.env.ACKEE_DOMAIN || '';
+const ackeeServer: string = ackeeSrc.split('/').splice(0, 3).join('/');
+const ackeeDomain: string = import.meta.env.PUBLIC_ACKEE_DOMAIN || '';
 ---
 
 <!doctype html>

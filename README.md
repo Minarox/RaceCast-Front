@@ -72,7 +72,7 @@ LIVEKIT_SECRET="secret"
 LIVEKIT_ROOM="room"
 
 PUBLIC_ACKEE_URL="https://example.com/tracker.js"
-ACKEE_DOMAIN="abcdef0123-a0b1-0a12-0a12-012a345b6789"
+PUBLIC_ACKEE_DOMAIN="abcdef0123-a0b1-0a12-0a12-012a345b6789"
 ```
 
 4. Start the server
