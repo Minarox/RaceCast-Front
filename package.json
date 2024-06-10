@@ -42,6 +42,6 @@
     "url": "https://github.com/Minarox/RaceCast.git"
   },
   "devDependencies": {
-    "@iconify-json/material-symbols": "^1.1.81"
+    "@iconify-json/material-symbols": "^1.1.82"
   }
 }
