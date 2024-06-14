@@ -1,196 +1,42 @@
-<div id="player-wrapper">
-    <button type="button" id="start">
-        Lancer le direct
-    </button>
-    <div id="player" />
+---
+import loading from "@assets/loading.svg";
+
+const { name } = Astro.props;
+const loadingIcon: string = (loading as any).src;
+---
+
+<div class="player" id={name}>
+    <img src={loadingIcon} alt="Chargement de la vidéo" >
+    <video controls />
 </div>
 
-<script>
-    import { RemoteTrack, Room, RoomEvent, Track } from "livekit-client";
-
-    const button: HTMLElement = document.getElementById("start") as HTMLElement;
-    const player: HTMLElement = document.getElementById("player") as HTMLElement;
-
-    window.addEventListener("resize", (): void => {
-        const video: HTMLCollectionOf<HTMLVideoElement> = document.getElementsByTagName("video") as HTMLCollectionOf<HTMLVideoElement>;
-        if (video.length > 0) {
-            video[0].controls = window.innerWidth <= 768;
-        }
-    });
-
-    /**
-     * Dispatch a custom event
-     * @param {string} name - Event name
-     * @param {any} data - Event data
-     * @returns {void}
-     */
-    function dispatchEvent(name: string, data: any): void {
-        const event: CustomEvent = new CustomEvent(name, {
-            detail: data,
-        });
-        document.dispatchEvent(event);
-    }
-
-    /**
-     * Get a Livekit token from the server
-     * @returns {Promise<string>}
-     */
-    async function getLivekitToken(): Promise<string> {
-        const response: Response = await fetch("/livekit-token");
-        return await response.json();
-    }
-
-    /**
-     * Handle track subscribed event
-     * @param {RemoteTrack} track
-     * @returns {void}
-     */
-    function handleTrackSubscribed(track: RemoteTrack): void {
-        if ([Track.Kind.Video, Track.Kind.Audio].includes(track.kind as any)) {
-            // attach it to a new HTMLVideoElement or HTMLAudioElement
-            const element: HTMLMediaElement = track.attach();
-            player.appendChild(element);
-            player.style.display = "flex";
-
-            if (element instanceof HTMLVideoElement && window.innerWidth <= 768) {
-                element.controls = true;
-            }
-
-            // Check if video and audio is present
-            if (document.getElementsByTagName("video").length > 0 && document.getElementsByTagName("audio").length > 0) {
-                button.remove();
-            }
-        }
-    }
-
-    /**
-     * Handle track unsubscribed event
-     * @param {RemoteTrack} track
-     * @returns {void}
-     */
-    function handleTrackUnsubscribed(track: RemoteTrack): void {
-        const elements: HTMLCollection = document
-            .getElementsByTagName((track.kind as any) === Track.Kind.Video ? "video" : "audio");
-        track.detach();
-        for (let i = 0; i < elements.length; i++) {
-            elements[i].remove();
-        }
-    }
-
-    /**
-     * Handle data
-     * @returns {void}
-     */
-    function handleData(event: any): void {
-        const data = JSON.parse(new TextDecoder().decode(event));
-        dispatchEvent("data", data);
-    }
-
-    /**
-     * Handle disconnect event
-     * @returns {void}
-     */
-    function handleDisconnect(): void {
-        dispatchEvent("status", "disconnected");
-
-        player.innerHTML = "";
-        player.style.display = "none";
-    }
-
-    /**
-     * Connect and show camera feed
-     * @returns {Promise<void>}
-     */
-    async function startLive(): Promise<void> {
-        dispatchEvent("status", "connecting");
-        const token: string = await getLivekitToken();
-
-        // creates a new room with options
-        const room: Room = new Room({
-            adaptiveStream: true, dynacast: false, reconnectPolicy: {
-                nextRetryDelayInMs: (): number => {
-                    return 1000;
-                }
-            }
-        });
-
-        // pre-warm connection, this can be called as early as your page is loaded
-        await room.prepareConnection(import.meta.env.PUBLIC_LIVEKIT_WS_URL, token);
-
-        // set up event listeners
-        room
-            .on(RoomEvent.Connected, (): void => dispatchEvent("status", "connected"))
-            .on(RoomEvent.Reconnecting, (): void => dispatchEvent("status", "reconnecting"))
-            .on(RoomEvent.Reconnected, (): void => dispatchEvent("status", "connected"))
-            .on(RoomEvent.Disconnected, handleDisconnect)
-            .on(RoomEvent.TrackSubscribed, handleTrackSubscribed)
-            .on(RoomEvent.TrackUnsubscribed, handleTrackUnsubscribed)
-            .on(RoomEvent.DataReceived, handleData)
-            .on(RoomEvent.RoomMetadataChanged, (metadata: string): void => dispatchEvent("metadata", metadata));
-
-        // connect to room
-        await room.connect(import.meta.env.PUBLIC_LIVEKIT_WS_URL, token);
-        dispatchEvent("metadata", room.metadata);
-    }
-
-    // Event listener for the button
-    button.addEventListener("click", startLive);
-
-    // Event listener for the sidebar
-    document.addEventListener("sidebar", (event: any): void => {
-        if (event.detail) {
-            player.parentElement!.style.width = "calc(100% - 400px)";
-        } else {
-            player.parentElement!.style.width = "100%";
-        }
-    });
-</script>
-
 <style>
-    div {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        transition: width 0.3s ease-in-out;
+  .player {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-        > button {
-            padding: 1.4rem 2.4rem;
-            backdrop-filter: blur(4px);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.2em;
+      > img {
+          z-index: 1;
+          pointer-events: none;
+          position: absolute;
+          width: 100px;
+          height: 100px;
+          opacity: 1;
+          transition: opacity 0.3s ease-in-out;
+      }
 
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.7);
-                outline: 1px solid white;
-            }
-        }
+      > video {
+          width: 100%;
+          max-height: 100%;
+          aspect-ratio: 16/9;
+      }
 
-        #player {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-
-            > video {
-                width: 100%;
-                height: 100%;
-            }
-        }
-
-        @media (max-width: 768px) {
-            width: unset;
-            height: 56vw;
-            min-height: 28vh;
-            max-height: 45vh;
-        }
+      @media (max-width: 768px) {
+          height: max-content;
+      }
     }
 </style>

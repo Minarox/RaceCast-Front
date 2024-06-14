@@ -141,6 +141,7 @@
     useGeographic();
     createMap();
 
+    // Event listener for metadata (to display car location)
     document.addEventListener("metadata", (event: any): void => {
         if (event.detail) {
             const metadata: Metadata = JSON.parse(event.detail);
@@ -151,6 +152,7 @@
         }
     });
 
+    // Event listener for connection status
     document.addEventListener("status", (event: any): void => {
         if (event.detail === State.CONNECTED) {
             flash();
@@ -165,15 +167,8 @@
 </script>
 
 <style>
-    #map {
+    div {
         padding: 0;
-        min-height: 300px;
         overflow: hidden;
-        flex: 1;
-
-        @media (max-width: 768px) {
-            min-height: 250px;
-            min-width: 49.4%;
-        }
     }
 </style>

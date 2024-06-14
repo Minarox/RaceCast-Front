@@ -1,22 +1,25 @@
 <p id="speed">
-  0 Km/h
+  -- Km/h
 </p>
 
 <script>
     import { State } from "../types/state.ts";
     import type { Metadata, GPS } from "../types/metadata.ts";
 
+    // Fetch DOM element
     const speed: HTMLElement = document.getElementById("speed") as HTMLElement;
 
+    // Event listener for status
     document.addEventListener("status", (event: any): void => {
-        speed.style.opacity = event.detail === State.CONNECTED ? "1" : "0";
+        speed.style.opacity = event.detail === State.CONNECTED ? '1' : '0';
     });
 
+    // Event listener for metadata (to display speed)
     document.addEventListener("metadata", (event: any): void => {
         if (event.detail) {
             const metadata: Metadata = JSON.parse(event.detail);
-            if (metadata?.car?.gps) {
-                const gps: GPS = metadata.car.gps;
+            const gps: GPS = metadata?.car?.gps;
+            if (gps) {
                 speed.innerText = `${gps.speed} Km/h`;
             }
         }
