@@ -1,5 +1,5 @@
 <p id="speed">
-  0 Km/h
+  -- Km/h
 </p>
 
 <script>
@@ -9,14 +9,14 @@
     const speed: HTMLElement = document.getElementById("speed") as HTMLElement;
 
     document.addEventListener("status", (event: any): void => {
-        speed.style.opacity = event.detail === State.CONNECTED ? "1" : "0";
+        speed.style.opacity = event.detail === State.CONNECTED ? '1' : '0';
     });
 
     document.addEventListener("metadata", (event: any): void => {
         if (event.detail) {
             const metadata: Metadata = JSON.parse(event.detail);
-            if (metadata?.car?.gps) {
-                const gps: GPS = metadata.car.gps;
+            const gps: GPS = metadata?.car?.gps;
+            if (gps) {
                 speed.innerText = `${gps.speed} Km/h`;
             }
         }

@@ -1,51 +1,50 @@
-<p id="status" class="container red-border">
-  Déconnecté
-</p>
+<div id="status" class="container orange-border">
+    <p>Connexion en cours...</p>
+</div>
 
 <script>
     import { State } from "../types/state.ts";
 
-    const status: HTMLElement = document.getElementById("status") as HTMLElement;
+    const div: HTMLElement = document.getElementById("status") as HTMLElement;
+    const p: HTMLElement = div.querySelector("p") as HTMLElement;
 
     document.addEventListener("status", (event: any): void => {
         switch (event.detail) {
             case State.CONNECTING:
             case State.RECONNECTING:
-                status.innerText = `${event.detail === "connecting" ? "Connexion" : "Reconnexion"} en cours...`;
-                status.classList.remove("green-border", "red-border", "hidden");
-                status.classList.add("orange-border");
+                p.innerText = `${event.detail === State.CONNECTING ? "Connexion" : "Reconnexion"} en cours...`;
+                div.classList.remove("green-border", "red-border", "hidden");
+                div.classList.add("orange-border");
                 break;
+
             case State.CONNECTED:
-                status.innerText = "Connecté";
-                status.classList.remove("red-border", "orange-border", "hidden");
-                status.classList.add("green-border");
-                setTimeout(() => status.classList.add("hidden"), 2800);
+                p.innerText = "Connecté";
+                div.classList.remove("red-border", "orange-border", "hidden");
+                div.classList.add("green-border");
+                setTimeout(() => div.classList.add("hidden"), 2700);
                 break;
+
             case State.DISCONNECTED:
-                status.innerText = "Déconnecté";
-                status.classList.remove("green-border", "orange-border", "hidden");
-                status.classList.add("red-border");
+                p.innerText = "Déconnecté";
+                div.classList.remove("green-border", "orange-border", "hidden");
+                div.classList.add("red-border");
                 break;
         }
     });
 </script>
 
 <style>
-    p {
+    div {
         z-index: 1000;
         position: absolute;
         top: 1rem;
-        left: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
         font-size: 1.2em;
         font-weight: bold;
         text-align: center;
         padding: 0.8rem 2rem;
         transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
-
-        @media (max-width: 768px) {
-            left: 50%;
-            transform: translateX(-50%);
-        }
     }
 
     .hidden {
