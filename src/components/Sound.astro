@@ -1,0 +1,56 @@
+<button type="button" id="sound">
+  Activer le son
+</button>
+
+<script>
+    import { State } from "../types/state.ts";
+
+    const button: HTMLElement = document.querySelector('#sound') as HTMLElement;
+
+    button.addEventListener("click", (event: any): void => {
+        if (event.target === button) {
+            button.style.opacity = "0";
+            button.style.pointerEvents = "none";
+            document.dispatchEvent(new CustomEvent("attach-audio"));
+        }
+    });
+
+    // Event listener for status change
+    document.addEventListener("status", (event: any): void => {
+        switch (event.detail) {
+            case State.CONNECTED:
+                button.style.opacity = "1";
+                button.style.pointerEvents = "auto";
+                break;
+
+            default:
+                button.style.opacity = "0";
+                button.style.pointerEvents = "none";
+                break;
+        }
+    });
+</script>
+
+<style>
+    button {
+        background-color: rgba(36, 36, 36, 0.9);
+        border-radius: 5px;
+        padding: 0.5rem 1.2rem;
+        backdrop-filter: blur(4px);
+        border: 1px solid white;
+        color: #fff;
+        cursor: pointer;
+        font-size: 1em;
+        outline: none;
+        z-index: 10;
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        transition: opacity 0.3s ease-in-out;
+
+        &:hover {
+            background-color: rgba(36, 36, 36, 1);
+        }
+    }
+</style>
+

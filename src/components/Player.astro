@@ -2,7 +2,7 @@
 import loading from "@assets/loading.svg";
 
 const { name } = Astro.props;
-const loadingIcon: string = (loading as HTMLImageElement).src;
+const loadingIcon: string = (loading as any).src;
 ---
 
 <div class="player" id={name}>

@@ -5,6 +5,7 @@ import Sidebar from "@layouts/Sidebar.astro";
 import Status from "@components/Status.astro";
 import Player from "@components/Player.astro";
 import Fullscreen from "@components/Fullscreen.astro";
+import Sound from "@components/Sound.astro";
 import Map from "@components/Map.astro";
 import Speed from "../components/Speed.astro";
 ---
@@ -12,6 +13,7 @@ import Speed from "../components/Speed.astro";
 <Layout>
   <Status />
   <Fullscreen />
+  <Sound />
   <Player name="main" />
 
   <Sidebar>
@@ -53,9 +55,10 @@ import Speed from "../components/Speed.astro";
     async function startLive(): Promise<void> {
         dispatchEvent("status", State.CONNECTING);
         const token: string = await getLivekitToken();
+        let audioTrack: any = undefined;
 
         // creates a new room with options
-        let room: Room = new Room({
+        let room: Room | undefined = new Room({
             adaptiveStream: true, dynacast: false, reconnectPolicy: {
                 nextRetryDelayInMs: (): number => {
                     return 1000;
@@ -83,28 +86,39 @@ import Speed from "../components/Speed.astro";
             .on(RoomEvent.TrackSubscribed, (track, publication): void => {
                 if (track.kind === Track.Kind.Video) {
                     if (publication.trackName.startsWith("Cam Link 4K")) {
-                        const player: HTMLElement = document.getElementById("main")
-                        track.attach(<HTMLMediaElement>player.querySelector("video"));
-                        player.querySelector("img").style.opacity = "0";
+                        const player: HTMLElement = document.getElementById("main") as HTMLElement;
+                        track.attach(player.querySelector("video") as HTMLMediaElement);
+                        (player.querySelector("img") as HTMLImageElement).style.opacity = "0";
                     } else {
-                        const player: HTMLElement = document.getElementById("alt")
-                        track.attach(<HTMLMediaElement>player.querySelector("video"));
-                        player.querySelector("img").style.opacity = "0";
+                        const player: HTMLElement = document.getElementById("alt") as HTMLElement;
+                        track.attach(player.querySelector("video") as HTMLMediaElement);
+                        (player.querySelector("img") as HTMLImageElement).style.opacity = "0";
                     }
                 }
+
+                if (track.kind === Track.Kind.Audio) {
+                    audioTrack = track;
+                    track.attach(document.getElementById("audio") as HTMLMediaElement);
+                }
+                // console.log(`Subscribed to ${publication.trackName} (${track.kind})`)
             })
             .on(RoomEvent.TrackUnsubscribed, (track, publication): void => {
                 if (track.kind === Track.Kind.Video) {
                     if (publication.trackName.startsWith("Cam Link 4K")) {
-                        const player: HTMLElement = document.getElementById("main")
-                        track.detach(<HTMLMediaElement>player.querySelector("video"));
-                        player.querySelector("img").style.opacity = "1";
+                        const player: HTMLElement = document.getElementById("main") as HTMLElement;
+                        track.detach(player.querySelector("video") as HTMLMediaElement);
+                        (player.querySelector("img") as HTMLImageElement).style.opacity = "1";
                     } else {
-                        const player: HTMLElement = document.getElementById("alt")
-                        track.detach(<HTMLMediaElement>player.querySelector("video"));
-                        player.querySelector("img").style.opacity = "1";
+                        const player: HTMLElement = document.getElementById("alt") as HTMLElement;
+                        track.detach(player.querySelector("video") as HTMLMediaElement);
+                        (player.querySelector("img") as HTMLImageElement).style.opacity = "1";
                     }
                 }
+
+                if (track.kind === Track.Kind.Audio) {
+                    track.detach(document.getElementById("audio") as HTMLMediaElement);
+                }
+                // console.log(`Unsubscribed of ${publication.trackName} (${track.kind})`)
             })
             .on(RoomEvent.DataReceived, (data): void => {
                 dispatchEvent("data", JSON.parse(new TextDecoder().decode(data)));
@@ -117,7 +131,17 @@ import Speed from "../components/Speed.astro";
         await room.connect(import.meta.env.PUBLIC_LIVEKIT_WS_URL, token);
         dispatchEvent("metadata", room.metadata);
 
+        function attachAudio(): void {
+            if (audioTrack) {
+                audioTrack.attach(document.getElementById("audio") as HTMLMediaElement);
+            }
+        }
+
         function wantReconnect(): void {
+            if (!room) {
+                setTimeout(startLive);
+                return;
+            }
             room.disconnect(true);
             document.addEventListener("status", isDisconnected);
         }
@@ -126,12 +150,15 @@ import Speed from "../components/Speed.astro";
             if (event.detail === State.DISCONNECTED) {
                 document.removeEventListener("status", isDisconnected);
                 document.removeEventListener("reconnect", wantReconnect);
+                document.removeEventListener("attach-audio", attachAudio);
                 room = undefined;
+                audioTrack = undefined;
                 setTimeout(startLive);
             }
         }
 
         document.addEventListener("reconnect", wantReconnect);
+        document.addEventListener("attach-audio", attachAudio);
     }
 
     setTimeout(startLive);

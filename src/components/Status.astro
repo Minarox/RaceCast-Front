@@ -40,7 +40,7 @@
     });
 
     // Button click event for reconnection
-    document.addEventListener("click", (event: any): void => {
+    button.addEventListener("click", (event: any): void => {
         if (event.target === button) {
             document.dispatchEvent(new CustomEvent("reconnect"));
         }
@@ -78,6 +78,7 @@
             font-size: 0.9em;
             outline: none;
             border: none;
+            width: max-content;
 
             &:hover {
                 background-color: rgba(36, 36, 36, 1);
