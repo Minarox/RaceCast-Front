@@ -31,7 +31,12 @@ const loadingIcon: string = (loading as HTMLImageElement).src;
 
       > video {
           width: 100%;
+          max-height: 100%;
           aspect-ratio: 16/9;
+      }
+
+      @media (max-width: 768px) {
+          height: max-content;
       }
     }
 </style>

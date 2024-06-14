@@ -6,6 +6,7 @@ import Status from "@components/Status.astro";
 import Player from "@components/Player.astro";
 import Fullscreen from "@components/Fullscreen.astro";
 import Map from "@components/Map.astro";
+import Speed from "../components/Speed.astro";
 ---
 
 <Layout>
@@ -14,13 +15,14 @@ import Map from "@components/Map.astro";
   <Player name="main" />
 
   <Sidebar>
-    <Player name="alt" />
-    <Map />
+    <Speed slot="header" />
+    <Player slot="component-left" name="alt" />
+    <Map slot="component-right" />
   </Sidebar>
 </Layout>
 
 <script>
-    import { RemoteTrack, Room, RoomEvent, Track } from "livekit-client";
+    import { Room, RoomEvent, Track } from "livekit-client";
     import {State} from "../types/state";
 
     /**
@@ -142,10 +144,11 @@ import Map from "@components/Map.astro";
         height: 100vh;
         height: 100dvh;
         position: relative;
-        overflow: hidden;
+        overflow-x: hidden;
 
         @media (max-width: 768px) {
             display: grid;
+            grid-template-rows: auto 1fr;
         }
     }
 </style>
