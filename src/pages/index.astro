@@ -3,7 +3,6 @@ import Layout from "@layouts/Layout.astro";
 import Sidebar from "@layouts/Sidebar.astro";
 
 import Fullscreen from "@components/Fullscreen.astro";
-import Player from "@components/Player.astro";
 import Status from "@components/Status.astro";
 import Map from "@components/Map.astro";
 ---
@@ -11,7 +10,6 @@ import Map from "@components/Map.astro";
 <Layout>
   <Status />
   <Fullscreen />
-  <Player />
 
   <Sidebar>
     <Map />
@@ -21,8 +19,6 @@ import Map from "@components/Map.astro";
 <script>
     import { RemoteTrack, Room, RoomEvent, Track } from "livekit-client";
     import {State} from "../types/state";
-
-    const player: HTMLElement = document.getElementById("player") as HTMLElement;
 
     /**
      * Dispatch a custom event
@@ -54,7 +50,7 @@ import Map from "@components/Map.astro";
         const token: string = await getLivekitToken();
 
         // creates a new room with options
-        const room: Room = new Room({
+        let room: Room = new Room({
             adaptiveStream: true, dynacast: false, reconnectPolicy: {
                 nextRetryDelayInMs: (): number => {
                     return 1000;
@@ -91,6 +87,22 @@ import Map from "@components/Map.astro";
         // connect to room
         await room.connect(import.meta.env.PUBLIC_LIVEKIT_WS_URL, token);
         dispatchEvent("metadata", room.metadata);
+
+        function wantReconnect(): void {
+            room.disconnect(true);
+            document.addEventListener("status", isDisconnected);
+        }
+
+        function isDisconnected(event: any): void {
+            if (event.detail === State.DISCONNECTED) {
+                document.removeEventListener("status", isDisconnected);
+                document.removeEventListener("reconnect", wantReconnect);
+                room = undefined;
+                setTimeout(startLive);
+            }
+        }
+
+        document.addEventListener("reconnect", wantReconnect);
     }
 
     setTimeout(startLive);
