@@ -8,17 +8,16 @@ import { Icon } from "astro-icon/components";
 </button>
 
 <script>
-    const icons: NodeListOf<HTMLElement> = document.querySelectorAll("#fullscreen svg") as NodeListOf<HTMLElement>;
+    // Fetch DOM elements
+    const button: HTMLElement = document.getElementById("fullscreen") as HTMLElement;
+    const icons: NodeListOf<SVGSVGElement> = button.querySelectorAll("svg") as NodeListOf<SVGSVGElement>;
 
-    document.getElementById("fullscreen")
-        ?.addEventListener("click", (): void => {
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-            } else {
-                document.documentElement.requestFullscreen();
-            }
-        });
+    // Event listener for fullscreen button
+    button.addEventListener("click", (): void => {
+        document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    });
 
+    // Event listener for fullscreen change (to toggle icons)
     document.addEventListener("fullscreenchange", (): void => {
         icons[0].style.display = document.fullscreenElement ? "none" : "block";
         icons[1].style.display = document.fullscreenElement ? "block" : "none";
@@ -44,10 +43,6 @@ import { Icon } from "astro-icon/components";
             &:nth-of-type(2) {
                 display: none;
             }
-        }
-
-        @media (max-width: 768px) {
-            display: none;
         }
     }
 </style>
