@@ -18,6 +18,84 @@ import Map from "@components/Map.astro";
   </Sidebar>
 </Layout>
 
+<script>
+    import { RemoteTrack, Room, RoomEvent, Track } from "livekit-client";
+    import {State} from "../types/state";
+
+    const player: HTMLElement = document.getElementById("player") as HTMLElement;
+
+    /**
+     * Dispatch a custom event
+     * @param {string} name - Event name
+     * @param {any} data - Event data
+     * @returns {void}
+     */
+    function dispatchEvent(name: string, data: any): void {
+        document.dispatchEvent(
+            new CustomEvent(name, { detail: data })
+        );
+    }
+
+    /**
+     * Get a Livekit token from the server
+     * @returns {Promise<string>}
+     */
+    async function getLivekitToken(): Promise<string> {
+        const response: Response = await fetch("/livekit-token");
+        return await response.json();
+    }
+
+    /**
+     * Connect and show camera feed
+     * @returns {Promise<void>}
+     */
+    async function startLive(): Promise<void> {
+        dispatchEvent("status", State.CONNECTING);
+        const token: string = await getLivekitToken();
+
+        // creates a new room with options
+        const room: Room = new Room({
+            adaptiveStream: true, dynacast: false, reconnectPolicy: {
+                nextRetryDelayInMs: (): number => {
+                    return 1000;
+                }
+            }
+        });
+
+        // pre-warm connection, this can be called as early as your page is loaded
+        await room.prepareConnection(import.meta.env.PUBLIC_LIVEKIT_WS_URL, token);
+
+        // set up event listeners
+        room
+            .on(RoomEvent.Connected, (): void => {
+                dispatchEvent("status", State.CONNECTED)
+            })
+            .on(RoomEvent.Reconnecting, (): void => {
+                dispatchEvent("status", State.RECONNECTING)
+            })
+            .on(RoomEvent.Reconnected, (): void => {
+                dispatchEvent("status", State.CONNECTED)
+            })
+            .on(RoomEvent.Disconnected, (): void => {
+                dispatchEvent("status", State.DISCONNECTED)
+            })
+            // .on(RoomEvent.TrackSubscribed, handleTrackSubscribed)
+            // .on(RoomEvent.TrackUnsubscribed, handleTrackUnsubscribed)
+            .on(RoomEvent.DataReceived, (data): void => {
+                dispatchEvent("data", JSON.parse(new TextDecoder().decode(data)));
+            })
+            .on(RoomEvent.RoomMetadataChanged, (metadata: string): void => {
+                dispatchEvent("metadata", metadata)
+            });
+
+        // connect to room
+        await room.connect(import.meta.env.PUBLIC_LIVEKIT_WS_URL, token);
+        dispatchEvent("metadata", room.metadata);
+    }
+
+    setTimeout(startLive);
+</script>
+
 <style>
     body {
         margin: 0;
