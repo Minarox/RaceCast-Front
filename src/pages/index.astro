@@ -25,7 +25,7 @@ import Speed from "../components/Speed.astro";
 
 <script>
     import { Room, RoomEvent, Track } from "livekit-client";
-    import {State} from "../types/state";
+import { State } from "../types/state";
 
     /**
      * Dispatch a custom event
@@ -125,11 +125,13 @@ import Speed from "../components/Speed.astro";
             })
             .on(RoomEvent.RoomMetadataChanged, (metadata: string): void => {
                 dispatchEvent("metadata", metadata)
+                console.log(JSON.parse(metadata || "{}")?.car);
             });
 
         // connect to room
         await room.connect(import.meta.env.PUBLIC_LIVEKIT_WS_URL, token);
         dispatchEvent("metadata", room.metadata);
+        console.log(JSON.parse(room?.metadata || "{}")?.car);
 
         function attachAudio(): void {
             if (audioTrack) {
