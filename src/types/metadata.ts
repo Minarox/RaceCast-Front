@@ -11,22 +11,17 @@ export interface Metadata {
 /**
  * Stage object
  */
-interface Stage {
+export interface Stage {
     name: string;
     time: string;
 }
 
-interface Car {
-    gps: GPS;
-    last_update: number;
-}
-
-/**
- * GPS data returned by the modem
- */
-export interface GPS {
-    latitude: number;
+export interface Car {
+    tech: Array<string>;
+    signal: number;
     longitude: number;
+    latitude: number;
     altitude: number;
     speed: number;
+    last_update: number;
 }

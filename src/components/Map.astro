@@ -1,19 +1,19 @@
 <div id="map" class="container" />
 
 <script>
-    import { State } from "../types/state.ts";
-    import { Feature, Map, View } from "ol/index";
-    import { OSM, Vector as VectorSource } from "ol/source";
-    import { Point } from "ol/geom";
-    import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
-    import { useGeographic } from "ol/proj";
     import { defaults as defaultControls, FullScreen, ScaleLine } from "ol/control.js";
-    import { Circle as CircleStyle, Stroke, Style } from "ol/style.js";
-    import { easeOut } from "ol/easing.js";
-    import { getVectorContext } from "ol/render.js";
-    import { unByKey } from "ol/Observable.js";
-    import "ol/ol.css";
-    import type { GPS, Metadata } from "../types/metadata";
+import { easeOut } from "ol/easing.js";
+import { Point } from "ol/geom";
+import { Feature, Map, View } from "ol/index";
+import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
+import { unByKey } from "ol/Observable.js";
+import "ol/ol.css";
+import { useGeographic } from "ol/proj";
+import { getVectorContext } from "ol/render.js";
+import { OSM, Vector as VectorSource } from "ol/source";
+import { Circle as CircleStyle, Stroke, Style } from "ol/style.js";
+import type { Car, Metadata } from "../types/metadata";
+import { State } from "../types/state.ts";
 
     let map: any = null;
     let tileLayer: any = null;
@@ -145,9 +145,9 @@
     document.addEventListener("metadata", (event: any): void => {
         if (event.detail) {
             const metadata: Metadata = JSON.parse(event.detail);
-            if (metadata?.car?.gps) {
-                const gps: GPS = metadata.car.gps;
-                setLocation([gps.longitude, gps.latitude]);
+            if (metadata?.car) {
+                const car: Car = metadata.car;
+                setLocation([car.longitude, car.latitude]);
             }
         }
     });
