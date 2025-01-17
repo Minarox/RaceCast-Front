@@ -85,7 +85,7 @@ import { State } from "../types/state";
             })
             .on(RoomEvent.TrackSubscribed, (track, publication): void => {
                 if (track.kind === Track.Kind.Video) {
-                    if (publication.trackName.startsWith("Cam Link 4K")) {
+                    if (publication.trackName.startsWith("HD USB Camera")) {
                         const player: HTMLElement = document.getElementById("main") as HTMLElement;
                         track.attach(player.querySelector("video") as HTMLMediaElement);
                         (player.querySelector("img") as HTMLImageElement).style.opacity = "0";
@@ -104,7 +104,7 @@ import { State } from "../types/state";
             })
             .on(RoomEvent.TrackUnsubscribed, (track, publication): void => {
                 if (track.kind === Track.Kind.Video) {
-                    if (publication.trackName.startsWith("Cam Link 4K")) {
+                    if (publication.trackName.startsWith("HD USB Camera")) {
                         const player: HTMLElement = document.getElementById("main") as HTMLElement;
                         track.detach(player.querySelector("video") as HTMLMediaElement);
                         (player.querySelector("img") as HTMLImageElement).style.opacity = "1";
