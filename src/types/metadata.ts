@@ -1,27 +1,34 @@
-/**
- * Metadata object
- */
 export interface Metadata {
-    name: string;
-    link: string;
-    stages: Stage[];
-    car: Car;
+    location: GPS;
+    modem: Modem;
+    system: System;
+    temp: number;
+    timestamp: number;
+    ups: UPS;
 }
 
-/**
- * Stage object
- */
-export interface Stage {
-    name: string;
-    time: string;
-}
-
-export interface Car {
-    tech: Array<string>;
-    signal: number;
-    longitude: number;
-    latitude: number;
-    altitude: number;
+export interface GPS {
+    alt: number;
+    hdop: number;
+    lat: number;
+    lon: number;
+    sat: number;
     speed: number;
-    last_update: number;
+}
+
+export interface Modem {
+    signal: number;
+    tech: string[];
+}
+
+export interface System {
+    fan: number;
+    load: number;
+    temp: number;
+    power: number;
+}
+
+export interface UPS {
+    capa: number;
+    volt: number;
 }

@@ -43,5 +43,12 @@
   },
   "devDependencies": {
     "@iconify-json/material-symbols": "^1.1.82"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
   }
 }

@@ -124,8 +124,8 @@ import { State } from "../types/state";
                 dispatchEvent("data", JSON.parse(new TextDecoder().decode(data)));
             })
             .on(RoomEvent.RoomMetadataChanged, (metadata: string): void => {
-                dispatchEvent("metadata", metadata)
-                console.log(JSON.parse(metadata || "{}")?.car);
+                console.log("Room metadata changed:", JSON.parse(metadata));
+                dispatchEvent("metadata", metadata);
             });
 
         // connect to room
