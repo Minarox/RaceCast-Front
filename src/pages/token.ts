@@ -12,8 +12,8 @@ export const prerender = false;
 export async function GET(context: any): Promise<Response> {
     // Generate a new token
     let accessToken: AccessToken = new AccessToken(
-        context?.locals?.runtime?.env?.LIVEKIT_KEY || import.meta.env.LIVEKIT_KEY,
-        context?.locals?.runtime?.env?.LIVEKIT_SECRET || import.meta.env.LIVEKIT_SECRET,
+        context?.locals?.runtime?.env?.LIVEKIT_API_KEY || import.meta.env.LIVEKIT_API_KEY,
+        context?.locals?.runtime?.env?.LIVEKIT_API_SECRET || import.meta.env.LIVEKIT_API_SECRET,
         {
             identity: `User-${Math.random().toString(36).substring(7)}`,
         },

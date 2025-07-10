@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@pages/*": ["src/pages/*"],
-      "@types/*": ["src/types/*"]
+      "@pages/*": ["src/pages/*"]
     }
   },
   "extends": "astro/tsconfigs/strictest",

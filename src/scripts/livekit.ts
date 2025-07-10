@@ -1,5 +1,5 @@
 import { Room, RoomEvent, Track } from "livekit-client";
-import { State } from "../types/state";
+import { State } from "../types";
 
 /**
  * Dispatch a custom event
@@ -41,7 +41,7 @@ async function startLive(): Promise<void> {
     });
 
     // pre-warm connection, this can be called as early as your page is loaded
-    await room.prepareConnection(import.meta.env.LIVEKIT_WS_URL, token);
+    await room.prepareConnection(`wss://${import.meta.env.LIVEKIT_DOMAIN}`, token);
 
     // set up event listeners
     room
@@ -103,7 +103,7 @@ async function startLive(): Promise<void> {
         });
 
     // connect to room
-    await room.connect(import.meta.env.LIVEKIT_WS_URL, token);
+    await room.connect(`wss://${import.meta.env.LIVEKIT_DOMAIN}`, token);
     dispatchEvent("metadata", room.metadata);
     console.log(JSON.parse(room?.metadata || "{}")?.car);
 

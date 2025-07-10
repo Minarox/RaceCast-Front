@@ -1,7 +1,7 @@
 interface ImportMetaEnv {
-    readonly LIVEKIT_WS_URL: string;
-    readonly LIVEKIT_KEY: string;
-    readonly LIVEKIT_SECRET: string;
+    readonly LIVEKIT_DOMAIN: string;
+    readonly LIVEKIT_API_KEY: string;
+    readonly LIVEKIT_API_SECRET: string;
     readonly LIVEKIT_ROOM: string;
 }
 
