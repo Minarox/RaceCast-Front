@@ -5,7 +5,28 @@
         "type": "node-terminal",
         "name": "Dev server",
         "request": "launch",
-        "command": "npm run dev",
+        "command": "pnpm run dev",
+        "cwd": "${workspaceFolder}"
+     },
+     {
+        "type": "node-terminal",
+        "name": "Check types",
+        "request": "launch",
+        "command": "pnpm run check",
+        "cwd": "${workspaceFolder}"
+     },
+     {
+        "type": "node-terminal",
+        "name": "Build project",
+        "request": "launch",
+        "command": "pnpm run build",
+        "cwd": "${workspaceFolder}"
+     },
+     {
+        "type": "node-terminal",
+        "name": "Preview project",
+        "request": "launch",
+        "command": "pnpm run preview",
         "cwd": "${workspaceFolder}"
      }
   ]

@@ -7,19 +7,18 @@
     "url": "https://minarox.fr/"
   },
   "bugs": {
-    "url": "https://github.com/Minarox/RaceCast/issues",
+    "url": "https://github.com/Minarox/RaceCast-Front/issues",
     "email": "contact@minarox.fr"
   },
-  "homepage": "https://github.com/Minarox/RaceCast#readme",
+  "homepage": "https://github.com/Minarox/RaceCast-Front#readme",
   "readme": "./README.md",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Minarox/RaceCast.git"
+    "url": "https://github.com/Minarox/RaceCast-Front.git"
   },
   "type": "module",
   "private": true,
-  "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
     "check": "astro check",
@@ -27,16 +26,17 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.2.1",
-    "@astrojs/sitemap": "^3.2.1",
-    "astro": "^5.2.5",
+    "@astrojs/cloudflare": "^12.6.0",
+    "@astrojs/sitemap": "^3.4.1",
+    "astro": "^5.11.0",
     "astro-compressor": "^1.0.0",
-    "astro-font": "^1.0.0",
+    "astro-font": "^1.1.0",
     "astro-icon": "^1.1.5",
-    "astro-meta-tags": "^0.3.1",
+    "astro-meta-tags": "^0.4.0",
     "astro-seo": "^0.8.4",
-    "livekit-client": "^2.8.1",
-    "livekit-server-sdk": "^2.9.7",
-    "sass": "^1.84.0"
-  }
+    "livekit-client": "^2.15.2",
+    "livekit-server-sdk": "^2.13.1",
+    "sass": "^1.89.2"
+  },
+  "packageManager": "pnpm@10.13.1"
 }
