@@ -38,5 +38,12 @@
     "livekit-server-sdk": "^2.13.1",
     "sass": "^1.89.2"
   },
-  "packageManager": "pnpm@10.13.1"
+  "packageManager": "pnpm@10.13.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "workerd"
+    ]
+  }
 }
