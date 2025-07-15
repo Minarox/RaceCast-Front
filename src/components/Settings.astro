@@ -1,0 +1,109 @@
+---
+import loading from "@assets/loading.svg";
+
+const loadingIcon: string = (loading as any).src;
+---
+
+<form>
+    <h1 class="hidden">Paramètres</h1>
+
+    <h2 class="hidden">Disposition</h2>
+    <div class="split-layout">
+        <label for="settings-main-cam">Caméra principale :</label>
+        <img id="settings-cam-loading" src={loadingIcon} alt="Loading..." />
+        <select id="settings-main-cam" class="hidden" disabled></select>
+    </div>
+    <div class="split-layout">
+        <label for="settings-speed">Afficher la vitesse :</label>
+        <input type="checkbox" id="settings-speed" checked />
+    </div>
+    <div class="split-layout">
+        <label for="settings-gps">Afficher la position GPS :</label>
+        <input type="checkbox" id="settings-gps" checked />
+    </div>
+    <div class="split-layout">
+        <label for="settings-sidebar">Afficher le panneau latéral :</label>
+        <input type="checkbox" id="settings-sidebar" checked />
+    </div>
+
+    <h2 class="hidden">Audio</h2>
+    <div id="mic-volumes" class="split-layout">
+        <img src={loadingIcon} alt="Loading..." />
+    </div>
+</form>
+
+<script>
+    /*
+
+    # Paramètres
+
+    ## Disposition :
+    Caméra principale : [Sélectionner la caméra principale]
+    Afficher la vitesse : [Activer/Désactiver]
+    Afficher la position GPS : [Activer/Désactiver]
+    Afficher le panneau latéral : [Activer/Désactiver]
+
+    ## Son :
+    Volume micro 1 : [0-100%]
+    Volume micro 2 : [0-100%]
+    ...
+
+    */
+
+    import { RemoteTrackPublication } from "livekit-client";
+    import { Event } from "@types";
+
+    const camerasSelectLoading = document.getElementById("settings-cam-loading")!;
+    const camerasSelect = document.getElementById("settings-main-cam")! as HTMLSelectElement;
+    const micVolumes = document.getElementById("mic-volumes")!;
+
+    document.addEventListener(Event.CAMERAS, (event: any) => {
+        camerasSelectLoading.classList.add("hidden");
+        camerasSelect.classList.remove("hidden");
+        const videoTracks: RemoteTrackPublication[] = event.detail;
+        camerasSelect.innerHTML = '';
+        camerasSelectLoading.classList.add("hidden");
+
+        if (videoTracks.length === 0) {
+            camerasSelect.innerHTML = '<option value="" disabled>Aucune caméra détectée</option>';
+            camerasSelect.disabled = true;
+            return;
+        }
+
+        videoTracks.forEach((track) => {
+            const option = document.createElement('option');
+            option.value = track.trackSid;
+            option.textContent = track.trackName || `Caméra ${track.trackSid}`;
+            camerasSelect.appendChild(option);
+        });
+        camerasSelect.disabled = false;
+    });
+
+    document.addEventListener(Event.MICROPHONES, (event: any) => {
+        const audioTracks: RemoteTrackPublication[] = event.detail;
+        micVolumes.innerHTML = '';
+
+        if (audioTracks.length === 0) {
+            micVolumes.innerHTML = '<p>Aucun micro détecté</p>';
+            return;
+        }
+
+        audioTracks.forEach((track) => {
+            const volumeControl = document.createElement('input');
+            volumeControl.type = 'range';
+            volumeControl.min = '0';
+            volumeControl.max = '100';
+            volumeControl.value = '100';
+            volumeControl.id = `mic-volume-${track.trackSid}`;
+            micVolumes.appendChild(volumeControl);
+        });
+    });
+</script>
+
+<style>
+    .split-layout {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>

@@ -2,10 +2,14 @@
 import { SEO } from "astro-seo";
 import { AstroFont } from "astro-font";
 import Logo from '@assets/logo.svg';
-import Banner from '@assets/banner.webp';
+import Loader from '@components/Loader.astro';
+import LiveKit from "@components/LiveKit.astro";
+import AudioTrigger from "@components/AudioTrigger.astro";
+// import Banner from '@assets/banner.webp';
 
 const title: string = "RaceCast";
 const description: string = "Diffusion en direct de la voiture de course de Kevin CORBIER.";
+const audio = Astro.props.audio || false;
 ---
 
 <!doctype html>
@@ -21,14 +25,15 @@ const description: string = "Diffusion en direct de la voiture de course de Kevi
 					title: title,
 					type: "website",
 					url: Astro.url.origin,
-					image: Banner.src
+					image: ''
+					// image: Banner.src
 				},
 				optional: {
 					locale: "fr_FR",
 				},
 				image: {
 					alt: `${title} banner`,
-					url: Banner.src,
+					// url: Banner.src,
 					type: "image/webp"
 				}
 			}}
@@ -38,7 +43,7 @@ const description: string = "Diffusion en direct de la voiture de course de Kevi
 				site: Astro.url.origin,
 				title: title,
 				description: description,
-				image: Banner.src,
+				// image: Banner.src,
 				imageAlt: `${title} banner`,
 			}}
 			extend={{
@@ -78,12 +83,16 @@ const description: string = "Diffusion en direct de la voiture de course de Kevi
 			]}
 		/>
 	</head>
+
 	<body>
 		<slot />
+		<LiveKit />
+		{audio && <AudioTrigger />}
+		<Loader />
 	</body>
 </html>
 
-<style>
+<style is:global>
 	* {
 		box-sizing: border-box;
 		margin: 0;
@@ -97,9 +106,32 @@ const description: string = "Diffusion en direct de la voiture de course de Kevi
 		font-optical-sizing: auto;
 		font-style: normal;
 		font-weight: 400;
+		font-size: 1em;
 		-moz-osx-font-smoothing: grayscale;
 		text-rendering: optimizeLegibility;
 		-webkit-text-size-adjust: 100%;
 		background-color: #242424;
+		color: white;
+	}
+
+	body {
+		width: 100vw;
+        height: 100vh;
+	}
+
+	.box {
+		padding: 16px;
+        background-color: #DDDDDD;
+        color: black;
+	}
+
+	.hidden {
+        display: none !important;
+    }
+
+	.hide {
+		opacity: 0 !important;
+		user-select: none !important;
+		pointer-events: none !important;
 	}
 </style>

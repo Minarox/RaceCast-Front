@@ -26,23 +26,28 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.0",
-    "@astrojs/sitemap": "^3.4.1",
-    "astro": "^5.11.0",
-    "astro-compressor": "^1.0.0",
+    "@astrojs/cloudflare": "^12.6.5",
+    "@astrojs/sitemap": "^3.5.1",
+    "@astrojs/vue": "^5.1.0",
+    "@iconify-json/iconamoon": "^1.2.2",
+    "astro": "^5.13.3",
+    "astro-compressor": "^1.1.2",
     "astro-font": "^1.1.0",
     "astro-icon": "^1.1.5",
     "astro-meta-tags": "^0.4.0",
     "astro-seo": "^0.8.4",
-    "livekit-client": "^2.15.2",
-    "livekit-server-sdk": "^2.13.1",
-    "sass": "^1.89.2"
+    "chart.js": "^4.5.0",
+    "livekit-client": "^2.15.6",
+    "livekit-server-sdk": "^2.13.2",
+    "ol": "^10.6.1",
+    "vue": "^3.5.20"
   },
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.15.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
       "esbuild",
+      "sharp",
       "workerd"
     ]
   }

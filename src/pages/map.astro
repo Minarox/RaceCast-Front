@@ -1,0 +1,16 @@
+---
+import Layout from '@layouts/Layout.astro';
+import OpenMap from '@components/OpenMap.vue';
+---
+
+<Layout>
+    <OpenMap client:load />
+</Layout>
+
+<style>
+    body {
+        background-color: #DDDDDD;
+        width: 100vw;
+        height: 100vh;
+    }
+</style>

@@ -1,0 +1,20 @@
+---
+import Layout from "@layouts/Layout.astro";
+import VideoPlayer from "@components/VideoPlayer.vue";
+
+export const prerender = false;
+
+const { index } = Astro.params;
+---
+
+<Layout>
+    <VideoPlayer index={index as string} client:load />
+</Layout>
+
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>

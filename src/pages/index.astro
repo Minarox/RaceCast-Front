@@ -1,11 +1,18 @@
 ---
-import Welcome from '@components/Welcome.astro';
 import Layout from '@layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import VideoGrid from '@layouts/VideoGrid.vue';
+import SideBar from '@layouts/SideBar.astro';
+import Info from '@components/Info.vue';
+import SpeedHistory from '@components/SpeedHistory.vue';
+import OpenMap from '@components/OpenMap.vue';
 ---
 
-<Layout>
-	<Welcome />
+<Layout audio>
+	<VideoGrid client:load />
+
+	<SideBar>
+		<OpenMap client:visible />
+		<SpeedHistory client:idle />
+		<Info client:visible />
+	</SideBar>
 </Layout>

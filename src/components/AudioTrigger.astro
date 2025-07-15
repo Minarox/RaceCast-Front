@@ -1,0 +1,59 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<button id="audio-trigger" type="button" class="hide">
+    <Icon name="iconamoon:arrow-right-2" />
+    Activer l'audio
+</button>
+
+<script>
+    import { Event, dispatchEvent } from "@types";
+
+    const button: HTMLElement = document.getElementById("audio-trigger")!;
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (!urlParams.has("no-audio")) {
+        button.addEventListener("click", () => {
+            dispatchEvent(Event.RESUME_AUDIO);
+            button.classList.add("hide");
+        });
+
+        document.addEventListener(Event.NEED_USER_INTERACTION, () => {
+            button.classList.remove("hide");
+        })
+    }
+
+    document.addEventListener(Event.HIDE_AUDIO_TRIGGER, () => {
+        button.classList.add("hide");
+    });
+</script>
+
+<style>
+    #audio-trigger {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        padding: 0.8rem 1.2rem;
+        backdrop-filter: blur(4px);
+        background-color: rgba(36, 36, 36, 0.9);
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        font-size: 1.1em;
+        transition: background-color 0.1s ease-in-out, opacity 0.3s ease-in-out;
+        display: flex;
+        gap: 0.5rem;
+
+        &:hover {
+            background-color: rgba(36, 36, 36, 1);
+        }
+
+        @media screen and (max-width: 768px) {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+</style>

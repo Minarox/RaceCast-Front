@@ -1,0 +1,178 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<article id="sidebar">
+	<section>
+		<button type="button">
+			<span>
+				<Icon name="iconamoon:arrow-left-2" />
+				<Icon name="iconamoon:arrow-right-2" />
+			</span>
+		</button>
+
+		<aside>
+			<div>
+				<slot />
+			</div>
+		</aside>
+	</section>
+</article>
+
+<script>
+	const wrapper = document.getElementById('sidebar')!;
+	const section = wrapper.querySelector('section')!;
+	const button = wrapper.querySelector('button')!;
+
+	button.addEventListener('click', () => {
+		section.classList.toggle('open');
+	});
+</script>
+
+<style>
+	#sidebar {
+		--sidebar-width: 430px;
+		--button-width: 36px;
+		--button-height: 120px;
+		--border-radius: 12px;
+		--spacing: 16px;
+		--bg-color: rgba(0, 0, 0, 0.6);
+		--blur: blur(12px);
+
+		pointer-events: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+
+		> section {
+			position: relative;
+			top: 0;
+			left: calc(100% - var(--button-width));
+			height: inherit;
+			width: var(--sidebar-width);
+			display: grid;
+			grid-template-columns: var(--button-width) 1fr;
+			align-items: center;
+			transition: left 0.3s ease-in-out;
+
+			&.open {
+				left: calc(100% - var(--sidebar-width));
+
+				> aside {
+					box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+				}
+
+				> button > span {
+					transform: translateX(-26px);
+					clip-path: polygon(38% 0, 100% 0, 100% 100%, 38% 100%);
+				}
+			}
+
+			> button {
+				pointer-events: auto;
+				position: relative;
+				cursor: pointer;
+				width: var(--button-width);
+				height: var(--button-height);
+				border-radius: var(--border-radius) 0 0 var(--border-radius);
+				background-color: var(--bg-color);
+				backdrop-filter: var(--blur);
+				outline: none;
+				border: none;
+				color: white;
+
+				&::before,
+				&::after {
+					position: absolute;
+					top: calc(var(--border-radius) * -1);
+					right: 0;
+					content: '';
+					width: var(--border-radius);
+					height: var(--border-radius);
+					background-color: transparent;
+					border-radius: 0 0 var(--border-radius) 0;
+					box-shadow: 0 0 0 var(--border-radius) var(--bg-color);
+					clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+					transform: scale(1.0001);
+				}
+
+				&::after {
+					transform: rotate(-90deg);
+					top: unset;
+					bottom: calc(var(--border-radius) * -1);
+				}
+
+				> span {
+					pointer-events: none;
+					font-size: 2em;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					width: 50px;
+					clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
+					transition: all 0.3s ease-in-out;
+					margin-left: 6px;
+				}
+			}
+
+			> aside {
+				pointer-events: auto;
+				margin: var(--spacing) var(--spacing) var(--spacing) 0;
+				padding: var(--spacing) calc(var(--spacing) / 2) var(--spacing) var(--spacing);
+				background-color: var(--bg-color);
+				backdrop-filter: var(--blur);
+				border-radius: var(--border-radius);
+				height: calc(100% - var(--spacing) * 2);
+				transition: box-shadow 0.3s ease-in-out;
+				overflow: hidden;
+
+				> div {
+					display: flex;
+					flex-direction: column;
+					gap: var(--spacing);
+					height: 100%;
+					padding-right: calc(var(--spacing) / 2);
+					overflow-y: auto;
+
+					* {
+						border-radius: 8px;
+					}
+				}
+			}
+		}
+
+		@media screen and (max-width: 768px) {
+			--button-height: 160px;
+			--top-offset: 2rem;
+
+			> section {
+				top: calc(100vh - var(--button-width));
+				left: 0;
+				right: 0;
+				width: 100%;
+				height: calc(100vh - var(--button-width) - var(--top-offset));
+				grid-template-columns: unset;
+				grid-template-rows: var(--button-width) 1fr;
+				justify-items: center;
+				transition: top 0.3s ease-in-out;
+
+				&.open {
+					left: 0;
+					top: var(--top-offset);
+				}
+
+				> button {
+					transform: rotate(90deg);
+				}
+
+				> aside {
+					margin: 0 var(--spacing) var(--spacing) var(--spacing);
+					width: 100%;
+					height: calc(100vh - var(--spacing) * 2 - var(--top-offset));
+				}
+			}
+		}
+	}
+</style>
