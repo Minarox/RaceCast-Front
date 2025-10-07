@@ -10,7 +10,15 @@ import vue from '@astrojs/vue';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://racecast.minarox.fr',
-    integrations: [sitemap(), metaTags(), icon(), vue(), compressor()],
-    adapter: cloudflare()
-});
+    adapter: cloudflare({
+        imageService: "cloudflare",
+        platformProxy: {
+            enabled: true
+        }
+    }),
+    vite: {
+        ssr: {
+          external: ["buffer", "path", "fs", "os", "crypto", "async_hooks"].map((i) => `node:${i}`)
+        }
+    }
+})

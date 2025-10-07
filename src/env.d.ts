@@ -1,11 +1,5 @@
-interface ImportMetaEnv {
-    readonly LIVEKIT_DOMAIN: string;
-    readonly LIVEKIT_API_KEY: string;
-    readonly LIVEKIT_API_SECRET: string;
-    readonly LIVEKIT_ROOM: string;
-    readonly LIVEKIT_REMOTE_IDENTITY: string;
-}
+type Runtime = import("@astrojs/cloudflare").Runtime<Env>
 
-interface ImportMeta {
-    readonly env: ImportMetaEnv;
+declare namespace App {
+	interface Locals extends Runtime {}
 }

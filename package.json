@@ -1,5 +1,5 @@
 {
-  "name": "racecast",
+  "name": "racecast-front",
   "description": "Interface for displaying race car data.",
   "author": {
     "name": "Mathis Serrieres Maniecki",
@@ -12,37 +12,45 @@
   },
   "homepage": "https://github.com/Minarox/RaceCast-Front#readme",
   "readme": "./README.md",
-  "license": "Apache-2.0",
+  "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
     "url": "https://github.com/Minarox/RaceCast-Front.git"
   },
   "type": "module",
   "private": true,
+  "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
     "check": "astro check",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro build && wrangler dev",
+    "astro": "astro",
+    "deploy": "astro build && wrangler deploy",
+    "cf-typegen": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.5",
-    "@astrojs/sitemap": "^3.5.1",
-    "@astrojs/vue": "^5.1.0",
+    "@astrojs/cloudflare": "^12.6.9",
+    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/vue": "^5.1.1",
     "@iconify-json/iconamoon": "^1.2.2",
-    "astro": "^5.13.3",
+    "astro": "^5.14.1",
     "astro-compressor": "^1.1.2",
     "astro-font": "^1.1.0",
     "astro-icon": "^1.1.5",
     "astro-meta-tags": "^0.4.0",
     "astro-seo": "^0.8.4",
     "chart.js": "^4.5.0",
-    "livekit-client": "^2.15.6",
-    "livekit-server-sdk": "^2.13.2",
+    "livekit-client": "2.15.8",
+    "livekit-server-sdk": "^2.14.0",
     "ol": "^10.6.1",
-    "vue": "^3.5.20"
+    "vue": "^3.5.22"
   },
-  "packageManager": "pnpm@10.15.0",
+  "devDependencies": {
+    "@types/node": "^24.7.0",
+    "wrangler": "^4.42.0"
+  },
+  "packageManager": "pnpm@10.18.1",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
