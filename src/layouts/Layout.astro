@@ -49,15 +49,15 @@ const audio = Astro.props.audio || false
 			}}
 			extend={{
 				link: [
-				{ rel: "icon", type: "image/svg+xml", href: Logo.src },
-				{ rel: "sitemap", href: "/sitemap-index.xml" },
+					{ rel: "icon", type: "image/svg+xml", href: Logo.src },
+					{ rel: "sitemap", href: "/sitemap-index.xml" },
 				],
 				meta: [
-				{ name: "viewport", content: "width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" },
-				{ name: "theme-color", content: "#242424" },
-				{ name: "keywords", content: "Stream, Rallye, Direct, Compétition, Kévin, Corbier, Voiture, Course, RaceCast, Race, Classement, Spéciale" },
-				{ name: "robots", content: "index, follow" },
-				{ name: "language", content: "French" },
+					{ name: "viewport", content: "width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" },
+					{ name: "theme-color", content: "#242424" },
+					{ name: "keywords", content: "Stream, Rallye, Direct, Compétition, Kévin, Corbier, Voiture, Course, RaceCast, Race, Classement, Spéciale" },
+					{ name: "robots", content: "index, follow" },
+					{ name: "language", content: "French" },
 					{ name: "author", content: "Mathis Serrieres Maniecki" }
 				]
 			}}
@@ -65,23 +65,18 @@ const audio = Astro.props.audio || false
 
 		<AstroFont
 			config={[
-			{
-				name: "Inter",
-				src: [
-					{
-						style: "normal",
-						path: "./public/font/Inter.ttf"
-					},
-					{
-						style: "italic",
-						path: "./public/font/Inter-Italic.ttf"
-					},
-				],
-				preload: true,
-				display: "swap",
-				selector: "body",
-				fallback: "sans-serif",
-			},
+				{
+					name: "Inter",
+					src: [],
+					googleFontsURL: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+					preload: true,
+					fetch: true,
+					verbose: true,
+					cacheDir: ".astro/fonts",
+					display: "swap",
+					selector: "body",
+					fallback: "sans-serif"
+				}
 			]}
 		/>
 	</head>

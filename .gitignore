@@ -4,6 +4,9 @@ dist/
 # generated types
 .astro/
 
+# generated fonts
+public/__astro_font_generated__/
+
 # dependencies
 node_modules/
 .pnpm-store/
