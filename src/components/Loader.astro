@@ -1,8 +1,8 @@
 ---
-import loading from "@assets/loading.svg";
-import { State, getStateString } from "@types";
+import loading from "@assets/loading.svg"
+import { State, getStateString } from "@types"
 
-const loadingIcon: string = (loading as any).src;
+const loadingIcon: string = (loading as any).src
 ---
 
 <section id="loader">
@@ -12,26 +12,26 @@ const loadingIcon: string = (loading as any).src;
 </section>
 
 <script>
-    import { Event, getStateString, State, dispatchEvent } from "@types";
+    import { Event, getStateString, State, dispatchEvent } from "@types"
 
-    const loader: HTMLElement = document.getElementById("loader")!;
-    const p: HTMLElement = loader.querySelector("p")!;
-    const img: HTMLImageElement = loader.querySelector("img")!;
-    const button: HTMLButtonElement = loader.querySelector("button")!;
+    const loader: HTMLElement = document.getElementById("loader")!
+    const p: HTMLElement = loader.querySelector("p")!
+    const img: HTMLImageElement = loader.querySelector("img")!
+    const button: HTMLButtonElement = loader.querySelector("button")!
 
     button.addEventListener("click", () => {
-        dispatchEvent(Event.CONNECT);
-    });
+        dispatchEvent(Event.CONNECT)
+    })
 
     document.addEventListener(Event.LOCAL_STATUS, (event: any) => {
-        const status: State = event.detail;
-        p.innerText = getStateString(status);
-        loader.classList.toggle("hide", status === State.CONNECTED);
-        img.classList.toggle("hidden", status === State.DISCONNECTED);
-        button.classList.toggle("hidden", status !== State.DISCONNECTED);
-    });
+        const status: State = event.detail
+        p.innerText = getStateString(status)
+        loader.classList.toggle("hide", status === State.CONNECTED)
+        img.classList.toggle("hidden", status === State.DISCONNECTED)
+        button.classList.toggle("hidden", status !== State.DISCONNECTED)
+    })
 
-    button.click();
+    button.click()
 </script>
 
 <style>

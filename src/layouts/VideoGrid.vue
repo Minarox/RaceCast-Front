@@ -5,37 +5,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
-import VideoPlayer from '@components/VideoPlayer.vue'
-import { Event } from 'src/types'
+import { ref, onMounted, onBeforeUnmount, computed } from "vue"
+import VideoPlayer from "@components/VideoPlayer.vue"
+import { Event } from "src/types"
 
 const props = defineProps<{
     list?: boolean
-}>();
+}>()
 
-const nbCameras = ref(0);
-const videoTracks = ref([]);
+const nbCameras = ref(0)
+const videoTracks = ref([])
 
 const gridClass = computed(() => {
     if (props.list) {
-        return 'list';
+        return "list"
     }
 
-    return '';
-});
+    return ''
+})
 
 function camerasHandler(event: any) {
-    videoTracks.value = event.detail;
-    nbCameras.value = videoTracks.value.length;
+    videoTracks.value = event.detail
+    nbCameras.value = videoTracks.value.length
 }
 
 onMounted(() => {
     document.addEventListener(Event.CAMERAS, camerasHandler)
-});
+})
 
 onBeforeUnmount(() => {
     document.removeEventListener(Event.CAMERAS, camerasHandler)
-});
+})
 </script>
 
 <style scoped>

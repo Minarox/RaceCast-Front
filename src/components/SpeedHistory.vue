@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted, onBeforeUnmount } from "vue"
 import { Event, Metadata } from "src/types"
 import Chart, { ChartItem } from 'chart.js/auto'
 
@@ -34,57 +34,57 @@ function metadataHandler(event: any): void {
 }
 
 onMounted(() => {
-    const wrapper: HTMLElement = document.getElementById("speed-history")!;
-    const canvas: HTMLCanvasElement = wrapper.querySelector("canvas")!;
+    const wrapper: HTMLElement = document.getElementById("speed-history")!
+    const canvas: HTMLCanvasElement = wrapper.querySelector("canvas")!
 
     chart = new Chart(
-    canvas as ChartItem,
-    {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [
-                {
-                    data: [],
-                    borderColor: function(context) {
-                        const chart = context.chart
-                        const { ctx, chartArea } = chart
+        canvas as ChartItem,
+        {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        data: [],
+                        borderColor: function(context) {
+                            const chart = context.chart
+                            const { ctx, chartArea } = chart
 
-                        if (!chartArea) {
-                            return
+                            if (!chartArea) {
+                                return
+                            }
+
+                            const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
+                            gradient.addColorStop(0, 'rgb(54, 162, 235)')
+                            gradient.addColorStop(0.5, 'rgb(255, 205, 86)')
+                            gradient.addColorStop(1, 'rgb(255, 99, 132)')
+                            return gradient
                         }
-
-                        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
-                        gradient.addColorStop(0, 'rgb(54, 162, 235)')
-                        gradient.addColorStop(0.5, 'rgb(255, 205, 86)')
-                        gradient.addColorStop(1, 'rgb(255, 99, 132)')
-                        return gradient
-                    },
-                }
-            ],
-        },
-        options: {
-            spanGaps: true,
-            interaction: {
-                intersect: false,
+                    }
+                ]
             },
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                x: {
-                    display: false
+            options: {
+                spanGaps: true,
+                interaction: {
+                    intersect: false,
                 },
-                y: {
-                    display: true,
-                    suggestedMin: 0,
-                    suggestedMax: 200
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        display: true,
+                        suggestedMin: 0,
+                        suggestedMax: 200
+                    }
                 }
             }
         }
-    }
     )
 
 

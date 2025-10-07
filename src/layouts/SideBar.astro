@@ -1,5 +1,5 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components"
 ---
 
 <article id="sidebar">
@@ -20,13 +20,13 @@ import { Icon } from 'astro-icon/components';
 </article>
 
 <script>
-	const wrapper = document.getElementById('sidebar')!;
-	const section = wrapper.querySelector('section')!;
-	const button = wrapper.querySelector('button')!;
+	const wrapper = document.getElementById("sidebar")!
+	const section = wrapper.querySelector("section")!
+	const button = wrapper.querySelector("button")!
 
-	button.addEventListener('click', () => {
-		section.classList.toggle('open');
-	});
+	button.addEventListener("click", () => {
+		section.classList.toggle("open")
+	})
 </script>
 
 <style>

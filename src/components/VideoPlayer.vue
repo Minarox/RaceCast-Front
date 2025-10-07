@@ -8,72 +8,72 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, defineComponent, defineProps } from 'vue'
-import loadingIcon from "@assets/loading.svg";
-import { Event, dispatchEvent } from '@types';
-import { RemoteTrackPublication } from 'livekit-client';
-import Speed from '@components/Speed.vue'
+import { ref, onMounted, onBeforeUnmount, defineComponent, defineProps } from "vue"
+import loadingIcon from "@assets/loading.svg"
+import { Event, dispatchEvent } from "@types"
+import { RemoteTrackPublication } from "livekit-client"
+import Speed from "@components/Speed.vue"
 
 const props = defineProps<{
     index: string,
     tracks?: RemoteTrackPublication[],
     speed?: boolean
-}>();
+}>()
 
 defineComponent({
     Speed
-});
+})
 
-const loading = ref(null) as any;
-const player = ref(null) as any;
-let oldVideoTrack: RemoteTrackPublication | null = null;
-let preventResend = false;
+const loading = ref(null) as any
+const player = ref(null) as any
+let oldVideoTrack: RemoteTrackPublication | null = null
+let preventResend = false
 
 function camerasHandler(event: any) {
-    preventResend = true;
-    const videoTracks = event.detail;
-    const videoTrack = videoTracks?.[props.index];
+    preventResend = true
+    const videoTracks = event.detail
+    const videoTrack = videoTracks?.[props.index]
 
     if (oldVideoTrack && oldVideoTrack?.trackSid === videoTrack?.trackSid) {
-        return;
+        return
     }
 
     if (oldVideoTrack) {
-        oldVideoTrack.track?.detach(player.value);
-        loading.value.classList.remove('hidden');
-        oldVideoTrack = null;
+        oldVideoTrack.track?.detach(player.value)
+        loading.value.classList.remove('hidden')
+        oldVideoTrack = null
     }
 
     setTimeout(() => {
         if (videoTrack && videoTrack.track) {
-            videoTrack.track.attach(player.value);
-            loading.value.classList.add('hidden');
-            oldVideoTrack = videoTrack;
+            videoTrack.track.attach(player.value)
+            loading.value.classList.add('hidden')
+            oldVideoTrack = videoTrack
         }
-    }, 50);
+    }, 50)
 }
 
 onMounted(() => {
-    document.addEventListener(Event.CAMERAS, camerasHandler);
+    document.addEventListener(Event.CAMERAS, camerasHandler)
 
     if (!preventResend || !props.tracks?.length) {
-        dispatchEvent(Event.RESEND, Event.CAMERAS);
+        dispatchEvent(Event.RESEND, Event.CAMERAS)
     }
 
     if (props.tracks?.length) {
-        camerasHandler({ detail: props.tracks });
+        camerasHandler({ detail: props.tracks })
     }
-});
+})
 
 onBeforeUnmount(() => {
     if (oldVideoTrack) {
-        oldVideoTrack.track?.detach(player.value);
-        oldVideoTrack = null;
+        oldVideoTrack.track?.detach(player.value)
+        oldVideoTrack = null
     }
-    loading.value.classList.remove('hidden');
+    loading.value.classList.remove('hidden')
 
     document.removeEventListener(Event.CAMERAS, camerasHandler)
-});
+})
 </script>
 
 <style scoped>

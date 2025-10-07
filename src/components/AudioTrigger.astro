@@ -1,5 +1,5 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components"
 ---
 
 <button id="audio-trigger" type="button" class="hide">
@@ -8,25 +8,25 @@ import { Icon } from 'astro-icon/components';
 </button>
 
 <script>
-    import { Event, dispatchEvent } from "@types";
+    import { Event, dispatchEvent } from "@types"
 
-    const button: HTMLElement = document.getElementById("audio-trigger")!;
-    const urlParams = new URLSearchParams(window.location.search);
+    const button: HTMLElement = document.getElementById("audio-trigger")!
+    const urlParams = new URLSearchParams(window.location.search)
 
     if (!urlParams.has("no-audio")) {
         button.addEventListener("click", () => {
-            dispatchEvent(Event.RESUME_AUDIO);
-            button.classList.add("hide");
-        });
+            dispatchEvent(Event.RESUME_AUDIO)
+            button.classList.add("hide")
+        })
 
         document.addEventListener(Event.NEED_USER_INTERACTION, () => {
-            button.classList.remove("hide");
+            button.classList.remove("hide")
         })
     }
 
     document.addEventListener(Event.HIDE_AUDIO_TRIGGER, () => {
-        button.classList.add("hide");
-    });
+        button.classList.add("hide")
+    })
 </script>
 
 <style>

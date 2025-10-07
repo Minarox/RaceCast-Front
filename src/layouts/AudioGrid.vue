@@ -5,25 +5,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import AudioPlayer from '@components/AudioPlayer.vue'
-import { Event } from 'src/types'
+import { ref, onMounted, onBeforeUnmount } from "vue"
+import AudioPlayer from "@components/AudioPlayer.vue"
+import { Event } from "@types"
 
-const nbMicrophones = ref(0);
-const audioTracks = ref([]);
+const nbMicrophones = ref(0)
+const audioTracks = ref([])
 
 function microphonesHandler(event: any) {
-    audioTracks.value = event.detail;
-    nbMicrophones.value = audioTracks.value.length;
+    audioTracks.value = event.detail
+    nbMicrophones.value = audioTracks.value.length
 }
 
 onMounted(() => {
     document.addEventListener(Event.MICROPHONES, microphonesHandler)
-});
+})
 
 onBeforeUnmount(() => {
     document.removeEventListener(Event.MICROPHONES, microphonesHandler)
-});
+})
 </script>
 
 <style scoped>

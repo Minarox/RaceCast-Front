@@ -1,43 +1,43 @@
 <script>
-    import { RemoteParticipant, RemoteTrackPublication, Room, RoomEvent, Track } from "livekit-client";
-    import { Event, State, Token, Metadata, defaultMetadata, dispatchEvent } from "@types";
+    import { RemoteParticipant, RemoteTrackPublication, Room, RoomEvent, Track } from "livekit-client"
+    import { Event, State, Token, Metadata, defaultMetadata, dispatchEvent } from "@types"
 
-    let nbViewers: number = 0;
-    let cameras: RemoteTrackPublication[] = [];
-    let microphones: RemoteTrackPublication[] = [];
-    let localStatus: State = State.DISCONNECTED;
-    let remoteStatus: State = State.DISCONNECTED;
-    let metadata: Metadata = defaultMetadata;
-    let room: Room | undefined = undefined;
+    let nbViewers: number = 0
+    let cameras: RemoteTrackPublication[] = []
+    let microphones: RemoteTrackPublication[] = []
+    let localStatus: State = State.DISCONNECTED
+    let remoteStatus: State = State.DISCONNECTED
+    let metadata: Metadata = defaultMetadata
+    let room: Room | undefined = undefined
 
     document.addEventListener(Event.RESEND, (event: any): void => {
         switch (event.detail) {
             case Event.VIEWERS:
-                dispatchEvent(Event.VIEWERS, nbViewers);
-                break;
+                dispatchEvent(Event.VIEWERS, nbViewers)
+                break
 
             case Event.CAMERAS:
-                dispatchEvent(Event.CAMERAS, cameras);
-                break;
+                dispatchEvent(Event.CAMERAS, cameras)
+                break
 
             case Event.MICROPHONES:
-                dispatchEvent(Event.MICROPHONES, microphones);
-                break;
+                dispatchEvent(Event.MICROPHONES, microphones)
+                break
 
             case Event.LOCAL_STATUS:
-                dispatchEvent(Event.LOCAL_STATUS, localStatus);
-                break;
+                dispatchEvent(Event.LOCAL_STATUS, localStatus)
+                break
 
             case Event.REMOTE_STATUS:
-                dispatchEvent(Event.REMOTE_STATUS, remoteStatus);
-                break;
+                dispatchEvent(Event.REMOTE_STATUS, remoteStatus)
+                break
 
             case Event.METADATA:
-                dispatchEvent(Event.METADATA, metadata);
-                break;
+                dispatchEvent(Event.METADATA, metadata)
+                break
 
             default:
-                throw new Error(`Unknown event: ${event.detail}`);
+                throw new Error(`Unknown event: ${event.detail}`)
         }
     })
 
@@ -45,111 +45,111 @@
         if (localStatus === State.DISCONNECTED) {
             setTimeout(() => connect())
         }
-    });
+    })
 
     async function getLiveKitToken(): Promise<Token> {
-        const response = await fetch(`${window.location.origin}/token`);
-        return await response.json();
-    };
+        const response = await fetch(`${window.location.origin}/token`)
+        return await response.json()
+    }
 
     function getEmitterTracks(participant: RemoteParticipant): void {
-        const tracks = Array.from(participant.trackPublications.values());
+        const tracks = Array.from(participant.trackPublications.values())
 
-        let videoTracks = tracks.filter((track: RemoteTrackPublication) => track.kind === Track.Kind.Video);
-        cameras = videoTracks.sort((a: any, b: any) => a?.trackInfo?.name.localeCompare(b?.trackInfo?.name));
-        dispatchEvent(Event.CAMERAS, cameras);
+        let videoTracks = tracks.filter((track: RemoteTrackPublication) => track.kind === Track.Kind.Video)
+        cameras = videoTracks.sort((a: any, b: any) => a?.trackInfo?.name.localeCompare(b?.trackInfo?.name))
+        dispatchEvent(Event.CAMERAS, cameras)
 
-        let audioTracks = tracks.filter((track: RemoteTrackPublication) => track.kind === Track.Kind.Audio);
-        microphones = audioTracks.sort((a: any, b: any) => a?.trackInfo?.name.localeCompare(b?.trackInfo?.name));
-        dispatchEvent(Event.MICROPHONES, microphones);
-    };
+        let audioTracks = tracks.filter((track: RemoteTrackPublication) => track.kind === Track.Kind.Audio)
+        microphones = audioTracks.sort((a: any, b: any) => a?.trackInfo?.name.localeCompare(b?.trackInfo?.name))
+        dispatchEvent(Event.MICROPHONES, microphones)
+    }
 
     async function connect(): Promise<void> {
-        const livekit = await getLiveKitToken();
+        const livekit = await getLiveKitToken()
 
         room = new Room({
             reconnectPolicy: {
                 nextRetryDelayInMs: () => {
-                    return 1000;
+                    return 1000
                 }
             }
-        });
+        })
 
-        room.prepareConnection(`wss://${livekit.domain}`, livekit.token);
+        room.prepareConnection(`wss://${livekit.domain}`, livekit.token)
 
         room
             .on(RoomEvent.ConnectionStateChanged, (state: string): void => {
-                localStatus = state as State;
-                dispatchEvent(Event.LOCAL_STATUS, localStatus);
+                localStatus = state as State
+                dispatchEvent(Event.LOCAL_STATUS, localStatus)
 
                 if (localStatus === State.DISCONNECTED) {
-                    room = undefined;
-                    nbViewers = 0;
-                    cameras = [];
-                    microphones = [];
-                    dispatchEvent(Event.VIEWERS, nbViewers);
-                    dispatchEvent(Event.CAMERAS, cameras);
-                    dispatchEvent(Event.MICROPHONES, microphones);
-                    setTimeout(() => connect());
+                    room = undefined
+                    nbViewers = 0
+                    cameras = []
+                    microphones = []
+                    dispatchEvent(Event.VIEWERS, nbViewers)
+                    dispatchEvent(Event.CAMERAS, cameras)
+                    dispatchEvent(Event.MICROPHONES, microphones)
+                    setTimeout(() => connect())
                 }
             })
             .on(RoomEvent.RoomMetadataChanged, (data: string): void => {
-                metadata = data ? JSON.parse(data) : defaultMetadata;
-                dispatchEvent(Event.METADATA, metadata);
+                metadata = data ? JSON.parse(data) : defaultMetadata
+                dispatchEvent(Event.METADATA, metadata)
             })
             .on(RoomEvent.ParticipantConnected, (participant): void => {
                 if (participant.identity === livekit.remoteIdentity) {
-                    getEmitterTracks(participant);
-                    remoteStatus = State.CONNECTED;
-                    dispatchEvent(Event.REMOTE_STATUS, remoteStatus);
+                    getEmitterTracks(participant)
+                    remoteStatus = State.CONNECTED
+                    dispatchEvent(Event.REMOTE_STATUS, remoteStatus)
                 } else {
-                    nbViewers++;
-                    dispatchEvent(Event.VIEWERS, nbViewers);
+                    nbViewers++
+                    dispatchEvent(Event.VIEWERS, nbViewers)
                 }
             })
             .on(RoomEvent.ParticipantDisconnected, (participant): void => {
                 if (participant.identity === livekit.remoteIdentity) {
-                    remoteStatus = State.DISCONNECTED;
-                    dispatchEvent(Event.REMOTE_STATUS, remoteStatus);
+                    remoteStatus = State.DISCONNECTED
+                    dispatchEvent(Event.REMOTE_STATUS, remoteStatus)
                 } else {
-                    nbViewers--;
-                    dispatchEvent(Event.VIEWERS, nbViewers);
+                    nbViewers--
+                    dispatchEvent(Event.VIEWERS, nbViewers)
                 }
             })
             .on(RoomEvent.TrackPublished, (_, participant): void => {
                 if (participant.identity === livekit.remoteIdentity) {
-                    getEmitterTracks(participant);
+                    getEmitterTracks(participant)
                 }
             })
             .on(RoomEvent.TrackUnpublished, (_, participant): void => {
                 if (participant.identity === livekit.remoteIdentity) {
-                    getEmitterTracks(participant);
+                    getEmitterTracks(participant)
                 }
             })
             .on(RoomEvent.AudioPlaybackStatusChanged, (state: boolean): void => {
                 if (!state) {
-                    dispatchEvent(Event.NEED_USER_INTERACTION);
+                    dispatchEvent(Event.NEED_USER_INTERACTION)
                 }
             });
 
-        await room.connect(`wss://${livekit.domain}`, livekit.token);
-        metadata = room?.metadata ? JSON.parse(room.metadata) : defaultMetadata;
-        dispatchEvent(Event.METADATA, metadata);
+        await room.connect(`wss://${livekit.domain}`, livekit.token)
+        metadata = room?.metadata ? JSON.parse(room.metadata) : defaultMetadata
+        dispatchEvent(Event.METADATA, metadata)
 
-        const emitter: RemoteParticipant | undefined = room.remoteParticipants.get(livekit.remoteIdentity);
-        remoteStatus = emitter ? State.CONNECTED : State.DISCONNECTED;
-        dispatchEvent(Event.REMOTE_STATUS, remoteStatus);
+        const emitter: RemoteParticipant | undefined = room.remoteParticipants.get(livekit.remoteIdentity)
+        remoteStatus = emitter ? State.CONNECTED : State.DISCONNECTED
+        dispatchEvent(Event.REMOTE_STATUS, remoteStatus)
 
-        nbViewers = Array.from(room.remoteParticipants.keys()).length + 1; // +1 for the local participant
+        nbViewers = Array.from(room.remoteParticipants.keys()).length + 1 // +1 for the local participant
         if (emitter) {
-            getEmitterTracks(emitter);
-            nbViewers--;
+            getEmitterTracks(emitter)
+            nbViewers--
         } else {
-            cameras = [];
-            microphones = [];
-            dispatchEvent(Event.CAMERAS, cameras);
-            dispatchEvent(Event.MICROPHONES, microphones);
+            cameras = []
+            microphones = []
+            dispatchEvent(Event.CAMERAS, cameras)
+            dispatchEvent(Event.MICROPHONES, microphones)
         }
-        dispatchEvent(Event.VIEWERS, nbViewers);
+        dispatchEvent(Event.VIEWERS, nbViewers)
     }
 </script>

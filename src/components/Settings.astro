@@ -1,7 +1,7 @@
 ---
-import loading from "@assets/loading.svg";
+import loading from "@assets/loading.svg"
 
-const loadingIcon: string = (loading as any).src;
+const loadingIcon: string = (loading as any).src
 ---
 
 <form>
@@ -50,54 +50,54 @@ const loadingIcon: string = (loading as any).src;
 
     */
 
-    import { RemoteTrackPublication } from "livekit-client";
-    import { Event } from "@types";
+    import { RemoteTrackPublication } from "livekit-client"
+    import { Event } from "@types"
 
-    const camerasSelectLoading = document.getElementById("settings-cam-loading")!;
-    const camerasSelect = document.getElementById("settings-main-cam")! as HTMLSelectElement;
-    const micVolumes = document.getElementById("mic-volumes")!;
+    const camerasSelectLoading = document.getElementById("settings-cam-loading")!
+    const camerasSelect = document.getElementById("settings-main-cam")! as HTMLSelectElement
+    const micVolumes = document.getElementById("mic-volumes")!
 
     document.addEventListener(Event.CAMERAS, (event: any) => {
-        camerasSelectLoading.classList.add("hidden");
-        camerasSelect.classList.remove("hidden");
-        const videoTracks: RemoteTrackPublication[] = event.detail;
-        camerasSelect.innerHTML = '';
-        camerasSelectLoading.classList.add("hidden");
+        camerasSelectLoading.classList.add("hidden")
+        camerasSelect.classList.remove("hidden")
+        const videoTracks: RemoteTrackPublication[] = event.detail
+        camerasSelect.innerHTML = ''
+        camerasSelectLoading.classList.add("hidden")
 
         if (videoTracks.length === 0) {
-            camerasSelect.innerHTML = '<option value="" disabled>Aucune caméra détectée</option>';
-            camerasSelect.disabled = true;
-            return;
+            camerasSelect.innerHTML = '<option value="" disabled>Aucune caméra détectée</option>'
+            camerasSelect.disabled = true
+            return
         }
 
         videoTracks.forEach((track) => {
-            const option = document.createElement('option');
-            option.value = track.trackSid;
-            option.textContent = track.trackName || `Caméra ${track.trackSid}`;
-            camerasSelect.appendChild(option);
-        });
-        camerasSelect.disabled = false;
-    });
+            const option = document.createElement('option')
+            option.value = track.trackSid
+            option.textContent = track.trackName || `Caméra ${track.trackSid}`
+            camerasSelect.appendChild(option)
+        })
+        camerasSelect.disabled = false
+    })
 
     document.addEventListener(Event.MICROPHONES, (event: any) => {
-        const audioTracks: RemoteTrackPublication[] = event.detail;
-        micVolumes.innerHTML = '';
+        const audioTracks: RemoteTrackPublication[] = event.detail
+        micVolumes.innerHTML = ''
 
         if (audioTracks.length === 0) {
-            micVolumes.innerHTML = '<p>Aucun micro détecté</p>';
-            return;
+            micVolumes.innerHTML = '<p>Aucun micro détecté</p>'
+            return
         }
 
         audioTracks.forEach((track) => {
-            const volumeControl = document.createElement('input');
-            volumeControl.type = 'range';
-            volumeControl.min = '0';
-            volumeControl.max = '100';
-            volumeControl.value = '100';
-            volumeControl.id = `mic-volume-${track.trackSid}`;
-            micVolumes.appendChild(volumeControl);
-        });
-    });
+            const volumeControl = document.createElement('input')
+            volumeControl.type = 'range'
+            volumeControl.min = '0'
+            volumeControl.max = '100'
+            volumeControl.value = '100'
+            volumeControl.id = `mic-volume-${track.trackSid}`
+            micVolumes.appendChild(volumeControl)
+        })
+    })
 </script>
 
 <style>

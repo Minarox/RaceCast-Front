@@ -1,28 +1,29 @@
 ---
-import { SEO } from "astro-seo";
-import { AstroFont } from "astro-font";
-import Logo from '@assets/logo.svg';
-import Loader from '@components/Loader.astro';
-import LiveKit from "@components/LiveKit.astro";
-import AudioTrigger from "@components/AudioTrigger.astro";
-// import Banner from '@assets/banner.webp';
+import { SEO } from "astro-seo"
+import { AstroFont } from "astro-font"
+import Logo from "@assets/logo.svg"
+import Loader from "@components/Loader.astro"
+import LiveKit from "@components/LiveKit.astro"
+import AudioTrigger from "@components/AudioTrigger.astro"
+// import Banner from "@assets/banner.webp"
 
-const title: string = "RaceCast";
-const description: string = "Diffusion en direct de la voiture de course de Kevin CORBIER.";
-const audio = Astro.props.audio || false;
+const title: string = "RaceCast"
+const description: string = "Diffusion en direct de la voiture de course de Kevin CORBIER."
+const audio = Astro.props.audio || false
 ---
 
 <!doctype html>
 <html lang="fr">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
 		<SEO
 			title={title}
 			description={description}
 			charset="UTF-8"
 			openGraph={{
 				basic: {
-					title: title,
+					title,
 					type: "website",
 					url: Astro.url.origin,
 					image: ''
@@ -41,7 +42,7 @@ const audio = Astro.props.audio || false;
 				creator: "@Minarox_",
 				card: "summary_large_image",
 				site: Astro.url.origin,
-				title: title,
+				title,
 				description: description,
 				// image: Banner.src,
 				imageAlt: `${title} banner`,
@@ -57,10 +58,11 @@ const audio = Astro.props.audio || false;
 				{ name: "keywords", content: "Stream, Rallye, Direct, Compétition, Kévin, Corbier, Voiture, Course, RaceCast, Race, Classement, Spéciale" },
 				{ name: "robots", content: "index, follow" },
 				{ name: "language", content: "French" },
-				{ name: "author", content: "Minarox" }
-				],
+					{ name: "author", content: "Mathis Serrieres Maniecki" }
+				]
 			}}
 		/>
+
 		<AstroFont
 			config={[
 			{

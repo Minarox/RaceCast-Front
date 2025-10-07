@@ -3,26 +3,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
-import { Event, Metadata } from "@types";
+import { ref, onMounted, onUnmounted } from "vue"
+import { Event, Metadata } from "@types"
 
-const speedText = ref("0");
-const isHidden = ref(true);
+const speedText = ref('0')
+const isHidden = ref(true)
 
 function metadataHandler(event: any) {
-    const metadata: Metadata = event.detail;
-    const speed = metadata.location.speed;
-    isHidden.value = speed === null;
-    speedText.value = speed !== null ? speed.toString() : "0";
+    const metadata: Metadata = event.detail
+    const speed = metadata.location.speed
+    isHidden.value = speed === null
+    speedText.value = speed !== null ? speed.toString() : "0"
 }
 
 onMounted(() => {
-    document.addEventListener(Event.METADATA, metadataHandler);
-});
+    document.addEventListener(Event.METADATA, metadataHandler)
+})
 
 onUnmounted(() => {
-    document.removeEventListener(Event.METADATA, metadataHandler);
-});
+    document.removeEventListener(Event.METADATA, metadataHandler)
+})
 </script>
 
 <style>

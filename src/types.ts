@@ -1,21 +1,21 @@
 export interface Token {
-    domain: string;
-    room: string;
-    identity: string;
-    token: string;
-    validity: string;
-    remoteIdentity: string;
-    timestamp: number;
-};
+    domain: string
+    room: string
+    identity: string
+    token: string
+    validity: string
+    remoteIdentity: string
+    timestamp: number
+}
 
 export interface Location {
-    alt: number | null;
-    hdop: number | null;
-    lat: number | null;
-    lon: number | null;
-    sat: number | null;
-    speed: number | null;
-};
+    alt: number | null
+    hdop: number | null
+    lat: number | null
+    lon: number | null
+    sat: number | null
+    speed: number | null
+}
 
 export const defaultLocation: Location = {
     alt: null,
@@ -24,52 +24,52 @@ export const defaultLocation: Location = {
     lon: null,
     sat: null,
     speed: null,
-};
+}
 
 export interface Modem {
-    signal: number | null;
-    tech: string[] | null;
-};
+    signal: number | null
+    tech: string[] | null
+}
 
 export const defaultModem: Modem = {
     signal: null,
     tech: null,
-};
+}
 
 export interface System {
-    fan: number | null;
-    load: number | null;
-    temp: number | null;
-    power: number | null;
-};
+    fan: number | null
+    load: number | null
+    temp: number | null
+    power: number | null
+}
 
 export const defaultSystem: System = {
     fan: null,
     load: null,
     temp: null,
     power: null,
-};
+}
 
 export interface UPS {
-    capa: number | null;
-    volt: number | null;
-    charge: boolean;
-};
+    capa: number | null
+    volt: number | null
+    charge: boolean
+}
 
 export const defaultUPS: UPS = {
     capa: null,
     volt: null,
     charge: false,
-};
+}
 
 export interface Metadata {
-    location: Location;
-    modem: Modem;
-    system: System;
-    temp: number | null;
-    timestamp: number | null;
-    ups: UPS;
-};
+    location: Location
+    modem: Modem
+    system: System
+    temp: number | null
+    timestamp: number | null
+    ups: UPS
+}
 
 export const defaultMetadata: Metadata = {
     location: defaultLocation,
@@ -78,7 +78,7 @@ export const defaultMetadata: Metadata = {
     temp: null,
     timestamp: null,
     ups: defaultUPS,
-};
+}
 
 export enum Event {
     LOCAL_STATUS = "local-status",
@@ -95,32 +95,32 @@ export enum Event {
     RESUME_AUDIO = "resume-audio",
     NEED_USER_INTERACTION = "need-user-interaction",
     HIDE_AUDIO_TRIGGER = "hide-audio-trigger",
-};
+}
 
 export enum State {
     CONNECTING = "connecting",
     CONNECTED = "connected",
     RECONNECTING = "reconnecting",
     DISCONNECTED = "disconnected"
-};
+}
 
 export function getStateString(state: State): string {
     switch (state) {
         case State.CONNECTING:
-            return "Connection...";
+            return "Connection..."
         case State.CONNECTED:
-            return "Connecté";
+            return "Connecté"
         case State.RECONNECTING:
-            return "Reconnexion...";
+            return "Reconnexion..."
         case State.DISCONNECTED:
-            return "Déconnecté";
+            return "Déconnecté"
         default:
-            return "Inconnu";
+            return "Inconnu"
     }
-};
+}
 
 export function dispatchEvent(event: Event, data?: any): void {
     document.dispatchEvent(
         new CustomEvent(event, { detail: data })
-    );
-};
+    )
+}
