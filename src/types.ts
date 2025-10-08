@@ -23,7 +23,7 @@ export const defaultLocation: Location = {
     lat: null,
     lon: null,
     sat: null,
-    speed: null,
+    speed: null
 }
 
 export interface Modem {
@@ -33,7 +33,7 @@ export interface Modem {
 
 export const defaultModem: Modem = {
     signal: null,
-    tech: null,
+    tech: null
 }
 
 export interface System {
@@ -47,7 +47,7 @@ export const defaultSystem: System = {
     fan: null,
     load: null,
     temp: null,
-    power: null,
+    power: null
 }
 
 export interface UPS {
@@ -59,7 +59,7 @@ export interface UPS {
 export const defaultUPS: UPS = {
     capa: null,
     volt: null,
-    charge: false,
+    charge: false
 }
 
 export interface Metadata {
@@ -77,7 +77,7 @@ export const defaultMetadata: Metadata = {
     system: defaultSystem,
     temp: null,
     timestamp: null,
-    ups: defaultUPS,
+    ups: defaultUPS
 }
 
 export enum Event {

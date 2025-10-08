@@ -18,7 +18,7 @@ export const GET: APIRoute = async ({ locals }): Promise<Response> => {
     let accessToken: AccessToken = new AccessToken(
         locals.runtime.env.LIVEKIT_API_KEY,
         locals.runtime.env.LIVEKIT_API_SECRET,
-        { identity },
+        { identity }
     )
 
     // Set permissions
@@ -36,7 +36,7 @@ export const GET: APIRoute = async ({ locals }): Promise<Response> => {
         canUpdateOwnMetadata: false,
         hidden: false,
         recorder: false,
-        agent: false,
+        agent: false
     })
 
     const response: Token = {
@@ -46,16 +46,12 @@ export const GET: APIRoute = async ({ locals }): Promise<Response> => {
         token: await accessToken.toJwt(),
         validity: accessToken.ttl.toString(),
         remoteIdentity: locals.runtime.env.LIVEKIT_REMOTE_IDENTITY,
-        timestamp: Date.now(),
+        timestamp: Date.now()
     }
 
     // Return the token
     return new Response(
         JSON.stringify(response),
-        {
-            headers: {
-                "Content-Type": "application/json",
-            }
-        }
+        { headers: { "Content-Type": "application/json" } }
     )
 }

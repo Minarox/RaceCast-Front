@@ -3,176 +3,176 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted } from "vue"
-import { defaults as defaultControls, FullScreen, ScaleLine } from "ol/control.js"
-import { easeOut } from "ol/easing.js"
-import { Point } from "ol/geom"
-import { Feature, Map, View } from "ol/index"
-import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer"
-import { unByKey } from "ol/Observable.js"
-import "ol/ol.css"
-import { useGeographic } from "ol/proj"
-import { getVectorContext } from "ol/render.js"
-import { OSM, Vector as VectorSource } from "ol/source"
-import { Circle as CircleStyle, Stroke, Style } from "ol/style.js"
-import { Event, Metadata, dispatchEvent } from "@types"
+    import { onBeforeUnmount, onMounted } from "vue"
+    import { defaults as defaultControls, FullScreen, ScaleLine } from "ol/control.js"
+    import { easeOut } from "ol/easing.js"
+    import { Point } from "ol/geom"
+    import { Feature, Map, View } from "ol/index"
+    import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer"
+    import { unByKey } from "ol/Observable.js"
+    import "ol/ol.css"
+    import { useGeographic } from "ol/proj"
+    import { getVectorContext } from "ol/render.js"
+    import { OSM, Vector as VectorSource } from "ol/source"
+    import { Circle as CircleStyle, Stroke, Style } from "ol/style.js"
+    import { Event, Metadata, dispatchEvent } from "@types"
 
-let map: any = null
-let tileLayer: any = null
-let source: any = null
-let vector: any = null
-let duration: number = 3000
-let start: any = null
-let flashGeom: any = null
-let listenerKey: any = null
-let location: Array<number> = [0, 0]
-let oldLocation: Array<number> = [0, 0]
-let canFlash: boolean = true
+    let map: any = null
+    let tileLayer: any = null
+    let source: any = null
+    let vector: any = null
+    let duration: number = 3000
+    let start: any = null
+    let flashGeom: any = null
+    let listenerKey: any = null
+    let location: Array<number> = [0, 0]
+    let oldLocation: Array<number> = [0, 0]
+    let canFlash: boolean = true
 
-function setLocation(position: [number, number]): void {
-    map.getLayers()
-        .getArray()[1]
-        .getSource()
-        .getFeatures()[0]
-        .getGeometry()
-        .setCoordinates(position)
+    function setLocation(position: [number, number]): void {
+        map.getLayers()
+            .getArray()[1]
+            .getSource()
+            .getFeatures()[0]
+            .getGeometry()
+            .setCoordinates(position)
 
-    // TODO: Ajouter un toggle pour centrer automatiquement la carte sur la position
-    setTimeout(() => {
-        map.getView().animate({
-            center: position,
-            duration: 300
-        })
-    }, 1)
-}
-
-function createMap(): void {
-    tileLayer = new TileLayer({
-        source: new OSM({
-            wrapX: false
-        })
-    })
-
-    source = new VectorSource({
-        wrapX: false,
-        features: [new Feature(new Point(location))]
-    })
-
-    vector = new VectorLayer({
-        source: source,
-        style: {
-            "circle-radius": 12,
-            "circle-fill-color": "rgba(255,255,255,0.6)",
-            "circle-stroke-color": "#3399CC",
-            "circle-stroke-width": 1.8
-        }
-    })
-
-    map = new Map({
-        target: document.getElementById("map") as HTMLElement,
-        controls: defaultControls({ attribution: false, zoom: true })
-            .extend([
-                new ScaleLine({
-                    units: "metric"
-                }),
-                new FullScreen()
-            ]),
-        layers: [tileLayer, vector],
-        view: new View({
-            center: location,
-            zoom: 15
-        })
-    })
-}
-
-function flash(): void {
-    start = Date.now()
-    flashGeom = map
-        .getLayers()
-        .getArray()[1]
-        .getSource()
-        .getFeatures()[0]
-        .getGeometry()
-        .clone()
-    listenerKey = tileLayer.on("postrender", animate)
-}
-
-function animate(event: any): void {
-    const frameState = event.frameState
-    const elapsed = frameState.time - start
-    if (elapsed >= duration) {
-        unByKey(listenerKey)
-        return
+        // TODO: Ajouter un toggle pour centrer automatiquement la carte sur la position
+        setTimeout(() => {
+            map.getView().animate({
+                center: position,
+                duration: 300
+            })
+        }, 1)
     }
-    const vectorContext = getVectorContext(event)
-    const elapsedRatio = elapsed / duration
-    const radius = easeOut(elapsedRatio) * 25 + 12
-    const opacity = easeOut(1 - elapsedRatio)
 
-    const style = new Style({
-        image: new CircleStyle({
-            radius: radius,
-            stroke: new Stroke({
-                color: "rgba(255, 0, 0, " + opacity + ")",
-                width: 0.25 + opacity
+    function createMap(): void {
+        tileLayer = new TileLayer({
+            source: new OSM({
+                wrapX: false
             })
         })
-    })
 
-    vectorContext.setStyle(style)
-    vectorContext.drawGeometry(flashGeom)
-    map.render()
-}
+        source = new VectorSource({
+            wrapX: false,
+            features: [new Feature(new Point(location))]
+        })
 
-function metadataHandler(event: any): void {
-    const metadata: Metadata = event.detail
-    if (metadata.location.lat && metadata.location.lon) {
-        if (oldLocation[0] !== metadata.location.lon && oldLocation[1] !== metadata.location.lat) {
-            setLocation([metadata.location.lon, metadata.location.lat])
-
-            if (canFlash) {
-                canFlash = false
-                flash()
-
-                setTimeout(() => {
-                    canFlash = true
-                }, 3000)
+        vector = new VectorLayer({
+            source: source,
+            style: {
+                "circle-radius": 12,
+                "circle-fill-color": "rgba(255,255,255,0.6)",
+                "circle-stroke-color": "#3399CC",
+                "circle-stroke-width": 1.8
             }
+        })
 
-            oldLocation = [metadata.location.lon, metadata.location.lat]
+        map = new Map({
+            target: document.getElementById("map") as HTMLElement,
+            controls: defaultControls({ attribution: false, zoom: true })
+                .extend([
+                    new ScaleLine({
+                        units: "metric"
+                    }),
+                    new FullScreen()
+                ]),
+            layers: [tileLayer, vector],
+            view: new View({
+                center: location,
+                zoom: 15
+            })
+        })
+    }
+
+    function flash(): void {
+        start = Date.now()
+        flashGeom = map
+            .getLayers()
+            .getArray()[1]
+            .getSource()
+            .getFeatures()[0]
+            .getGeometry()
+            .clone()
+        listenerKey = tileLayer.on("postrender", animate)
+    }
+
+    function animate(event: any): void {
+        const frameState = event.frameState
+        const elapsed = frameState.time - start
+        if (elapsed >= duration) {
+            unByKey(listenerKey)
+            return
+        }
+        const vectorContext = getVectorContext(event)
+        const elapsedRatio = elapsed / duration
+        const radius = easeOut(elapsedRatio) * 25 + 12
+        const opacity = easeOut(1 - elapsedRatio)
+
+        const style = new Style({
+            image: new CircleStyle({
+                radius: radius,
+                stroke: new Stroke({
+                    color: "rgba(255, 0, 0, " + opacity + ")",
+                    width: 0.25 + opacity
+                })
+            })
+        })
+
+        vectorContext.setStyle(style)
+        vectorContext.drawGeometry(flashGeom)
+        map.render()
+    }
+
+    function metadataHandler(event: any): void {
+        const metadata: Metadata = event.detail
+        if (metadata.location.lat && metadata.location.lon) {
+            if (oldLocation[0] !== metadata.location.lon && oldLocation[1] !== metadata.location.lat) {
+                setLocation([metadata.location.lon, metadata.location.lat])
+
+                if (canFlash) {
+                    canFlash = false
+                    flash()
+
+                    setTimeout(() => {
+                        canFlash = true
+                    }, 3000)
+                }
+
+                oldLocation = [metadata.location.lon, metadata.location.lat]
+            }
         }
     }
-}
 
-onMounted(() => {
-    useGeographic()
-    createMap()
+    onMounted(() => {
+        useGeographic()
+        createMap()
 
-    document.addEventListener(Event.METADATA, metadataHandler)
+        document.addEventListener(Event.METADATA, metadataHandler)
 
-    dispatchEvent(Event.RESEND, Event.METADATA)
-})
+        dispatchEvent(Event.RESEND, Event.METADATA)
+    })
 
-onBeforeUnmount(() => {
-    if (map) {
-        map.setTarget(null)
-        map = null
-    }
+    onBeforeUnmount(() => {
+        if (map) {
+            map.setTarget(null)
+            map = null
+        }
 
-    document.removeEventListener(Event.METADATA, metadataHandler)
-})
+        document.removeEventListener(Event.METADATA, metadataHandler)
+    })
 </script>
 
 <style>
-#map {
-    width: 100%;
-    min-width: 200px;
-    height: 100%;
-    min-height: 200px;
-}
+    #map {
+        width: 100%;
+        min-width: 200px;
+        height: 100%;
+        min-height: 200px;
+    }
 
-div {
-    padding: 0;
-    overflow: hidden;
-}
+    div {
+        padding: 0;
+        overflow: hidden;
+    }
 </style>
