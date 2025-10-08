@@ -1,5 +1,5 @@
 <!-- https://github.com/jasikpark/astro-svg-loader -->
-<svg width="24" height="18" viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg">
+<svg width="24" height="18" viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" alt="Chargement...">
     <style>
         .spinner_nOfF {
             fill: white;

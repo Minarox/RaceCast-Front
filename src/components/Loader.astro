@@ -1,13 +1,12 @@
 ---
-import loading from "@assets/loading.svg"
+import { Image } from "astro:assets"
+import Loading from "@assets/loading.svg"
 import { State, getStateString } from "@types"
-
-const loadingIcon: string = (loading as any).src
 ---
 
 <section id="loader">
     <p>{getStateString(State.CONNECTING)}</p>
-    <img src={loadingIcon} alt="Loading..." />
+    <Image src={Loading} alt="Chargement..." />
     <button class="hidden" type="button">Se reconnecter</button>
 </section>
 

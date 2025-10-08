@@ -1,112 +1,108 @@
 <template>
     <div class="video-player">
         <Speed v-if="speed" />
-        <img :id="`video-player-${index}-loading`" :src="loadingIcon.src"
-            alt="Chargement de la vidéo" ref="loading">
+        <div :id="`video-player-${index}-loading`" v-html="Loading" ref="loading" />
         <video :id="`video-player-${index}`" controls ref="player" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, defineComponent, defineProps } from "vue"
-import loadingIcon from "@assets/loading.svg"
-import { Event, dispatchEvent } from "@types"
-import { RemoteTrackPublication } from "livekit-client"
-import Speed from "@components/Speed.vue"
+    import { ref, onMounted, onBeforeUnmount } from "vue"
+    import Loading from "@assets/loading.svg?raw"
+    import { Event, dispatchEvent } from "@types"
+    import { RemoteTrackPublication } from "livekit-client"
+    import Speed from "@components/Speed.vue"
 
-const props = defineProps<{
-    index: string,
-    tracks?: RemoteTrackPublication[],
-    speed?: boolean
-}>()
+    const props = defineProps<{
+        index: string,
+        tracks?: RemoteTrackPublication[],
+        speed?: boolean
+    }>()
 
-defineComponent({
-    Speed
-})
+    const loading = ref(null) as any
+    const player = ref(null) as any
+    let oldVideoTrack: RemoteTrackPublication | null = null
+    let preventResend = false
 
-const loading = ref(null) as any
-const player = ref(null) as any
-let oldVideoTrack: RemoteTrackPublication | null = null
-let preventResend = false
+    function camerasHandler(event: any) {
+        preventResend = true
+        const videoTracks = event.detail
+        const videoTrack = videoTracks?.[props.index]
 
-function camerasHandler(event: any) {
-    preventResend = true
-    const videoTracks = event.detail
-    const videoTrack = videoTracks?.[props.index]
-
-    if (oldVideoTrack && oldVideoTrack?.trackSid === videoTrack?.trackSid) {
-        return
-    }
-
-    if (oldVideoTrack) {
-        oldVideoTrack.track?.detach(player.value)
-        loading.value.classList.remove('hidden')
-        oldVideoTrack = null
-    }
-
-    setTimeout(() => {
-        if (videoTrack && videoTrack.track) {
-            videoTrack.track.attach(player.value)
-            loading.value.classList.add('hidden')
-            oldVideoTrack = videoTrack
+        if (oldVideoTrack && oldVideoTrack?.trackSid === videoTrack?.trackSid) {
+            return
         }
-    }, 50)
-}
 
-onMounted(() => {
-    document.addEventListener(Event.CAMERAS, camerasHandler)
+        if (oldVideoTrack) {
+            oldVideoTrack.track?.detach(player.value)
+            loading.value.classList.remove('hidden')
+            oldVideoTrack = null
+        }
 
-    if (!preventResend || !props.tracks?.length) {
-        dispatchEvent(Event.RESEND, Event.CAMERAS)
+        setTimeout(() => {
+            if (videoTrack && videoTrack.track) {
+                videoTrack.track.attach(player.value)
+                loading.value.classList.add('hidden')
+                oldVideoTrack = videoTrack
+            }
+        }, 50)
     }
 
-    if (props.tracks?.length) {
-        camerasHandler({ detail: props.tracks })
-    }
-})
+    onMounted(() => {
+        document.addEventListener(Event.CAMERAS, camerasHandler)
 
-onBeforeUnmount(() => {
-    if (oldVideoTrack) {
-        oldVideoTrack.track?.detach(player.value)
-        oldVideoTrack = null
-    }
-    loading.value.classList.remove('hidden')
+        if (!preventResend || !props.tracks?.length) {
+            dispatchEvent(Event.RESEND, Event.CAMERAS)
+        }
 
-    document.removeEventListener(Event.CAMERAS, camerasHandler)
-})
+        if (props.tracks?.length) {
+            camerasHandler({ detail: props.tracks })
+        }
+    })
+
+    onBeforeUnmount(() => {
+        if (oldVideoTrack) {
+            oldVideoTrack.track?.detach(player.value)
+            oldVideoTrack = null
+        }
+        loading.value.classList.remove('hidden')
+
+        document.removeEventListener(Event.CAMERAS, camerasHandler)
+    })
 </script>
 
 <style scoped>
-.video-player {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    > #speed {
-        position: absolute;
-        bottom: 1.4rem;
-        left: 1rem;
-    }
-
-    > img {
-        z-index: 1;
-        pointer-events: none;
-        position: absolute;
-        width: 60%;
-        max-width: 100px;
-        height: 60%;
-        max-height: 100px;
-        opacity: 1;
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    > video {
+    .video-player {
+        position: relative;
         width: 100%;
-        max-height: 100%;
-        aspect-ratio: 16/9;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        > #speed {
+            position: absolute;
+            bottom: 1.4rem;
+            left: 1rem;
+        }
+
+        > div {
+            z-index: 1;
+            pointer-events: none;
+            line-height: 0;
+            position: absolute;
+            width: 60%;
+            max-width: 100px;
+            height: 60%;
+            max-height: 100px;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        > video {
+            width: 100%;
+            max-height: 100%;
+            aspect-ratio: 16/9;
+        }
     }
-}
 </style>
