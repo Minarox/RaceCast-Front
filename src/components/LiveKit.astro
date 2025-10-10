@@ -1,6 +1,7 @@
 <script>
     import { RemoteParticipant, RemoteTrackPublication, Room, RoomEvent, Track } from "livekit-client"
-    import { Event, State, Token, Metadata, defaultMetadata, dispatchEvent } from "@types"
+    import { Event, State, Metadata, defaultMetadata, dispatchEvent } from "@types"
+    import { actions } from "astro:actions"
 
     let nbViewers: number = 0
     let cameras: RemoteTrackPublication[] = []
@@ -47,11 +48,6 @@
         }
     })
 
-    async function getLiveKitToken(): Promise<Token> {
-        const response = await fetch(`${window.location.origin}/token`)
-        return await response.json()
-    }
-
     function getEmitterTracks(participant: RemoteParticipant): void {
         const tracks = Array.from(participant.trackPublications.values())
 
@@ -65,7 +61,7 @@
     }
 
     async function connect(): Promise<void> {
-        const livekit = await getLiveKitToken()
+        const livekit = await actions.getLiveKitToken.orThrow()
 
         room = new Room({
             reconnectPolicy: {
