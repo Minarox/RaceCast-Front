@@ -1,109 +1,330 @@
 ---
-import loading from "@assets/loading.svg"
-
-const loadingIcon: string = (loading as any).src
+import { Image } from "astro:assets"
+import { Icon } from "astro-icon/components"
+import Loading from "@assets/loading.svg"
+import { Position } from "@types"
 ---
 
-<form>
-    <h1 class="hidden">Paramètres</h1>
+<form id="settings-form">
+	<article>
+		<header>
+			Paramètres
+			<button id="close-settings-btn" type="button"
+				aria-label="Fermer les paramètres" title="Fermer les paramètres">
+				<Icon name="iconamoon:close" />
+			</button>
+		</header>
 
-    <h2 class="hidden">Disposition</h2>
-    <div class="split-layout">
-        <label for="settings-main-cam">Caméra principale :</label>
-        <img id="settings-cam-loading" src={loadingIcon} alt="Loading..." />
-        <select id="settings-main-cam" class="hidden" disabled></select>
-    </div>
-    <div class="split-layout">
-        <label for="settings-speed">Afficher la vitesse :</label>
-        <input type="checkbox" id="settings-speed" checked />
-    </div>
-    <div class="split-layout">
-        <label for="settings-gps">Afficher la position GPS :</label>
-        <input type="checkbox" id="settings-gps" checked />
-    </div>
-    <div class="split-layout">
-        <label for="settings-sidebar">Afficher le panneau latéral :</label>
-        <input type="checkbox" id="settings-sidebar" checked />
-    </div>
+		<section>
+			<h2>Disposition</h2>
+			<div class="split-layout">
+				<label for="settings-main-cam">Caméra principale :</label>
+				<Image id="settings-cam-loading" src={Loading} alt="Loading..." />
+				<select id="settings-main-cam" class="hidden" disabled></select>
+			</div>
+			<div class="split-layout">
+				<label for="settings-speed">Afficher la vitesse :</label>
+				<div>
+					<input type="checkbox" id="settings-speed" checked />
+					<select id="settings-speed-position">
+						<option value={Position.LEFT}>Gauche</option>
+						<option value={Position.RIGHT}>Droite</option>
+					</select>
+				</div>
+			</div>
+			<div class="split-layout">
+				<label for="settings-map">Afficher la position GPS :</label>
+				<div>
+					<input type="checkbox" id="settings-map" checked />
+					<select id="settings-map-position">
+						<option value={Position.LEFT}>Gauche</option>
+						<option value={Position.RIGHT}>Droite</option>
+					</select>
+				</div>
+			</div>
+			<div class="split-layout">
+				<label for="settings-other-cameras">Afficher les autres caméras :</label>
+				<input type="checkbox" id="settings-other-cameras" checked />
+			</div>
+			<div class="split-layout">
+				<label for="settings-sidebar">Afficher le panneau latéral :</label>
+				<input type="checkbox" id="settings-sidebar" checked />
+				<select id="settings-sidebar-position">
+					<option value={Position.LEFT}>Gauche</option>
+					<option value={Position.RIGHT}>Droite</option>
+				</select>
+			</div>
 
-    <h2 class="hidden">Audio</h2>
-    <div id="mic-volumes" class="split-layout">
-        <img src={loadingIcon} alt="Loading..." />
-    </div>
+			<h2>Audio</h2>
+			<div id="mic-volumes" class="split-layout">
+				<Image src={Loading} alt="Loading..." />
+			</div>
+		</section>
+
+		<footer>
+			<button id="close-settings-footer-btn" type="button">Fermer</button>
+			<button id="save-settings-btn" type="submit">Enregistrer</button>
+		</footer>
+	</article>
 </form>
 
 <script>
-    /*
+	/*
 
-    # Paramètres
+	# Paramètres
 
-    ## Disposition :
-    Caméra principale : [Sélectionner la caméra principale]
-    Afficher la vitesse : [Activer/Désactiver]
-    Afficher la position GPS : [Activer/Désactiver]
-    Afficher le panneau latéral : [Activer/Désactiver]
+	## Disposition :
+	Caméra principale : [Sélectionner la caméra principale]
+	Afficher la vitesse : [Activer/Désactiver]
+	Afficher la position GPS : [Activer/Désactiver]
+	Afficher le panneau latéral : [Activer/Désactiver]
 
-    ## Son :
-    Volume micro 1 : [0-100%]
-    Volume micro 2 : [0-100%]
-    ...
+	## Son :
+	Volume micro 1 : [0-100%]
+	Volume micro 2 : [0-100%]
+	...
 
-    */
+	*/
 
-    import { RemoteTrackPublication } from "livekit-client"
-    import { Event } from "@types"
+	import { RemoteTrackPublication } from "livekit-client"
+	import { dispatchEvent, Event, getSettings, Position } from "@types"
+	import DefaultSettings from "@assets/settings.json"
 
-    const camerasSelectLoading = document.getElementById("settings-cam-loading")!
-    const camerasSelect = document.getElementById("settings-main-cam")! as HTMLSelectElement
-    const micVolumes = document.getElementById("mic-volumes")!
+	const camerasSelectLoading = document.getElementById("settings-cam-loading")!
+	const camerasSelect = document.getElementById("settings-main-cam")! as unknown as HTMLSelectElement
+	const micVolumes = document.getElementById("mic-volumes")!
+	const form = document.getElementById("settings-form")!
+	const closeBtn = document.getElementById("close-settings-btn")!
+	const closeFooterBtn = document.getElementById("close-settings-footer-btn")!
+	const showSpeed = document.getElementById("settings-speed")! as HTMLInputElement
+	const showSpeedPosition = document.getElementById("settings-speed-position")! as unknown as HTMLSelectElement
+	const showMap = document.getElementById("settings-map")! as HTMLInputElement
+	const showMapPosition = document.getElementById("settings-map-position")! as unknown as HTMLSelectElement
+	const showOtherCameras = document.getElementById("settings-other-cameras")! as HTMLInputElement
+	const showSidebar = document.getElementById("settings-sidebar")! as HTMLInputElement
+	const sidebarPosition = document.getElementById("settings-sidebar-position")! as unknown as HTMLSelectElement
 
-    document.addEventListener(Event.CAMERAS, (event: any) => {
-        camerasSelectLoading.classList.add("hidden")
-        camerasSelect.classList.remove("hidden")
-        const videoTracks: RemoteTrackPublication[] = event.detail
-        camerasSelect.innerHTML = ''
-        camerasSelectLoading.classList.add("hidden")
+	let settings = getSettings()
+	settings = {
+		...DefaultSettings,
+		...settings
+	}
+	window.localStorage.setItem("settings", JSON.stringify(settings))
+	dispatchEvent(Event.SETTINGS)
 
-        if (videoTracks.length === 0) {
-            camerasSelect.innerHTML = '<option value="" disabled>Aucune caméra détectée</option>'
-            camerasSelect.disabled = true
-            return
-        }
+	function toggleMobileSettings() {
+		const isSmallScreen = window.innerWidth < 768
+		showSpeedPosition.classList.toggle("hidden", isSmallScreen)
+		showMapPosition.classList.toggle("hidden", isSmallScreen)
+	}
 
-        videoTracks.forEach((track) => {
-            const option = document.createElement('option')
-            option.value = track.trackSid
-            option.textContent = track.trackName || `Caméra ${track.trackSid}`
-            camerasSelect.appendChild(option)
-        })
-        camerasSelect.disabled = false
-    })
+	document.addEventListener(Event.CAMERAS, (event: any) => {
+		camerasSelectLoading.classList.add("hidden")
+		camerasSelect.classList.remove("hidden")
+		const videoTracks: RemoteTrackPublication[] = event.detail
+		camerasSelect.innerHTML = ''
+		camerasSelectLoading.classList.add("hidden")
 
-    document.addEventListener(Event.MICROPHONES, (event: any) => {
-        const audioTracks: RemoteTrackPublication[] = event.detail
-        micVolumes.innerHTML = ''
+		if (videoTracks.length === 0) {
+			camerasSelect.innerHTML = '<option value="" disabled>Aucune caméra détectée</option>'
+			camerasSelect.disabled = true
+			return
+		}
 
-        if (audioTracks.length === 0) {
-            micVolumes.innerHTML = '<p>Aucun micro détecté</p>'
-            return
-        }
+		videoTracks.forEach((track) => {
+			const option = document.createElement('option')
+			option.value = track.trackSid
+			option.textContent = track.trackName || `Caméra ${track.trackSid}`
+			camerasSelect.appendChild(option)
+		})
+		camerasSelect.disabled = false
+	})
 
-        audioTracks.forEach((track) => {
-            const volumeControl = document.createElement('input')
-            volumeControl.type = 'range'
-            volumeControl.min = '0'
-            volumeControl.max = '100'
-            volumeControl.value = '100'
-            volumeControl.id = `mic-volume-${track.trackSid}`
-            micVolumes.appendChild(volumeControl)
-        })
-    })
+	document.addEventListener(Event.MICROPHONES, (event: any) => {
+		const audioTracks: RemoteTrackPublication[] = event.detail
+		micVolumes.innerHTML = ''
+
+		if (audioTracks.length === 0) {
+			micVolumes.innerHTML = '<p>Aucun micro détecté</p>'
+			return
+		}
+
+		audioTracks.forEach((track) => {
+			const volumeControl = document.createElement('input')
+			volumeControl.type = 'range'
+			volumeControl.min = '0'
+			volumeControl.max = '100'
+			volumeControl.value = '100'
+			volumeControl.id = `mic-volume-${track.trackSid}`
+			micVolumes.appendChild(volumeControl)
+		})
+	})
+
+	document.addEventListener(Event.SHOW_SETTINGS, () => {
+		form.classList.add('show')
+		const settings = getSettings()
+		camerasSelect.value = settings.mainCamera
+		showSpeed.checked = settings.speed.show
+		showSpeedPosition.value = settings.speed.position
+		showMap.checked = settings.map.show
+		showMapPosition.value = settings.map.position
+		showOtherCameras.checked = settings.showOtherCameras
+		showSidebar.checked = settings.sidebar.show
+		sidebarPosition.value = settings.sidebar.position
+	})
+
+	closeBtn.addEventListener("click", () => {
+		form.classList.remove('show')
+	})
+
+	closeFooterBtn.addEventListener("click", () => {
+		form.classList.remove('show')
+	})
+
+	form.addEventListener("submit", (e) => {
+		e.preventDefault()
+		settings.mainCamera = camerasSelect.value
+		settings.speed.show = showSpeed.checked
+		settings.speed.position = showSpeedPosition.value as Position
+		settings.map.show = showMap.checked
+		settings.map.position = showMapPosition.value as Position
+		settings.showOtherCameras = showOtherCameras.checked
+		settings.sidebar.show = showSidebar.checked
+		settings.sidebar.position = sidebarPosition.value as Position
+
+		// const audioTracks = micVolumes.querySelectorAll('input[type="range"]')
+		// settings.micVolumes = {}
+		// audioTracks.forEach((input: any) => {
+		//     const trackSid = input.id.replace('mic-volume-', '')
+		//     settings.micVolumes[trackSid] = parseInt(input.value)
+		// })
+
+		window.localStorage.setItem("settings", JSON.stringify(settings))
+		dispatchEvent(Event.SETTINGS)
+		form.classList.remove('show')
+	})
+
+	document.addEventListener("resize", toggleMobileSettings)
+
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape") {
+			if (form.classList.contains('show')) {
+				form.classList.remove('show')
+			}
+		}
+	})
+
+	toggleMobileSettings()
 </script>
 
 <style>
-    .split-layout {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+	form {
+		z-index: 100;
+		opacity: 0;
+		pointer-events: none;
+		user-select: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		padding: 8px;
+		background-color: rgba(0, 0, 0, 0.3);
+		transition: opacity 180ms ease-in-out;
+
+		&.show {
+			opacity: 1;
+			pointer-events: auto;
+			user-select: auto;
+		}
+
+		article {
+			width: min(600px, 100%);
+			padding: 1.2rem;
+			background-color: white;
+			border-radius: 8px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			color: black;
+
+			header {
+				font-size: 1.5em;
+				font-weight: bold;
+				margin-bottom: 1rem;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				button {
+					background: none;
+					border: none;
+					cursor: pointer;
+					font-size: 1em;
+
+					&:hover {
+						color: #444;
+					}
+				}
+			}
+
+			section {
+				h2 {
+					font-size: 1.2em;
+					margin-top: 1.5rem;
+					margin-bottom: 0.5rem;
+					border-bottom: 1px solid #ccc;
+					padding-bottom: 0.2rem;
+				}
+
+				.split-layout {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					margin: 0.4rem 0;
+
+					> div {
+						display: flex;
+						gap: 0.6rem;
+						align-items: center;
+					}
+				}
+			}
+
+			footer {
+				display: flex;
+				justify-content: flex-end;
+				gap: 0.6rem;
+				margin-top: 1.5rem;
+
+				#save-settings-btn {
+					background-color: #4CAF50;
+					color: white;
+					border: none;
+					padding: 0.6rem 1.2rem;
+					border-radius: 8px;
+					cursor: pointer;
+					font-size: 0.9em;
+
+					&:hover {
+						background-color: #45a049;
+					}
+				}
+
+				#close-settings-footer-btn {
+					color: black;
+					background-color: transparent;
+					border: none;
+					padding: 0.6rem 1.2rem;
+					cursor: pointer;
+					font-size: 0.9em;
+
+					&:hover {
+						color: #444;
+					}
+				}
+			}
+		}
+	}
 </style>

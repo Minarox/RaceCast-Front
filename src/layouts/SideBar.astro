@@ -1,10 +1,29 @@
 ---
 import { Icon } from "astro-icon/components"
+import Settings from "@components/Settings.astro"
 ---
+
+<Settings />
 
 <article id="sidebar">
 	<section>
-		<button type="button">
+		<div>
+			<button id="toggle-fullscreen-btn" type="button"
+				aria-label="Basculer en plein écran" title="Basculer en plein écran">
+				<Icon name="iconamoon:screen-full" />
+			</button>
+			<button id="sticky-sidebar-btn" type="button"
+				aria-label="Forcer l'affichage de la barre latérale" title="Forcer l'affichage de la barre latérale">
+				<Icon name="iconamoon:download" />
+			</button>
+			<button id="open-settings-btn" type="button"
+				aria-label="Ouvrir les paramètres" title="Ouvrir les paramètres">
+				<Icon name="iconamoon:settings" />
+			</button>
+		</div>
+
+		<button id="sidebar-btn" class="hide" type="button"
+			aria-label="Ouvrir/Fermer le panneau latéral" title="Ouvrir/Fermer le panneau latéral">
 			<span>
 				<Icon name="iconamoon:arrow-left-2" />
 				<Icon name="iconamoon:arrow-right-2" />
@@ -20,13 +39,63 @@ import { Icon } from "astro-icon/components"
 </article>
 
 <script>
+	import { dispatchEvent, Event, getSettings, Position } from "@types"
+
 	const wrapper = document.getElementById("sidebar")!
 	const section = wrapper.querySelector("section")!
-	const button = wrapper.querySelector("button")!
+	const toggleFullscreenBtn = document.getElementById("toggle-fullscreen-btn")!
+	const stickySidebarBtn = document.getElementById("sticky-sidebar-btn")!
+	const openSettingsBtn = document.getElementById("open-settings-btn")!
+	const openSidebarBtn = document.getElementById("sidebar-btn")!
 
-	button.addEventListener("click", () => {
+	toggleFullscreenBtn.addEventListener("click", () => {
+		if (!document.fullscreenElement) {
+			document.documentElement.requestFullscreen()
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen()
+			}
+		}
+	})
+
+	stickySidebarBtn.addEventListener("click", () => {
+		const settings = getSettings()
+		settings.sidebar.sticky = !settings.sidebar.sticky
+		window.localStorage.setItem("settings", JSON.stringify(settings))
+		dispatchEvent(Event.SETTINGS)
+	})
+
+	openSettingsBtn.addEventListener("click", () => {
+		dispatchEvent(Event.SHOW_SETTINGS)
+	})
+
+	openSidebarBtn.addEventListener("click", () => {
 		section.classList.toggle("open")
 	})
+
+	function checkSettings() {
+		const settings = getSettings()
+		section.classList.toggle("reverse", settings.sidebar.position === Position.LEFT)
+
+		if (settings.sidebar.show) {
+			openSidebarBtn.classList.remove("hide")
+		} else {
+			section.classList.remove("open")
+			openSidebarBtn.classList.add("hide")
+		}
+
+		if (settings.sidebar.sticky) {
+			section.classList.add("open")
+			openSidebarBtn.classList.add("hide")
+			stickySidebarBtn.classList.add("active")
+		} else {
+			openSidebarBtn.classList.remove("hide")
+			stickySidebarBtn.classList.remove("active")
+		}
+	}
+
+	document.addEventListener(Event.SETTINGS, checkSettings)
+	checkSettings()
 </script>
 
 <style>
@@ -52,10 +121,25 @@ import { Icon } from "astro-icon/components"
 			left: calc(100% - var(--button-width));
 			height: inherit;
 			width: var(--sidebar-width);
-			display: grid;
-			grid-template-columns: var(--button-width) 1fr;
+			display: flex;
 			align-items: center;
 			transition: left 0.3s ease-in-out;
+
+			.reverse {
+				left: unset;
+				right: calc(100% - var(--button-width));
+				flex-direction: row-reverse;
+
+				> button {
+					transform: rotate(180deg);
+				}
+
+				> div {
+					right: unset;
+					left: calc(100% - var(--button-width) + 1rem);
+					transform: scaleX(-1)
+				}
+			}
 
 			&.open {
 				left: calc(100% - var(--sidebar-width));
@@ -67,6 +151,42 @@ import { Icon } from "astro-icon/components"
 				> button > span {
 					transform: translateX(-26px);
 					clip-path: polygon(38% 0, 100% 0, 100% 100%, 38% 100%);
+				}
+			}
+
+			> div {
+				z-index: 1;
+				pointer-events: auto;
+				position: absolute;
+				top: 1rem;
+				right: calc(100% - var(--button-width) + 1rem);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: 5px;
+				overflow: hidden;
+
+				> button {
+					padding: 0.5rem;
+					display: inline-flex;
+					align-items: center;
+					justify-content: center;
+					outline: none;
+					border: none;
+					font-size: 1.3em;
+					cursor: pointer;
+					background-color: rgba(0, 0, 0, 0.5);
+					backdrop-filter: blur(4px);
+					transition: opacity 0.3s ease-in-out, background-color 0.2s ease-in-out;
+					color: white;
+
+					.active {
+						background-color: rgba(92, 92, 92, 0.5);
+					}
+
+					#sticky-sidebar-btn {
+						transform: rotate(-90deg);
+					}
 				}
 			}
 
@@ -82,13 +202,14 @@ import { Icon } from "astro-icon/components"
 				outline: none;
 				border: none;
 				color: white;
+				transition: opacity 0.3s ease-in-out;
 
 				&::before,
 				&::after {
 					position: absolute;
 					top: calc(var(--border-radius) * -1);
 					right: 0;
-					content: '';
+					content: "";
 					width: var(--border-radius);
 					height: var(--border-radius);
 					background-color: transparent;
@@ -118,6 +239,7 @@ import { Icon } from "astro-icon/components"
 			}
 
 			> aside {
+				flex-grow: 1;
 				pointer-events: auto;
 				margin: var(--spacing) var(--spacing) var(--spacing) 0;
 				padding: var(--spacing) calc(var(--spacing) / 2) var(--spacing) var(--spacing);

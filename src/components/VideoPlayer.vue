@@ -1,6 +1,5 @@
 <template>
     <div class="video-player">
-        <Speed v-if="speed" />
         <div :id="`video-player-${index}-loading`" v-html="Loading" ref="loading" />
         <video :id="`video-player-${index}`" controls ref="player" />
     </div>
@@ -11,12 +10,10 @@
     import Loading from "@assets/loading.svg?raw"
     import { Event, dispatchEvent } from "@types"
     import { RemoteTrackPublication } from "livekit-client"
-    import Speed from "@components/Speed.vue"
 
     const props = defineProps<{
         index: string,
-        tracks?: RemoteTrackPublication[],
-        speed?: boolean
+        tracks?: RemoteTrackPublication[]
     }>()
 
     const loading = ref(null) as any
@@ -80,21 +77,12 @@
         justify-content: center;
         align-items: center;
 
-        > #speed {
-            position: absolute;
-            bottom: 1.4rem;
-            left: 1rem;
-        }
-
         > div {
             z-index: 1;
             pointer-events: none;
             line-height: 0;
             position: absolute;
-            width: 60%;
-            max-width: 100px;
-            height: 60%;
-            max-height: 100px;
+            transform: scale(3);
             opacity: 1;
             transition: opacity 0.3s ease-in-out;
         }

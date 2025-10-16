@@ -1,3 +1,12 @@
+import DefaultSettings from "@assets/settings.json"
+
+export type Settings = typeof DefaultSettings
+
+export enum Position {
+    LEFT = "left",
+    RIGHT = "right"
+}
+
 export interface Token {
     domain: string
     room: string
@@ -87,14 +96,13 @@ export enum Event {
     CAMERAS = "cameras",
     MICROPHONES = "microphones",
     METADATA = "metadata",
-    SHOW_SPEED = "show-speed",
-    SHOW_MAP = "show-map",
-    SHOW_INFO = "show-info",
     CONNECT = "connect",
     RESEND = "resend",
     RESUME_AUDIO = "resume-audio",
     NEED_USER_INTERACTION = "need-user-interaction",
     HIDE_AUDIO_TRIGGER = "hide-audio-trigger",
+    SHOW_SETTINGS = "show-settings",
+    SETTINGS = "settings"
 }
 
 export enum State {
@@ -123,4 +131,8 @@ export function dispatchEvent(event: Event, data?: any): void {
     document.dispatchEvent(
         new CustomEvent(event, { detail: data })
     )
+}
+
+export function getSettings(): Settings {
+    return JSON.parse(window.localStorage.getItem("settings") || JSON.stringify(DefaultSettings))
 }

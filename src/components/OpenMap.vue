@@ -1,9 +1,9 @@
 <template>
-  <div id="map" />
+  <div :id="`map-${id}`" />
 </template>
 
 <script setup lang="ts">
-    import { onBeforeUnmount, onMounted } from "vue"
+    import { onBeforeUnmount, onMounted, useId } from "vue"
     import { defaults as defaultControls, FullScreen, ScaleLine } from "ol/control.js"
     import { easeOut } from "ol/easing.js"
     import { Point } from "ol/geom"
@@ -17,6 +17,7 @@
     import { Circle as CircleStyle, Stroke, Style } from "ol/style.js"
     import { Event, Metadata, dispatchEvent } from "@types"
 
+    const id = useId()
     let map: any = null
     let tileLayer: any = null
     let source: any = null
@@ -69,7 +70,7 @@
         })
 
         map = new Map({
-            target: document.getElementById("map") as HTMLElement,
+            target: document.getElementById(`map-${id}`) as HTMLElement,
             controls: defaultControls({ attribution: false, zoom: true })
                 .extend([
                     new ScaleLine({
@@ -163,15 +164,12 @@
     })
 </script>
 
-<style>
-    #map {
-        width: 100%;
-        min-width: 200px;
-        height: 100%;
-        min-height: 200px;
-    }
-
+<style scoped>
     div {
+        width: 100%;
+        min-width: 100px;
+        height: 100%;
+        min-height: 100px;
         padding: 0;
         overflow: hidden;
     }

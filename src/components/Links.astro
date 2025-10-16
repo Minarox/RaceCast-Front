@@ -1,0 +1,22 @@
+<section class="box">
+	<h2>Liens</h2>
+	<ul>
+		<li><a href="/cam">Caméras</a></li>
+		<li><a href="/mic">Microphones</a></li>
+		<li><a href="/map">Carte</a></li>
+		<li><a href="/data">Métadonnées</a></li>
+	</ul>
+
+	<hr>
+
+	<a href="mailto:contact@minarox.fr">Contact</a>
+	<p>
+		&copy; <span id="current-year"></span> &nbsp;|&nbsp;
+		<a href="/">racecast.minarox.fr</a>
+	</p>
+</section>
+
+<script>
+	const currentYearSpan = document.getElementById("current-year")!
+	currentYearSpan.innerText = new Date().getFullYear().toString()
+</script>

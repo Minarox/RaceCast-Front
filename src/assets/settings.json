@@ -1,0 +1,18 @@
+{
+    "mainCamera": "0",
+    "showOtherCameras": true,
+    "speed": {
+        "show": true,
+        "position": "left"
+    },
+    "map": {
+        "show": true,
+        "position": "right"
+    },
+    "sidebar": {
+        "show": true,
+        "position": "left",
+        "sticky": false
+    },
+    "volumes": []
+}

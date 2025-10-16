@@ -1,13 +1,31 @@
 <template>
-    <section :class="gridClass" id="video-grid">
-        <VideoPlayer v-for="i in nbCameras" :key="i" :index="(i - 1).toString()" :tracks="videoTracks" :speed="i === 1" />
+    <section v-if="props.list" id="video-grid" class="list">
+        <VideoPlayer v-for="i in nbCameras" :key="i" :index="(i - 1).toString()" :tracks="videoTracks" />
+    </section>
+
+    <section v-else id="video-grid">
+        <VideoPlayer v-if="nbCameras" index="0" :tracks="videoTracks" />
+        <article>
+            <Speed v-if="settings.speed.show" :class="speedPosition" />
+            <div :class="mapPosition">
+                <section>
+                    <template v-if="settings.showOtherCameras && nbCameras > 1">
+                        <VideoPlayer v-for="i in nbCameras - 1" :key="i + 1" :index="(i).toString()" :tracks="videoTracks" />
+                    </template>
+                </section>
+                <Map v-if="settings.map.show" />
+            </div>
+        </article>
     </section>
 </template>
 
 <script setup lang="ts">
     import { ref, onMounted, onBeforeUnmount, computed } from "vue"
     import VideoPlayer from "@components/VideoPlayer.vue"
-    import { Event } from "@types"
+    import Map from "@components/OpenMap.vue"
+    import Speed from "@components/Speed.vue"
+    import { Event, getSettings, Position } from "@types"
+    import DefaultSettings from "@assets/settings.json"
 
     const props = defineProps<{
         list?: boolean
@@ -15,13 +33,14 @@
 
     const nbCameras = ref(0)
     const videoTracks = ref([])
+    const settings = ref(DefaultSettings)
 
-    const gridClass = computed(() => {
-        if (props.list) {
-            return "list"
-        }
+    const speedPosition = computed(() => {
+        return settings.value.speed.position === Position.RIGHT && "reverse" || ''
+    })
 
-        return ''
+    const mapPosition = computed(() => {
+        return settings.value.map.position === Position.RIGHT && "reverse" || ''
     })
 
     function camerasHandler(event: any) {
@@ -29,11 +48,18 @@
         nbCameras.value = videoTracks.value.length
     }
 
+    function settingsHandler() {
+		settings.value = getSettings()
+    }
+
     onMounted(() => {
         document.addEventListener(Event.CAMERAS, camerasHandler)
+        document.addEventListener(Event.SETTINGS, settingsHandler)
+        settingsHandler()
     })
 
     onBeforeUnmount(() => {
+        document.removeEventListener(Event.SETTINGS, settingsHandler)
         document.removeEventListener(Event.CAMERAS, camerasHandler)
     })
 </script>
@@ -45,6 +71,69 @@
         overflow: hidden;
         position: relative;
 
+        &:not(.list) {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            > article {
+                position: absolute;
+                bottom: 1rem;
+                left: 1rem;
+                right: 1rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.6rem;
+                height: 200px;
+
+                > p:first-child {
+                    padding-inline: 0.4rem;
+
+                    &.reverse {
+                        align-self: flex-end;
+                    }
+                }
+
+                > div {
+                    width: 100%;
+                    flex-grow: 1;
+                    display: flex;
+                    gap: 0.4rem;
+                    justify-content: space-between;
+                    flex-direction: row;
+                    overflow-x: auto;
+
+                    &.reverse {
+                        flex-direction: row-reverse;
+                    }
+
+                    > section {
+                        flex-grow: 1;
+                        display: flex;
+                        gap: 0.4rem;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        overflow-x: auto;
+                        min-width: max-content;
+
+                        > .video-player {
+                            width: unset;
+                            border-radius: 8px !important;
+                            flex-shrink: 0;
+                            overflow: hidden;
+                        }
+                    }
+
+                    > div {
+                        width: 180px;
+                        flex-shrink: 0;
+                        border-radius: 8px;
+                    }
+                }
+            }
+        }
+
         &.list {
             display: flex;
             flex-flow: row wrap;
@@ -53,24 +142,46 @@
             overflow-y: auto;
         }
 
-        &:not(.list) {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            grid-template-rows: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
         @media screen and (max-width: 768px) {
-            height: 100%;
-            overflow-y: auto;
-
             &:not(.list) {
-                display: flex;
                 flex-direction: column;
+                justify-content: flex-start;
+                overflow-y: auto;
 
-                > .video-player {
-                    width: unset;
+                .video-player {
                     height: unset;
+                    border-radius: unset;
+                }
+
+                > article {
+                    position: unset;
+                    width: 100vw;
+                    height: 100%;
+
+                    > p:first-child {
+                        align-self: center;
+                        padding-top: 0.4rem;
+                    }
+
+                    > div {
+                        width: inherit;
+                        flex-direction: column !important;
+                        gap: 2.4rem;
+                        min-height: max-content;
+
+                        > section {
+                            flex-direction: column !important;
+                            min-width: unset;
+                            min-height: max-content;
+                            flex-grow: 0;
+                        }
+
+                        > div {
+                            width: 100%;
+                            height: 40vw;
+                            min-height: 180px;
+                        }
+                    }
                 }
             }
         }

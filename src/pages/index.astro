@@ -3,16 +3,39 @@ import Layout from "@layouts/Layout.astro"
 import VideoGrid from "@layouts/VideoGrid.vue"
 import SideBar from "@layouts/SideBar.astro"
 import Info from "@components/Info.vue"
-import SpeedHistory from "@components/SpeedHistory.vue"
 import OpenMap from "@components/OpenMap.vue"
+import SpeedHistory from "@components/SpeedHistory.vue"
+import Metadata from "@components/Metadata.vue"
+import Links from "@components/Links.astro"
 ---
 
 <Layout audio>
 	<VideoGrid client:load />
 
 	<SideBar>
-		<OpenMap client:visible />
-		<SpeedHistory client:idle />
 		<Info client:visible />
+		<OpenMap class="sidebar-map" client:visible />
+		<SpeedHistory client:idle />
+		<Metadata client:visible />
+		<Links />
 	</SideBar>
 </Layout>
+
+<script>
+	import { getSettings, Event } from "@types"
+
+	function settingsHandler() {
+		const settings = getSettings()
+		const map = document.getElementsByClassName("sidebar-map")[0]! as HTMLElement
+		map.style.display = settings.map.show ? "none" : "block"
+	}
+
+	document.addEventListener(Event.SETTINGS, settingsHandler)
+	settingsHandler()
+</script>
+
+<style>
+	.sidebar-map {
+		min-height: 200px;
+	}
+</style>

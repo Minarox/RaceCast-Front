@@ -4,6 +4,7 @@
     "exclude": ["dist"],
     "compilerOptions": {
         "verbatimModuleSyntax": false,
+        "resolveJsonModule": true,
         "jsx": "preserve",
         "baseUrl": ".",
         "paths": {

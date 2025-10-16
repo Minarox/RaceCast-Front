@@ -42,5 +42,11 @@ export const server = {
                 timestamp: Date.now()
             }
         }
+    }),
+    getInfoBoxContent: defineAction({
+        handler: async (_, { locals }): Promise<string> => {
+            const content = await locals.runtime.env.STORE.get("INFO_BOX_CONTENT", { type: "text" })
+            return content ?? ''
+        }
     })
 }
