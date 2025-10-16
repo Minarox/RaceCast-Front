@@ -1,6 +1,6 @@
 <template>
     <section class="box">
-        <div v-if="loading" id="loader" v-html="Loading" />
+        <div v-if="loading" id="info-loading" v-html="Loading" />
         <div v-else v-html="content" />
     </section>
 </template>
@@ -29,7 +29,7 @@
 </script>
 
 <style scoped>
-    #loader {
+    #info-loading {
         display: flex;
         justify-content: center;
         align-items: center;

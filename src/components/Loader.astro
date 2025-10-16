@@ -1,12 +1,11 @@
 ---
-import { Image } from "astro:assets"
 import Loading from "@assets/loading.svg"
 import { State, getStateString } from "@types"
 ---
 
 <section id="loader">
     <p>{getStateString(State.CONNECTING)}</p>
-    <Image src={Loading} alt="Chargement..." />
+    <Loading />
     <button class="hidden" type="button">Se reconnecter</button>
 </section>
 
@@ -15,7 +14,7 @@ import { State, getStateString } from "@types"
 
     const loader: HTMLElement = document.getElementById("loader")!
     const p: HTMLElement = loader.querySelector("p")!
-    const img: HTMLImageElement = loader.querySelector("img")!
+    const img: SVGElement = loader.querySelector("svg")!
     const button: HTMLButtonElement = loader.querySelector("button")!
 
     button.addEventListener("click", () => {
@@ -54,7 +53,7 @@ import { State, getStateString } from "@types"
             font-size: 1.2em;
         }
 
-        > img {
+        > svg {
             transform: scale(2);
         }
 
