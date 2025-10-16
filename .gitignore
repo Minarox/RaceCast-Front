@@ -7,6 +7,9 @@ dist/
 # generated fonts
 public/__astro_font_generated__/
 
+# wrangler
+.wrangler/
+
 # dependencies
 node_modules/
 .pnpm-store/
