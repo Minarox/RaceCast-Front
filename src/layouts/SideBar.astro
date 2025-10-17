@@ -48,6 +48,21 @@ import Settings from "@components/Settings.astro"
 	const openSettingsBtn = document.getElementById("open-settings-btn")!
 	const openSidebarBtn = document.getElementById("sidebar-btn")!
 
+	document.addEventListener("fullscreenchange", () => {
+		if (document.fullscreenElement) {
+			toggleFullscreenBtn.classList.add("active")
+		} else {
+			toggleFullscreenBtn.classList.remove("active")
+		}
+	})
+
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "F11") {
+			e.preventDefault()
+			toggleFullscreenBtn.click()
+		}
+	})
+
 	toggleFullscreenBtn.addEventListener("click", () => {
 		if (!document.fullscreenElement) {
 			document.documentElement.requestFullscreen()
@@ -63,10 +78,14 @@ import Settings from "@components/Settings.astro"
 		settings.sidebar.sticky = !settings.sidebar.sticky
 		window.localStorage.setItem("settings", JSON.stringify(settings))
 		dispatchEvent(Event.SETTINGS)
+		if (!settings.sidebar.sticky) {
+			section.classList.remove("open")
+		}
 	})
 
 	openSettingsBtn.addEventListener("click", () => {
 		dispatchEvent(Event.SHOW_SETTINGS)
+		openSettingsBtn.classList.add("active")
 	})
 
 	openSidebarBtn.addEventListener("click", () => {
@@ -180,11 +199,11 @@ import Settings from "@components/Settings.astro"
 					transition: opacity 0.3s ease-in-out, background-color 0.2s ease-in-out;
 					color: white;
 
-					.active {
+					&.active {
 						background-color: rgba(92, 92, 92, 0.5);
 					}
 
-					#sticky-sidebar-btn {
+					&#sticky-sidebar-btn {
 						transform: rotate(-90deg);
 					}
 				}

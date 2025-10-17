@@ -1,17 +1,17 @@
 <template>
     <section id="metadata" class="box">
         <h2>Système</h2>
-        <div id="metadata-last-update">
+        <div>
             Dernière mise à jour :
             <div v-if="!lastUpdate" class="loader" v-html="Loading" />
             <span>{{ lastUpdate }}</span>
         </div>
-        <div id="metadata-usage">
+        <div>
             Utilisation :
             <div v-if="!usage" class="loader" v-html="Loading" />
             <span>{{ usage }}</span>
         </div>
-        <div id="metadata-temp">
+        <div>
             Température :
             <div v-if="!internalTemp && !externalTemp" class="loader" v-html="Loading" />
             <ul :class="{ hidden: !internalTemp && !externalTemp }">
@@ -19,56 +19,56 @@
                 <li v-if="externalTemp">{{ externalTemp }}</li>
             </ul>
         </div>
-        <div id="metadata-connectivity">
+        <div>
             Connectivité :
             <div v-if="!connectivity" class="loader" v-html="Loading" />
             <span>{{ connectivity }}</span>
         </div>
-        <div id="metadata-battery">
+        <div>
             Batterie :
             <div v-if="!battery" class="loader" v-html="Loading" />
             <span>{{ battery }}</span>
         </div>
 
         <h2>GPS</h2>
-        <div id="metadata-latitude">
+        <div>
             Latitude :
             <div v-if="!latitude" class="loader" v-html="Loading" />
             <span>{{ latitude }}</span>
         </div>
-        <div id="metadata-longitude">
+        <div>
             Longitude :
             <div v-if="!longitude" class="loader" v-html="Loading" />
             <span>{{ longitude }}</span>
         </div>
-        <div id="metadata-altitude">
+        <div>
             Altitude :
             <div v-if="!altitude" class="loader" v-html="Loading" />
             <span>{{ altitude }}</span>
         </div>
-        <div id="metadata-speed">
+        <div>
             Vitesse :
             <div v-if="!speed" class="loader" v-html="Loading" />
             <span>{{ speed }}</span>
         </div>
-        <div id="metadata-precision">
+        <div>
             Précision :
             <div v-if="!precision" class="loader" v-html="Loading" />
             <span>{{ precision }}</span>
         </div>
 
         <h2>Diffusion</h2>
-        <div id="metadata-status">
+        <div>
             Statut :
             <div v-if="!status" class="loader" v-html="Loading" />
-            <span>{{ status }}</span>
+            <span>{{ getStateString(status) }}</span>
         </div>
-        <div id="metadata-spectators">
+        <div>
             {{ spectatorTitle }} :
             <div v-if="!viewers" class="loader" :v-html="Loading" />
             <span>{{ viewers }}</span>
         </div>
-        <div id="metadata-cameras">
+        <div>
             {{ cameraTitle }} :
             <ul>
                 <li v-if="cameras.length === 0">Aucune caméra</li>
@@ -78,7 +78,7 @@
                 </li>
             </ul>
         </div>
-        <div id="metadata-microphones">
+        <div>
             {{ microphoneTitle }} :
             <ul>
                 <li v-if="microphones.length === 0">Aucun microphone</li>
@@ -108,7 +108,7 @@
     const altitude = ref('')
     const speed = ref('')
     const precision = ref('')
-    const status = ref('')
+    const status = ref(State.DISCONNECTED)
     const viewers = ref('')
     const cameras: any = ref([])
     const microphones: any = ref([])
@@ -168,7 +168,7 @@
     }
 
     function remoteStatusHandler(event: any) {
-        status.value = getStateString(event.detail as State)
+        status.value = event.detail as State
     }
 
     function camerasHandler(event: any) {
@@ -255,7 +255,7 @@
             }
 
             > ul {
-                margin-top: 0.4rem;
+                margin-top: 0.2rem;
                 margin-left: 1.4rem;
 
                 > li > p {

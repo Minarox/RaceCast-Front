@@ -48,11 +48,13 @@ import { Position } from "@types"
 			</div>
 			<div class="split-layout">
 				<label for="settings-sidebar">Afficher le panneau latéral :</label>
-				<input type="checkbox" id="settings-sidebar" checked />
-				<select id="settings-sidebar-position">
-					<option value={Position.LEFT}>Gauche</option>
-					<option value={Position.RIGHT}>Droite</option>
-				</select>
+				<div>
+					<input type="checkbox" id="settings-sidebar" checked />
+					<select id="settings-sidebar-position">
+						<option value={Position.LEFT}>Gauche</option>
+						<option value={Position.RIGHT}>Droite</option>
+					</select>
+				</div>
 			</div>
 
 			<h2>Audio</h2>
@@ -90,6 +92,7 @@ import { Position } from "@types"
 	import { dispatchEvent, Event, getSettings, Position } from "@types"
 	import DefaultSettings from "@assets/settings.json"
 
+	const openSettingsBtn = document.getElementById("open-settings-btn")
 	const camerasSelectLoading = document.getElementById("settings-cam-loading")!
 	const camerasSelect = document.getElementById("settings-main-cam")! as unknown as HTMLSelectElement
 	const micVolumes = document.getElementById("mic-volumes")!
@@ -175,10 +178,12 @@ import { Position } from "@types"
 
 	closeBtn.addEventListener("click", () => {
 		form.classList.remove('show')
+		openSettingsBtn?.classList.remove("active")
 	})
 
 	closeFooterBtn.addEventListener("click", () => {
 		form.classList.remove('show')
+		openSettingsBtn?.classList.remove("active")
 	})
 
 	form.addEventListener("submit", (e) => {
@@ -202,6 +207,7 @@ import { Position } from "@types"
 		window.localStorage.setItem("settings", JSON.stringify(settings))
 		dispatchEvent(Event.SETTINGS)
 		form.classList.remove('show')
+		openSettingsBtn?.classList.remove("active")
 	})
 
 	document.addEventListener("resize", toggleMobileSettings)
@@ -210,6 +216,7 @@ import { Position } from "@types"
 		if (e.key === "Escape") {
 			if (form.classList.contains('show')) {
 				form.classList.remove('show')
+				openSettingsBtn?.classList.remove("active")
 			}
 		}
 	})

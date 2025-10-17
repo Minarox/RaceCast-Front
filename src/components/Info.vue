@@ -1,5 +1,5 @@
 <template>
-    <section class="box">
+    <section id="info-box" class="box">
         <div v-if="loading" id="info-loading" v-html="Loading" />
         <div v-else v-html="content" />
     </section>
@@ -16,6 +16,7 @@
 
     async function updateContent() {
         content.value = await actions.getInfoBoxContent.orThrow()
+        loading.value = false
     }
 
     onMounted(() => {
@@ -28,7 +29,7 @@
     })
 </script>
 
-<style scoped>
+<style>
     #info-loading {
         display: flex;
         justify-content: center;
@@ -39,16 +40,33 @@
         svg {
             width: 50px;
             height: 50px;
-            animation: spin 1s linear infinite;
+            filter: invert(1);
         }
     }
 
-    h2 {
-        font-size: 1.4em;
-        margin-top: 1rem;
+    #info-box {
+        h2 {
+            font-size: 1.4rem;
+            margin: 1rem 0 0.4rem;
 
-        &:first-of-type {
-            margin-top: 0;
+            &:first-child {
+                margin-top: 0;
+            }
         }
+
+        ul {
+            margin: 0.3rem 0;
+
+            li {
+                margin-left: 1.2rem;
+                margin-bottom: 0.2rem;
+            }
+        }
+
+        hr {
+			margin: 1rem 0;
+			border: none;
+			border-top: 1px solid black;
+		}
     }
 </style>

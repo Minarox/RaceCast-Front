@@ -3,7 +3,7 @@
         <VideoPlayer v-for="i in nbCameras" :key="i" :index="(i - 1).toString()" :tracks="videoTracks" />
     </section>
 
-    <section v-else id="video-grid">
+    <section v-else id="video-grid" :class="gridClass">
         <VideoPlayer v-if="nbCameras" index="0" :tracks="videoTracks" />
         <article>
             <Speed v-if="settings.speed.show" :class="speedPosition" />
@@ -34,6 +34,15 @@
     const nbCameras = ref(0)
     const videoTracks = ref([])
     const settings = ref(DefaultSettings)
+
+    const gridClass = computed(() => {
+        const classList: string[] = []
+
+        if (settings.value.sidebar.sticky) classList.push('sidebar-opened')
+        if (settings.value.sidebar.position === Position.RIGHT) classList.push('reverse')
+
+        return classList.join(' ')
+    })
 
     const speedPosition = computed(() => {
         return settings.value.speed.position === Position.RIGHT && "reverse" || ''
@@ -70,12 +79,26 @@
         height: 100vh;
         overflow: hidden;
         position: relative;
+        transition: width 0.3s ease-in-out, margin 0.3s ease-in-out;
 
         &:not(.list) {
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
+
+            &.sidebar-opened {
+                width: calc(100vw - 394px);
+
+                &.reverse {
+                    margin-right: 394px;
+                }
+
+                @media screen and (max-width: 768px) {
+                    margin-left: 0;
+                    width: 100vw;
+                }
+            }
 
             > article {
                 position: absolute;
@@ -139,7 +162,15 @@
             flex-flow: row wrap;
             justify-content: center;
             align-items: center;
+            gap: 0.4rem;
             overflow-y: auto;
+
+            > .video-player {
+                flex: 0 1 calc(50% - 0.6rem);
+                min-width: 300px;
+                width: unset;
+                height: unset;
+            }
         }
 
         @media screen and (max-width: 768px) {
