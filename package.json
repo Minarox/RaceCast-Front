@@ -47,7 +47,7 @@
     "vue": "^3.5.22"
   },
   "devDependencies": {
-    "@types/node": "^24.8.0",
+    "@types/node": "^24.8.1",
     "wrangler": "^4.43.0"
   },
   "packageManager": "pnpm@10.18.1",
