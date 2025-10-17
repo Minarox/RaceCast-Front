@@ -61,6 +61,7 @@
     }
 
     async function connect(): Promise<void> {
+        await actions.createLiveKitRoom.orThrow()
         const livekit = await actions.getLiveKitToken.orThrow()
 
         room = new Room({

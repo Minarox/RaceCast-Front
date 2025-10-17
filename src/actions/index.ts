@@ -1,10 +1,38 @@
 import { Token } from "@types"
 import { defineAction } from "astro:actions"
-import { AccessToken } from "livekit-server-sdk"
+import { AccessToken, RoomServiceClient } from "livekit-server-sdk"
 
 export const server = {
+    createLiveKitRoom: defineAction({
+        handler: async (_: any, { locals }) => {
+            try {
+                const protocol = locals.runtime.env.LIVEKIT_TLS === 'true' ? 'https://' : 'http://'
+                const room = new RoomServiceClient(
+                    protocol + locals.runtime.env.LIVEKIT_DOMAIN,
+                    locals.runtime.env.LIVEKIT_API_KEY,
+                    locals.runtime.env.LIVEKIT_API_SECRET
+                )
+
+                const rooms = await room.listRooms()
+                const roomIndex = rooms.findIndex(r => r.name === locals.runtime.env.LIVEKIT_ROOM)
+
+                if (roomIndex === -1) {
+                    const newRoom = await room.createRoom({
+                        name: locals.runtime.env.LIVEKIT_ROOM,
+                        departureTimeout: 60 * 60 * 24
+                    })
+                    return JSON.parse(JSON.stringify(newRoom))
+                }
+
+                return JSON.parse(JSON.stringify(rooms[roomIndex]))
+            } catch (error: any) {
+                throw new Error(`Failed to create or get LiveKit room: ${error.message}`)
+            }
+        }
+    }),
+
     getLiveKitToken: defineAction({
-        handler: async (_, { locals }): Promise<Token> => {
+        handler: async (_: any, { locals }): Promise<Token> => {
             const identity: string = `User-${Math.random().toString(36).substring(7)}`
 
             // Generate a new token
@@ -43,8 +71,9 @@ export const server = {
             }
         }
     }),
+
     getInfoBoxContent: defineAction({
-        handler: async (_, { locals }): Promise<string> => {
+        handler: async (_: any, { locals }): Promise<string> => {
             const content = await locals.runtime.env.STORE.get("INFO_BOX_CONTENT", { type: "text" })
             return content ?? ''
         }
