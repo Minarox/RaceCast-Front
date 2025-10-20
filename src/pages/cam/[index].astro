@@ -1,14 +1,16 @@
 ---
 import Layout from "@layouts/Layout.astro"
 import VideoPlayer from "@components/VideoPlayer.vue"
+import ControlCenter from "@layouts/ControlCenter.astro"
 
 export const prerender = false
 
 const { index } = Astro.params
 ---
 
-<Layout>
+<Layout audio>
     <VideoPlayer index={index as string} client:load />
+    <ControlCenter settings />
 </Layout>
 
 <style>
