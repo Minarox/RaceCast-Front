@@ -61,8 +61,11 @@
     }
 
     async function connect(): Promise<void> {
-        await actions.createLiveKitRoom.orThrow()
-        const livekit = await actions.getLiveKitToken.orThrow()
+        const responses = await Promise.all([
+            actions.createLiveKitRoom.orThrow(),
+            actions.getLiveKitToken.orThrow()
+        ])
+        const livekit = responses[1]
 
         room = new Room({
             reconnectPolicy: {
