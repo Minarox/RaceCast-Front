@@ -1,6 +1,6 @@
 {
   "name": "racecast-front",
-  "description": "Interface for displaying race car data.",
+  "description": "Web dashboard for displaying race car data stream.",
   "author": {
     "name": "Mathis Serrieres Maniecki",
     "email": "contact@minarox.fr",
@@ -34,7 +34,7 @@
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/vue": "^5.1.1",
     "@iconify-json/iconamoon": "^1.2.2",
-    "astro": "^5.14.5",
+    "astro": "^5.14.7",
     "astro-compressor": "^1.2.0",
     "astro-font": "^1.1.0",
     "astro-icon": "^1.1.5",
@@ -47,7 +47,7 @@
     "vue": "^3.5.22"
   },
   "devDependencies": {
-    "@types/node": "^24.8.1",
+    "@types/node": "^24.9.0",
     "wrangler": "^4.43.0"
   },
   "packageManager": "pnpm@10.18.3",
