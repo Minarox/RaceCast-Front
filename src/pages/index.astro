@@ -1,7 +1,7 @@
 ---
 import Layout from "@layouts/Layout.astro"
 import VideoGrid from "@layouts/VideoGrid.vue"
-import SideBar from "@layouts/SideBar.astro"
+import ControlCenter from "@layouts/ControlCenter.astro"
 import Info from "@components/Info.vue"
 import OpenMap from "@components/OpenMap.vue"
 import SpeedHistory from "@components/SpeedHistory.vue"
@@ -12,13 +12,13 @@ import Links from "@components/Links.astro"
 <Layout audio>
 	<VideoGrid client:load />
 
-	<SideBar>
+	<ControlCenter fullscreen settings sidebar>
 		<Info client:visible />
 		<OpenMap class="sidebar-map" client:visible />
 		<SpeedHistory client:idle />
 		<Metadata client:visible />
 		<Links />
-	</SideBar>
+	</ControlCenter>
 </Layout>
 
 <script>

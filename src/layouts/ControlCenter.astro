@@ -1,28 +1,32 @@
 ---
 import { Icon } from "astro-icon/components"
 import Settings from "@components/Settings.astro"
+
+const fullscreen = Astro.props.fullscreen || false
+const sidebar = Astro.props.sidebar || false
+const settings = Astro.props.settings || false
 ---
 
-<Settings />
+{settings && <Settings sidebar={sidebar} />}
 
 <article id="sidebar">
 	<section>
 		<div>
-			<button id="toggle-fullscreen-btn" type="button"
+			{fullscreen && <button id="toggle-fullscreen-btn" type="button"
 				aria-label="Basculer en plein écran" title="Basculer en plein écran">
 				<Icon name="iconamoon:screen-full" />
-			</button>
-			<button id="sticky-sidebar-btn" type="button"
+			</button>}
+			{sidebar && <button id="sticky-sidebar-btn" type="button"
 				aria-label="Forcer l'affichage de la barre latérale" title="Forcer l'affichage de la barre latérale">
 				<Icon name="iconamoon:download" />
-			</button>
-			<button id="open-settings-btn" type="button"
+			</button>}
+			{settings && <button id="open-settings-btn" type="button"
 				aria-label="Ouvrir les paramètres" title="Ouvrir les paramètres">
 				<Icon name="iconamoon:settings" />
-			</button>
+			</button>}
 		</div>
 
-		<button id="sidebar-btn" class="hide" type="button"
+		{sidebar &&<button id="sidebar-btn" class="hide" type="button"
 			aria-label="Ouvrir/Fermer le panneau latéral" title="Ouvrir/Fermer le panneau latéral">
 			<span>
 				<Icon name="iconamoon:arrow-left-2" />
@@ -34,7 +38,7 @@ import Settings from "@components/Settings.astro"
 			<div>
 				<slot />
 			</div>
-		</aside>
+		</aside>}
 	</section>
 </article>
 
@@ -43,27 +47,29 @@ import Settings from "@components/Settings.astro"
 
 	const wrapper = document.getElementById("sidebar")!
 	const section = wrapper.querySelector("section")!
-	const toggleFullscreenBtn = document.getElementById("toggle-fullscreen-btn")!
-	const stickySidebarBtn = document.getElementById("sticky-sidebar-btn")!
-	const openSettingsBtn = document.getElementById("open-settings-btn")!
-	const openSidebarBtn = document.getElementById("sidebar-btn")!
+	const toggleFullscreenBtn = document.getElementById("toggle-fullscreen-btn")
+	const stickySidebarBtn = document.getElementById("sticky-sidebar-btn")
+	const openSettingsBtn = document.getElementById("open-settings-btn")
+	const openSidebarBtn = document.getElementById("sidebar-btn")
 
-	document.addEventListener("fullscreenchange", () => {
-		if (document.fullscreenElement) {
-			toggleFullscreenBtn.classList.add("active")
-		} else {
-			toggleFullscreenBtn.classList.remove("active")
-		}
-	})
+	if (toggleFullscreenBtn) {
+		document.addEventListener("fullscreenchange", () => {
+			if (document.fullscreenElement) {
+				toggleFullscreenBtn.classList.add("active")
+			} else {
+				toggleFullscreenBtn.classList.remove("active")
+			}
+		})
 
-	document.addEventListener("keydown", (e) => {
-		if (e.key === "F11") {
-			e.preventDefault()
-			toggleFullscreenBtn.click()
-		}
-	})
+		document.addEventListener("keydown", (e) => {
+			if (e.key === "F11") {
+				e.preventDefault()
+				toggleFullscreenBtn.click()
+			}
+		})
+	}
 
-	toggleFullscreenBtn.addEventListener("click", () => {
+	toggleFullscreenBtn?.addEventListener("click", () => {
 		if (!document.fullscreenElement) {
 			document.documentElement.requestFullscreen()
 		} else {
@@ -73,7 +79,7 @@ import Settings from "@components/Settings.astro"
 		}
 	})
 
-	stickySidebarBtn.addEventListener("click", () => {
+	stickySidebarBtn?.addEventListener("click", () => {
 		const settings = getSettings()
 		settings.sidebar.sticky = !settings.sidebar.sticky
 		window.localStorage.setItem("settings", JSON.stringify(settings))
@@ -83,33 +89,39 @@ import Settings from "@components/Settings.astro"
 		}
 	})
 
-	openSettingsBtn.addEventListener("click", () => {
+	openSettingsBtn?.addEventListener("click", () => {
 		dispatchEvent(Event.SHOW_SETTINGS)
 		openSettingsBtn.classList.add("active")
 	})
 
-	openSidebarBtn.addEventListener("click", () => {
+	openSidebarBtn?.addEventListener("click", () => {
 		section.classList.toggle("open")
 	})
 
 	function checkSettings() {
 		const settings = getSettings()
-		section.classList.toggle("reverse", settings.sidebar.position === Position.LEFT)
-
-		if (settings.sidebar.show) {
-			openSidebarBtn.classList.remove("hide")
+		if (settings.sidebar.position === Position.LEFT) {
+			section.classList.add("reverse")
 		} else {
-			section.classList.remove("open")
-			openSidebarBtn.classList.add("hide")
+			section.classList.remove("reverse")
 		}
 
-		if (settings.sidebar.sticky) {
-			section.classList.add("open")
-			openSidebarBtn.classList.add("hide")
-			stickySidebarBtn.classList.add("active")
-		} else {
-			openSidebarBtn.classList.remove("hide")
-			stickySidebarBtn.classList.remove("active")
+		if (openSidebarBtn) {
+			if (settings.sidebar.show) {
+				openSidebarBtn.classList.remove("hide")
+			} else {
+				section.classList.remove("open")
+				openSidebarBtn.classList.add("hide")
+			}
+
+			if (settings.sidebar.sticky) {
+				section.classList.add("open")
+				openSidebarBtn.classList.add("hide")
+				stickySidebarBtn?.classList.add("active")
+			} else {
+				openSidebarBtn.classList.remove("hide")
+				stickySidebarBtn?.classList.remove("active")
+			}
 		}
 	}
 
@@ -144,10 +156,13 @@ import Settings from "@components/Settings.astro"
 			align-items: center;
 			transition: left 0.3s ease-in-out;
 
-			.reverse {
-				left: unset;
-				right: calc(100% - var(--button-width));
+			&.reverse {
+				left: calc(var(--button-width) - var(--sidebar-width)) !important;
 				flex-direction: row-reverse;
+
+				&.open {
+					left: 0 !important;
+				}
 
 				> button {
 					transform: rotate(180deg);
@@ -156,7 +171,14 @@ import Settings from "@components/Settings.astro"
 				> div {
 					right: unset;
 					left: calc(100% - var(--button-width) + 1rem);
-					transform: scaleX(-1)
+
+					> button:nth-child(2) {
+						scale: -1;
+					}
+				}
+
+				> aside {
+					margin: var(--spacing) 0 var(--spacing) var(--spacing);
 				}
 			}
 

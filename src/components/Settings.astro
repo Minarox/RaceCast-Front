@@ -3,6 +3,8 @@ import { Image } from "astro:assets"
 import { Icon } from "astro-icon/components"
 import Loading from "@assets/loading.svg"
 import { Position } from "@types"
+
+const sidebar = Astro.props.sidebar || false
 ---
 
 <form id="settings-form">
@@ -17,7 +19,7 @@ import { Position } from "@types"
 
 		<section>
 			<h2>Disposition</h2>
-			<div class="split-layout">
+			{sidebar && <div class="split-layout">
 				<label for="settings-main-cam">Caméra principale :</label>
 				<Image id="settings-cam-loading" src={Loading} alt="Loading..." />
 				<select id="settings-main-cam" class="hidden" disabled></select>
@@ -45,11 +47,13 @@ import { Position } from "@types"
 			<div class="split-layout">
 				<label for="settings-other-cameras">Afficher les autres caméras :</label>
 				<input type="checkbox" id="settings-other-cameras" checked />
-			</div>
+			</div>}
 			<div class="split-layout">
-				<label for="settings-sidebar">Afficher le panneau latéral :</label>
+				<label for="settings-sidebar">
+					{sidebar && 'Afficher le panneau latéral :' || 'Position des boutons :'}
+				</label>
 				<div>
-					<input type="checkbox" id="settings-sidebar" checked />
+					{sidebar && <input type="checkbox" id="settings-sidebar" checked />}
 					<select id="settings-sidebar-position">
 						<option value={Position.LEFT}>Gauche</option>
 						<option value={Position.RIGHT}>Droite</option>
@@ -74,12 +78,8 @@ import { Position } from "@types"
 	/*
 
 	# Paramètres
-
 	## Disposition :
-	Caméra principale : [Sélectionner la caméra principale]
-	Afficher la vitesse : [Activer/Désactiver]
-	Afficher la position GPS : [Activer/Désactiver]
-	Afficher le panneau latéral : [Activer/Désactiver]
+	...
 
 	## Son :
 	Volume micro 1 : [0-100%]
@@ -90,58 +90,55 @@ import { Position } from "@types"
 
 	import { RemoteTrackPublication } from "livekit-client"
 	import { dispatchEvent, Event, getSettings, Position } from "@types"
-	import DefaultSettings from "@assets/settings.json"
 
 	const openSettingsBtn = document.getElementById("open-settings-btn")
 	const camerasSelectLoading = document.getElementById("settings-cam-loading")!
-	const camerasSelect = document.getElementById("settings-main-cam")! as unknown as HTMLSelectElement
+	const camerasSelect = document.getElementById("settings-main-cam") as unknown as HTMLSelectElement
 	const micVolumes = document.getElementById("mic-volumes")!
 	const form = document.getElementById("settings-form")!
 	const closeBtn = document.getElementById("close-settings-btn")!
 	const closeFooterBtn = document.getElementById("close-settings-footer-btn")!
-	const showSpeed = document.getElementById("settings-speed")! as HTMLInputElement
-	const showSpeedPosition = document.getElementById("settings-speed-position")! as unknown as HTMLSelectElement
-	const showMap = document.getElementById("settings-map")! as HTMLInputElement
-	const showMapPosition = document.getElementById("settings-map-position")! as unknown as HTMLSelectElement
-	const showOtherCameras = document.getElementById("settings-other-cameras")! as HTMLInputElement
-	const showSidebar = document.getElementById("settings-sidebar")! as HTMLInputElement
+	const showSpeed = document.getElementById("settings-speed") as HTMLInputElement
+	const showSpeedPosition = document.getElementById("settings-speed-position") as unknown as HTMLSelectElement
+	const showMap = document.getElementById("settings-map") as HTMLInputElement
+	const showMapPosition = document.getElementById("settings-map-position") as unknown as HTMLSelectElement
+	const showOtherCameras = document.getElementById("settings-other-cameras") as HTMLInputElement
+	const showSidebar = document.getElementById("settings-sidebar") as HTMLInputElement
 	const sidebarPosition = document.getElementById("settings-sidebar-position")! as unknown as HTMLSelectElement
 
 	let settings = getSettings()
-	settings = {
-		...DefaultSettings,
-		...settings
-	}
 	window.localStorage.setItem("settings", JSON.stringify(settings))
 	dispatchEvent(Event.SETTINGS)
 
 	function toggleMobileSettings() {
 		const isSmallScreen = window.innerWidth < 768
-		showSpeedPosition.classList.toggle("hidden", isSmallScreen)
-		showMapPosition.classList.toggle("hidden", isSmallScreen)
+		showSpeedPosition?.classList.toggle("hidden", isSmallScreen)
+		showMapPosition?.classList.toggle("hidden", isSmallScreen)
 	}
 
-	document.addEventListener(Event.CAMERAS, (event: any) => {
-		camerasSelectLoading.classList.add("hidden")
-		camerasSelect.classList.remove("hidden")
-		const videoTracks: RemoteTrackPublication[] = event.detail
-		camerasSelect.innerHTML = ''
-		camerasSelectLoading.classList.add("hidden")
+	if (camerasSelect) {
+		document.addEventListener(Event.CAMERAS, (event: any) => {
+			camerasSelectLoading.classList.add("hidden")
+			camerasSelect.classList.remove("hidden")
+			const videoTracks: RemoteTrackPublication[] = event.detail
+			camerasSelect.innerHTML = ''
+			camerasSelectLoading.classList.add("hidden")
 
-		if (videoTracks.length === 0) {
-			camerasSelect.innerHTML = '<option value="" disabled>Aucune caméra détectée</option>'
-			camerasSelect.disabled = true
-			return
-		}
+			if (videoTracks.length === 0) {
+				camerasSelect.innerHTML = '<option value="" disabled>Aucune caméra détectée</option>'
+				camerasSelect.disabled = true
+				return
+			}
 
-		videoTracks.forEach((track) => {
-			const option = document.createElement('option')
-			option.value = track.trackSid
-			option.textContent = track.trackName || `Caméra ${track.trackSid}`
-			camerasSelect.appendChild(option)
+			videoTracks.forEach((track) => {
+				const option = document.createElement('option')
+				option.value = track.trackSid
+				option.textContent = track.trackName || `Caméra ${track.trackSid}`
+				camerasSelect.appendChild(option)
+			})
+			camerasSelect.disabled = false
 		})
-		camerasSelect.disabled = false
-	})
+	}
 
 	document.addEventListener(Event.MICROPHONES, (event: any) => {
 		const audioTracks: RemoteTrackPublication[] = event.detail
@@ -166,13 +163,35 @@ import { Position } from "@types"
 	document.addEventListener(Event.SHOW_SETTINGS, () => {
 		form.classList.add('show')
 		const settings = getSettings()
-		camerasSelect.value = settings.mainCamera
-		showSpeed.checked = settings.speed.show
-		showSpeedPosition.value = settings.speed.position
-		showMap.checked = settings.map.show
-		showMapPosition.value = settings.map.position
-		showOtherCameras.checked = settings.showOtherCameras
-		showSidebar.checked = settings.sidebar.show
+
+		if (camerasSelect) {
+			camerasSelect.value = settings.mainCamera
+		}
+
+		if (showMap) {
+			showMap.checked = settings.map.show
+		}
+
+		if (showMapPosition) {
+			showMapPosition.value = settings.map.position
+		}
+
+		if (showOtherCameras) {
+			showOtherCameras.checked = settings.showOtherCameras
+		}
+
+		if (showSidebar) {
+			showSidebar.checked = settings.sidebar.show
+		}
+
+		if (showSpeed) {
+			showSpeed.checked = settings.speed.show
+		}
+
+		if (showSpeedPosition) {
+			showSpeedPosition.value = settings.speed.position
+		}
+
 		sidebarPosition.value = settings.sidebar.position
 	})
 
@@ -188,13 +207,35 @@ import { Position } from "@types"
 
 	form.addEventListener("submit", (e) => {
 		e.preventDefault()
-		settings.mainCamera = camerasSelect.value
-		settings.speed.show = showSpeed.checked
-		settings.speed.position = showSpeedPosition.value as Position
-		settings.map.show = showMap.checked
-		settings.map.position = showMapPosition.value as Position
-		settings.showOtherCameras = showOtherCameras.checked
-		settings.sidebar.show = showSidebar.checked
+
+		if (camerasSelect) {
+			settings.mainCamera = camerasSelect.value
+		}
+
+		if (showMap) {
+			settings.map.show = showMap.checked
+		}
+
+		if (showMapPosition) {
+			settings.map.position = showMapPosition.value as Position
+		}
+
+		if (showOtherCameras) {
+			settings.showOtherCameras = showOtherCameras.checked
+		}
+
+		if (showSidebar) {
+			settings.sidebar.show = showSidebar.checked
+		}
+
+		if (showSpeed) {
+			settings.speed.show = showSpeed.checked
+		}
+
+		if (showSpeedPosition) {
+			settings.speed.position = showSpeedPosition.value as Position
+		}
+
 		settings.sidebar.position = sidebarPosition.value as Position
 
 		// const audioTracks = micVolumes.querySelectorAll('input[type="range"]')

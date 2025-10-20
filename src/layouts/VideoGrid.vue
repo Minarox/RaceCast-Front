@@ -39,7 +39,7 @@
         const classList: string[] = []
 
         if (settings.value.sidebar.sticky) classList.push('sidebar-opened')
-        if (settings.value.sidebar.position === Position.RIGHT) classList.push('reverse')
+        if (settings.value.sidebar.position === Position.LEFT) classList.push('reverse')
 
         return classList.join(' ')
     })
@@ -91,7 +91,7 @@
                 width: calc(100vw - 394px);
 
                 &.reverse {
-                    margin-right: 394px;
+                    margin-left: 394px;
                 }
 
                 @media screen and (max-width: 768px) {
