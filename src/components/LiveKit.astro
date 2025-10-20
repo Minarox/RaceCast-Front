@@ -127,7 +127,7 @@
                 if (!state) {
                     dispatchEvent(Event.NEED_USER_INTERACTION)
                 }
-            });
+            })
 
         await room.connect(`wss://${livekit.domain}`, livekit.token)
         metadata = room?.metadata ? JSON.parse(room.metadata) : defaultMetadata

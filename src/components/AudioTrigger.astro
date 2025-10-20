@@ -10,10 +10,12 @@ import { Icon } from "astro-icon/components"
 
 <script>
     import { Event, Position, dispatchEvent, getSettings } from "@types"
+    import { RemoteTrackPublication } from "livekit-client"
 
     const sidebar = document.getElementById("sidebar")
     const button = document.getElementById("audio-trigger")!
-    const urlParams = new URLSearchParams(window.location.search)
+    let needInteraction = false
+    let hasMicrophone = false
 
     function buttonPositionHandler() {
         const settings = getSettings()
@@ -24,16 +26,29 @@ import { Icon } from "astro-icon/components"
         }
     }
 
-    if (!urlParams.has("no-audio")) {
-        button.addEventListener("click", () => {
-            dispatchEvent(Event.RESUME_AUDIO)
-            button.classList.add("hide")
-        })
-
-        document.addEventListener(Event.NEED_USER_INTERACTION, () => {
+    function updateButtonVisibility() {
+        if (needInteraction && hasMicrophone) {
             button.classList.remove("hide")
-        })
+        } else {
+            button.classList.add("hide")
+        }
     }
+
+    button.addEventListener("click", () => {
+        dispatchEvent(Event.RESUME_AUDIO)
+        button.classList.add("hide")
+    })
+
+    document.addEventListener(Event.NEED_USER_INTERACTION, () => {
+        needInteraction = true
+        updateButtonVisibility()
+    })
+
+    document.addEventListener(Event.MICROPHONES, (event: any) => {
+		const audioTracks: RemoteTrackPublication[] = event.detail
+        hasMicrophone = audioTracks.length > 0
+        updateButtonVisibility()
+	})
 
     document.addEventListener(Event.HIDE_AUDIO_TRIGGER, () => {
         button.classList.add("hide")
@@ -51,8 +66,8 @@ import { Icon } from "astro-icon/components"
         top: 1rem;
         left: 1rem;
         padding: 0.8rem 1.2rem;
+        background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(4px);
-        background-color: rgba(36, 36, 36, 0.9);
         color: #fff;
         border-radius: 5px;
         cursor: pointer;
@@ -65,10 +80,6 @@ import { Icon } from "astro-icon/components"
 
         &.padding {
             top: 4rem;
-        }
-
-        &:hover {
-            background-color: rgba(36, 36, 36, 1);
         }
 
         @media screen and (max-width: 768px) {
