@@ -81,6 +81,22 @@
         position: relative;
         transition: width 0.3s ease-in-out, margin 0.3s ease-in-out;
 
+        &.list {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.4rem;
+            overflow-y: auto;
+
+            > .video-player {
+                flex: 0 1 calc(50% - 0.6rem);
+                min-width: 300px;
+                width: unset;
+                height: unset;
+            }
+        }
+
         &:not(.list) {
             position: relative;
             display: flex;
@@ -157,26 +173,10 @@
             }
         }
 
-        &.list {
-            display: flex;
-            flex-flow: row wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 0.4rem;
-            overflow-y: auto;
-
-            > .video-player {
-                flex: 0 1 calc(50% - 0.6rem);
-                min-width: 300px;
-                width: unset;
-                height: unset;
-            }
-        }
-
         @media screen and (max-width: 768px) {
             &:not(.list) {
-                flex-direction: column;
-                justify-content: flex-start;
+                display: grid;
+                grid-template-rows: repeat(2, max-content);
                 overflow-y: auto;
 
                 .video-player {
@@ -187,7 +187,7 @@
                 > article {
                     position: unset;
                     width: 100vw;
-                    height: 100%;
+                    height: max-content;
 
                     > p:first-child {
                         align-self: center;
@@ -198,13 +198,12 @@
                         width: inherit;
                         flex-direction: column !important;
                         gap: 2.4rem;
-                        min-height: max-content;
+                        height: max-content;
 
                         > section {
                             flex-direction: column !important;
                             min-width: unset;
-                            min-height: max-content;
-                            flex-grow: 0;
+                            height: max-content;
                         }
 
                         > div {

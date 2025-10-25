@@ -152,13 +152,16 @@ const settings = Astro.props.settings || false
 			left: calc(100% - var(--button-width));
 			height: inherit;
 			width: var(--sidebar-width);
-			display: flex;
+			display: grid;
+			grid-template-columns: var(--button-width) 1fr;
+			grid-template-areas: "toggle content";
 			align-items: center;
 			transition: left 0.3s ease-in-out;
 
 			&.reverse {
 				left: calc(var(--button-width) - var(--sidebar-width)) !important;
-				flex-direction: row-reverse;
+				grid-template-columns: 1fr var(--button-width);
+				grid-template-areas: "content toggle";
 
 				&.open {
 					left: 0 !important;
@@ -232,6 +235,7 @@ const settings = Astro.props.settings || false
 			}
 
 			> button {
+				grid-area: toggle;
 				pointer-events: auto;
 				position: relative;
 				cursor: pointer;
@@ -280,6 +284,7 @@ const settings = Astro.props.settings || false
 			}
 
 			> aside {
+				grid-area: content;
 				flex-grow: 1;
 				pointer-events: auto;
 				margin: var(--spacing) var(--spacing) var(--spacing) 0;
@@ -318,12 +323,25 @@ const settings = Astro.props.settings || false
 				height: calc(100vh - var(--button-width) - var(--top-offset));
 				grid-template-columns: unset;
 				grid-template-rows: var(--button-width) 1fr;
+				grid-template-areas:
+					"toggle"
+					"content";
 				justify-items: center;
 				transition: top 0.3s ease-in-out;
 
 				&.open {
 					left: 0;
 					top: var(--top-offset);
+				}
+
+				> div {
+					position: fixed;
+					top: 1rem;
+					right: 1rem;
+
+					> button#sticky-sidebar-btn {
+						transform: rotate(0deg);
+					}
 				}
 
 				> button {
