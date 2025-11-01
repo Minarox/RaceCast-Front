@@ -58,8 +58,8 @@ importers:
         specifier: ^24.9.1
         version: 24.9.1
       wrangler:
-        specifier: ^4.45.0
-        version: 4.45.0(@cloudflare/workers-types@4.20251014.0)
+        specifier: ^4.45.3
+        version: 4.45.3(@cloudflare/workers-types@4.20251014.0)
 
 packages:
 
@@ -1224,8 +1224,8 @@ packages:
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
 
-  '@sindresorhus/is@7.1.0':
-    resolution: {integrity: sha512-7F/yz2IphV39hiS2zB4QYVkivrptHHh0K8qJJd9HhuWSdvf8AN7NpebW3CcDZDBQsUPMoDKWsY2WWgW7bqOcfA==}
+  '@sindresorhus/is@7.1.1':
+    resolution: {integrity: sha512-rO92VvpgMc3kfiTjGT52LEtJ8Yc5kCWhZjLQ3LwlA4pSgPpQO7bVpYXParOD8Jwf+cVQECJo3yP/4I8aZtUQTQ==}
     engines: {node: '>=18'}
 
   '@sindresorhus/merge-streams@4.0.0':
@@ -3304,8 +3304,8 @@ packages:
       '@cloudflare/workers-types':
         optional: true
 
-  wrangler@4.45.0:
-    resolution: {integrity: sha512-2qM6bHw8l7r89Z9Y5A7Wn4L9U+dFoLjYgEUVpqy7CcmXpppL3QIYqU6rU5lre7/SRzBuPu/H93Vwfh538gZ3iw==}
+  wrangler@4.45.3:
+    resolution: {integrity: sha512-0ddEA9t4HeBgSVTVTcqtBHl7Z5CorWZ8tGgTQCP5XuL+9E1TJRwS6t/zzG51Ruwjb17SZYCaLchoM8V629S8cw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -4323,7 +4323,7 @@ snapshots:
   '@poppinss/dumper@0.6.4':
     dependencies:
       '@poppinss/colors': 4.1.5
-      '@sindresorhus/is': 7.1.0
+      '@sindresorhus/is': 7.1.1
       supports-color: 10.2.2
 
   '@poppinss/exception@1.2.2': {}
@@ -4439,7 +4439,7 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.0.2': {}
 
-  '@sindresorhus/is@7.1.0': {}
+  '@sindresorhus/is@7.1.1': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
@@ -7039,7 +7039,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  wrangler@4.45.0(@cloudflare/workers-types@4.20251014.0):
+  wrangler@4.45.3(@cloudflare/workers-types@4.20251014.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
       '@cloudflare/unenv-preset': 2.7.8(unenv@2.0.0-rc.21)(workerd@1.20251011.0)
