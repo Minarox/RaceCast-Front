@@ -34,7 +34,7 @@
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/vue": "^5.1.1",
     "@iconify-json/iconamoon": "^1.2.2",
-    "astro": "^5.15.1",
+    "astro": "^5.15.3",
     "astro-compressor": "^1.2.0",
     "astro-font": "^1.1.0",
     "astro-icon": "^1.1.5",
