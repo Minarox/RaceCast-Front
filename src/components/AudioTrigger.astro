@@ -20,9 +20,9 @@ import { Icon } from "astro-icon/components"
     function buttonPositionHandler() {
         const settings = getSettings()
         if (settings.sidebar.position === Position.LEFT) {
-            button.classList.add("padding")
+            button.classList.add("reverse")
         } else {
-            button.classList.remove("padding")
+            button.classList.remove("reverse")
         }
     }
 
@@ -78,13 +78,18 @@ import { Icon } from "astro-icon/components"
         display: flex;
         gap: 0.5rem;
 
-        &.padding {
-            top: 4rem;
+        &.reverse {
+            left: unset;
+            right: 1rem;
         }
 
         @media screen and (max-width: 768px) {
-            left: 50%;
-            transform: translateX(-50%);
+            top: 0.65rem;
+
+            &.reverse {
+                left: 1rem;
+                right: unset;
+            }
         }
     }
 </style>

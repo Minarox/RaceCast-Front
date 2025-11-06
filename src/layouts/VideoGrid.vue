@@ -7,6 +7,7 @@
         <VideoPlayer v-if="nbCameras" index="0" :tracks="videoTracks" />
         <article>
             <Speed v-if="settings.speed.show" :class="speedPosition" />
+            <span v-else id="speed-padding"></span>
             <div :class="mapPosition">
                 <section>
                     <template v-if="settings.showOtherCameras && nbCameras > 1">
@@ -109,11 +110,6 @@
                 &.reverse {
                     margin-left: 394px;
                 }
-
-                @media screen and (max-width: 768px) {
-                    margin-left: 0;
-                    width: 100vw;
-                }
             }
 
             > article {
@@ -152,7 +148,7 @@
                         display: flex;
                         gap: 0.4rem;
                         flex-direction: row;
-                        justify-content: space-between;
+                        justify-content: flex-end;
                         overflow-x: auto;
                         min-width: max-content;
 
@@ -175,6 +171,7 @@
 
         @media screen and (max-width: 768px) {
             &:not(.list) {
+                padding-top: 4.25rem;
                 display: grid;
                 grid-template-rows: repeat(2, max-content);
                 overflow-y: auto;
@@ -182,6 +179,12 @@
                 .video-player {
                     height: unset;
                     border-radius: unset;
+                }
+
+                &.sidebar-opened,
+                &.sidebar-opened.reverse {
+                    margin-left: 0;
+                    width: 100vw;
                 }
 
                 > article {
@@ -215,5 +218,9 @@
                 }
             }
         }
+    }
+
+    #speed-padding {
+        min-height: 28px;
     }
 </style>

@@ -159,12 +159,12 @@ const settings = Astro.props.settings || false
 			transition: left 0.3s ease-in-out;
 
 			&.reverse {
-				left: calc(var(--button-width) - var(--sidebar-width)) !important;
+				left: calc(var(--button-width) - var(--sidebar-width));
 				grid-template-columns: 1fr var(--button-width);
 				grid-template-areas: "content toggle";
 
 				&.open {
-					left: 0 !important;
+					left: 0;
 				}
 
 				> button {
@@ -313,9 +313,10 @@ const settings = Astro.props.settings || false
 
 		@media screen and (max-width: 768px) {
 			--button-height: 160px;
-			--top-offset: 2rem;
+			--top-offset: 5rem;
 
-			> section {
+			> section,
+			> section.reverse {
 				top: calc(100vh - var(--button-width));
 				left: 0;
 				right: 0;
@@ -352,6 +353,15 @@ const settings = Astro.props.settings || false
 					margin: 0 var(--spacing) var(--spacing) var(--spacing);
 					width: 100%;
 					height: calc(100vh - var(--spacing) * 2 - var(--top-offset));
+				}
+			}
+
+			> section.reverse > div {
+				right: 1rem;
+				left: unset;
+
+				> button#sticky-sidebar-btn {
+					transform: rotate(180deg);
 				}
 			}
 		}

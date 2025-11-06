@@ -27,6 +27,7 @@
 
 <style>
     #speed {
+        min-height: 28px;
         pointer-events: none;
         transition: opacity 0.5s ease-in-out;
         font-size: 1.4em;
