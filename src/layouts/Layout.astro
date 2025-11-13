@@ -5,6 +5,7 @@ import Logo from "@assets/logo.svg"
 import Loader from "@components/Loader.astro"
 import LiveKit from "@components/LiveKit.astro"
 import AudioTrigger from "@components/AudioTrigger.astro"
+import Plausible from "@components/Plausible.astro"
 import Banner from "@assets/banner.webp"
 
 const title: string = "RaceCast"
@@ -52,7 +53,7 @@ const audio = Astro.props.audio || false
 					{ rel: "sitemap", href: "/sitemap-index.xml" },
 				],
 				meta: [
-					{ name: "viewport", content: "width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" },
+					{ name: "viewport", content: "width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" },
 					{ name: "theme-color", content: "#242424" },
 					{ name: "keywords", content: "Stream, Rallye, Direct, Compétition, Kévin, Corbier, Voiture, Course, RaceCast, Race, Classement, Spéciale" },
 					{ name: "robots", content: "index, follow" },
@@ -85,6 +86,7 @@ const audio = Astro.props.audio || false
 		<LiveKit />
 		{audio && <AudioTrigger />}
 		<Loader />
+		<Plausible />
 	</body>
 </html>
 
