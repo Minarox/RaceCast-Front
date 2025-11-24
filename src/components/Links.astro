@@ -9,10 +9,10 @@
 
 	<hr>
 
-	<a href="mailto:contact@minarox.fr">Contact</a>
+	<a class="muted" href="mailto:contact@minarox.fr">Contact</a>
 	<p>
 		&copy; <span id="current-year"></span> &nbsp;|&nbsp;
-		<a href="/">racecast.minarox.fr</a>
+		<a class="muted" href="/">racecast.minarox.fr</a>
 	</p>
 </section>
 
@@ -33,9 +33,21 @@
 		}
 
 		> hr {
-			margin: 1rem 0;
+			margin: 0.8rem 0;
 			border: none;
 			border-top: 1px solid black;
+		}
+
+		a {
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+
+			&.muted {
+				color: black;
+			}
 		}
 
 		> a {
