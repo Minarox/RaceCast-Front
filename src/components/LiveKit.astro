@@ -61,11 +61,8 @@
     }
 
     async function connect(): Promise<void> {
-        const responses = await Promise.all([
-            actions.createLiveKitRoom.orThrow(),
-            actions.getLiveKitToken.orThrow()
-        ])
-        const livekit = responses[1]
+        await actions.createLiveKitRoom.orThrow()
+        const livekit = await actions.getLiveKitToken.orThrow()
 
         room = new Room({
             reconnectPolicy: {
@@ -98,7 +95,7 @@
                 dispatchEvent(Event.METADATA, metadata)
             })
             .on(RoomEvent.ParticipantConnected, (participant): void => {
-                if (participant.identity === livekit.remoteIdentity) {
+                if (participant.identity === livekit.publisherIdentity) {
                     getEmitterTracks(participant)
                     remoteStatus = State.CONNECTED
                     dispatchEvent(Event.REMOTE_STATUS, remoteStatus)
@@ -108,7 +105,7 @@
                 }
             })
             .on(RoomEvent.ParticipantDisconnected, (participant): void => {
-                if (participant.identity === livekit.remoteIdentity) {
+                if (participant.identity === livekit.publisherIdentity) {
                     remoteStatus = State.DISCONNECTED
                     dispatchEvent(Event.REMOTE_STATUS, remoteStatus)
                 } else {
@@ -117,14 +114,14 @@
                 }
             })
             .on(RoomEvent.TrackPublished, (_, participant): void => {
-                if (participant.identity === livekit.remoteIdentity) {
+                // if (participant.identity === livekit.publisherIdentity) {
                     getEmitterTracks(participant)
-                }
+                // }
             })
             .on(RoomEvent.TrackUnpublished, (_, participant): void => {
-                if (participant.identity === livekit.remoteIdentity) {
+                // if (participant.identity === livekit.publisherIdentity) {
                     getEmitterTracks(participant)
-                }
+                // }
             })
             .on(RoomEvent.AudioPlaybackStatusChanged, (state: boolean): void => {
                 if (!state) {
@@ -136,7 +133,7 @@
         metadata = room?.metadata ? JSON.parse(room.metadata) : defaultMetadata
         dispatchEvent(Event.METADATA, metadata)
 
-        const emitter: RemoteParticipant | undefined = room.remoteParticipants.get(livekit.remoteIdentity)
+        const emitter: RemoteParticipant | undefined = room.remoteParticipants.get(livekit.publisherIdentity)
         remoteStatus = emitter ? State.CONNECTED : State.DISCONNECTED
         dispatchEvent(Event.REMOTE_STATUS, remoteStatus)
 

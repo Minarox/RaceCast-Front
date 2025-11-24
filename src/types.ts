@@ -13,7 +13,7 @@ export interface Token {
     identity: string
     token: string
     validity: string
-    remoteIdentity: string
+    publisherIdentity: string
     timestamp: number
 }
 

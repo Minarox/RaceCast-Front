@@ -66,7 +66,7 @@ export const server = {
                 identity: identity,
                 token: await accessToken.toJwt(),
                 validity: accessToken.ttl.toString(),
-                remoteIdentity: locals.runtime.env.LIVEKIT_REMOTE_IDENTITY,
+                publisherIdentity: locals.runtime.env.LIVEKIT_PUBLISHER_IDENTITY,
                 timestamp: Date.now()
             }
         }
