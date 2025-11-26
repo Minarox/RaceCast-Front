@@ -1,7 +1,7 @@
 import { defineConfig } from "astro/config"
+import icon from "astro-icon"
 import sitemap from "@astrojs/sitemap"
 import metaTags from "astro-meta-tags"
-import icon from "astro-icon"
 import { astroFont } from "astro-font/integration"
 import vue from "@astrojs/vue"
 import compressor from "astro-compressor"
@@ -10,12 +10,13 @@ import cloudflare from "@astrojs/cloudflare"
 // https://astro.build/config
 export default defineConfig({
     site: "https://racecast.minarox.fr",
-    integrations: [sitemap(), metaTags(), icon(), astroFont(), vue(), compressor()],
+    base: '/',
+    integrations: [icon(), sitemap(), metaTags(), astroFont(), vue(), compressor()],
     adapter: cloudflare({
         imageService: "cloudflare",
-        platformProxy: {
-            enabled: true
-        }
+		platformProxy: {
+			enabled: true
+		}
     }),
     vite: {
         ssr: {

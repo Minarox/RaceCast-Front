@@ -1,10 +1,10 @@
 // https://developers.cloudflare.com/workers/wrangler/configuration/
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "racecast-front",
+	"name": "racecast",
 	"main": "./dist/_worker.js/index.js",
 	"workers_dev": false,
-	"compatibility_date": "2025-10-01",
+	"compatibility_date": "2025-09-06",
 	"compatibility_flags": [
 		"nodejs_compat",
 		"global_fetch_strictly_public"
@@ -24,5 +24,17 @@
 			"binding": "STORE",
 			"id": "8fcdd6da5cfc4df38fb41976d8b35de6"
 		}
-	]
+	],
+	"routes": [
+		{
+			"pattern": "racecast.minarox.fr",
+			"custom_domain": true
+		}
+	],
+	"vars": {
+		"LIVEKIT_DOMAIN": "livekit.minarox.fr",
+		"LIVEKIT_PUBLISHER_IDENTITY": "car",
+		"LIVEKIT_ROOM": "racecast",
+		"LIVEKIT_TLS": "true"
+	}
 }

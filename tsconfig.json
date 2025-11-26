@@ -3,9 +3,8 @@
     "include": [".astro/types.d.ts", "**/*"],
     "exclude": ["dist"],
     "compilerOptions": {
-        "verbatimModuleSyntax": false,
+        "verbatimModuleSyntax": true,
         "resolveJsonModule": true,
-        "jsx": "preserve",
         "baseUrl": ".",
         "paths": {
             "@assets/*": ["src/assets/*"],
@@ -14,6 +13,9 @@
             "@pages/*": ["src/pages/*"],
             "@types": ["src/types.ts"],
         },
-        "types": ["node"]
+        "types": [
+            "./worker-configuration.d.ts",
+            "node"
+        ]
     }
 }

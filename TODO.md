@@ -1,2 +1,0 @@
-- Scroll bizarre lorsque pas assez de place
-- Paramétrage du son
