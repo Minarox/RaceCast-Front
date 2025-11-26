@@ -99,9 +99,9 @@ const sidebar = Astro.props.sidebar || false
 	const closeBtn = document.getElementById("close-settings-btn")!
 	const closeFooterBtn = document.getElementById("close-settings-footer-btn")!
 	const showSpeed = document.getElementById("settings-speed") as HTMLInputElement
-	const showSpeedPosition = document.getElementById("settings-speed-position") as unknown as HTMLSelectElement
+	const speedPosition = document.getElementById("settings-speed-position") as unknown as HTMLSelectElement
 	const showMap = document.getElementById("settings-map") as HTMLInputElement
-	const showMapPosition = document.getElementById("settings-map-position") as unknown as HTMLSelectElement
+	const mapPosition = document.getElementById("settings-map-position") as unknown as HTMLSelectElement
 	const showOtherCameras = document.getElementById("settings-other-cameras") as HTMLInputElement
 	const showSidebar = document.getElementById("settings-sidebar") as HTMLInputElement
 	const sidebarPosition = document.getElementById("settings-sidebar-position")! as unknown as HTMLSelectElement
@@ -112,8 +112,26 @@ const sidebar = Astro.props.sidebar || false
 
 	function toggleMobileSettings() {
 		const isSmallScreen = window.innerWidth < 768
-		showSpeedPosition?.classList.toggle("hidden", isSmallScreen)
-		showMapPosition?.classList.toggle("hidden", isSmallScreen)
+		speedPosition?.classList.toggle("hidden", isSmallScreen)
+		mapPosition?.classList.toggle("hidden", isSmallScreen)
+	}
+
+	if (showSpeed && speedPosition) {
+		showSpeed.addEventListener("click", () => {
+			speedPosition.disabled = !showSpeed.checked
+		})
+	}
+
+	if (showMap && mapPosition) {
+		showMap.addEventListener("click", () => {
+			mapPosition.disabled = !showMap.checked
+		})
+	}
+
+	if (showSidebar && sidebarPosition) {
+		showSidebar.addEventListener("click", () => {
+			sidebarPosition.disabled = !showSidebar.checked
+		})
 	}
 
 	if (camerasSelect) {
@@ -172,8 +190,12 @@ const sidebar = Astro.props.sidebar || false
 			showMap.checked = settings.map.show
 		}
 
-		if (showMapPosition) {
-			showMapPosition.value = settings.map.position
+		if (mapPosition) {
+			mapPosition.value = settings.map.position
+
+			if (!settings.map.show) {
+				mapPosition.disabled = true
+			}
 		}
 
 		if (showOtherCameras) {
@@ -188,11 +210,18 @@ const sidebar = Astro.props.sidebar || false
 			showSpeed.checked = settings.speed.show
 		}
 
-		if (showSpeedPosition) {
-			showSpeedPosition.value = settings.speed.position
+		if (speedPosition) {
+			speedPosition.value = settings.speed.position
+
+			if (!settings.speed.show) {
+				speedPosition.disabled = true
+			}
 		}
 
 		sidebarPosition.value = settings.sidebar.position
+		if (!settings.sidebar.show) {
+			sidebarPosition.disabled = true
+		}
 	})
 
 	closeBtn.addEventListener("click", () => {
@@ -216,8 +245,8 @@ const sidebar = Astro.props.sidebar || false
 			settings.map.show = showMap.checked
 		}
 
-		if (showMapPosition) {
-			settings.map.position = showMapPosition.value as Position
+		if (mapPosition) {
+			settings.map.position = mapPosition.value as Position
 		}
 
 		if (showOtherCameras) {
@@ -232,8 +261,8 @@ const sidebar = Astro.props.sidebar || false
 			settings.speed.show = showSpeed.checked
 		}
 
-		if (showSpeedPosition) {
-			settings.speed.position = showSpeedPosition.value as Position
+		if (speedPosition) {
+			settings.speed.position = speedPosition.value as Position
 		}
 
 		settings.sidebar.position = sidebarPosition.value as Position
