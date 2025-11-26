@@ -17,8 +17,8 @@
     "type": "git",
     "url": "https://github.com/Minarox/RaceCast-Front.git"
   },
-  "type": "module",
   "private": true,
+  "type": "module",
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
