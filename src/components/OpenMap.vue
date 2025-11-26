@@ -15,7 +15,7 @@
     import { getVectorContext } from "ol/render.js"
     import { OSM, Vector as VectorSource } from "ol/source"
     import { Circle as CircleStyle, Stroke, Style } from "ol/style.js"
-    import { Event, Metadata, dispatchEvent } from "@types"
+    import { Event, type Metadata, dispatchEvent } from "@types"
 
     const id = useId()
     let map: any = null

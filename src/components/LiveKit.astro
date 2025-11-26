@@ -1,6 +1,6 @@
 <script>
     import { RemoteParticipant, RemoteTrackPublication, Room, RoomEvent, Track } from "livekit-client"
-    import { Event, State, Metadata, defaultMetadata, dispatchEvent } from "@types"
+    import { Event, State, type Metadata, defaultMetadata, dispatchEvent } from "@types"
     import { actions } from "astro:actions"
 
     let nbViewers: number = 0
@@ -61,7 +61,6 @@
     }
 
     async function connect(): Promise<void> {
-        await actions.createLiveKitRoom.orThrow()
         const livekit = await actions.getLiveKitToken.orThrow()
 
         room = new Room({

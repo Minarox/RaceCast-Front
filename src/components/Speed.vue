@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
     import { ref, onMounted, onUnmounted } from "vue"
-    import { Event, Metadata } from "@types"
+    import { Event, type Metadata } from "@types"
 
     const speedText = ref('0')
     const isHidden = ref(true)
