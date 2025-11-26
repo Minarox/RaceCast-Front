@@ -76,8 +76,7 @@
 
 <style scoped>
     #video-grid {
-        width: 100vw;
-        height: 100vh;
+        height: 100%;
         overflow: hidden;
         position: relative;
         transition: width 0.3s ease-in-out, margin 0.3s ease-in-out;
@@ -120,7 +119,10 @@
                 display: flex;
                 flex-direction: column;
                 gap: 0.6rem;
-                height: 200px;
+
+                &:has(> div > div) {
+                    height: 200px;
+                }
 
                 > p:first-child {
                     padding-inline: 0.4rem;
@@ -190,7 +192,10 @@
                 > article {
                     position: unset;
                     width: 100vw;
-                    height: max-content;
+
+                    &:has(> div > div) {
+                        height: max-content;
+                    }
 
                     > p:first-child {
                         align-self: center;

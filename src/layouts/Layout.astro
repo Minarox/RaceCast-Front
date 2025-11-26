@@ -53,7 +53,7 @@ const audio = Astro.props.audio || false
 					{ rel: "sitemap", href: "/sitemap-index.xml" },
 				],
 				meta: [
-					{ name: "viewport", content: "width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" },
+					{ name: "viewport", content: "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content" },
 					{ name: "theme-color", content: "#242424" },
 					{ name: "keywords", content: "Stream, Rallye, Direct, Compétition, Kévin, Corbier, Voiture, Course, RaceCast, Race, Classement, Spéciale" },
 					{ name: "robots", content: "index, follow" },
@@ -114,8 +114,7 @@ const audio = Astro.props.audio || false
 
 	body {
 		width: 100vw;
-        height: 100vh;
-		overflow: hidden;
+		height: 100dvh;
 	}
 
 	.box {

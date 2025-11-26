@@ -143,8 +143,8 @@ const settings = Astro.props.settings || false
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 100vw;
-		height: 100vh;
+		right: 0;
+		height: 100dvh;
 
 		> section {
 			position: relative;
@@ -317,22 +317,31 @@ const settings = Astro.props.settings || false
 
 			> section,
 			> section.reverse {
-				top: calc(100vh - var(--button-width));
+				top: calc(100dvh - var(--button-width));
 				left: 0;
 				right: 0;
 				width: 100%;
-				height: calc(100vh - var(--button-width) - var(--top-offset));
+				height: calc(100dvh - var(--button-width) - var(--top-offset));
 				grid-template-columns: unset;
 				grid-template-rows: var(--button-width) 1fr;
 				grid-template-areas:
 					"toggle"
 					"content";
 				justify-items: center;
-				transition: top 0.3s ease-in-out;
+				transition: top 0.3s ease-in-out, height 0.3s ease-in-out;
 
 				&.open {
 					left: 0;
 					top: var(--top-offset);
+
+					&:has(> button.hide) {
+						top: 2rem;
+						height: calc(100dvh - var(--button-width) - 2rem);
+
+						> aside {
+							height: calc(100dvh - var(--spacing) * 2 - 2rem);
+						}
+					}
 				}
 
 				> div {
@@ -352,7 +361,9 @@ const settings = Astro.props.settings || false
 				> aside {
 					margin: 0 var(--spacing) var(--spacing) var(--spacing);
 					width: 100%;
-					height: calc(100vh - var(--spacing) * 2 - var(--top-offset));
+					height: calc(100dvh - var(--spacing) * 2 - var(--top-offset));
+					transition: height 0.3s ease-in-out;
+					border-radius: var(--border-radius) var(--border-radius) 0 0;
 				}
 			}
 
