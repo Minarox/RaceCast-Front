@@ -7,8 +7,8 @@
 
 <script setup lang="ts">
     import { onMounted, onBeforeUnmount } from "vue"
-    import { Event, Metadata } from "@types"
-    import Chart, { ChartItem } from "chart.js/auto"
+    import { Event, type Metadata } from "@types"
+    import Chart, { type ChartItem } from "chart.js/auto"
 
     const speedHistoryLimit = 45
     const speedValues: { speed: number | null; date: number}[] = []
