@@ -2,9 +2,9 @@
 import { Icon } from "astro-icon/components"
 import Settings from "@components/Settings.astro"
 
-const fullscreen = Astro.props.fullscreen || false
-const sidebar = Astro.props.sidebar || false
-const settings = Astro.props.settings || false
+const fullscreen = Astro.props['fullscreen'] || false
+const sidebar = Astro.props['sidebar'] || false
+const settings = Astro.props['settings'] || false
 ---
 
 {settings && <Settings sidebar={sidebar} />}

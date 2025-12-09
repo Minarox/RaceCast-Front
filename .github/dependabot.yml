@@ -7,13 +7,13 @@ updates:
         time: "09:00"
         timezone: "Europe/Paris"
       labels:
-      - "dependencies"
+      - "dependencie"
 
-    - package-ecosystem: "npm"
+    - package-ecosystem: "bun"
       directory: "/"
       schedule:
         interval: "monthly"
         time: "09:00"
         timezone: "Europe/Paris"
       labels:
-      - "dependencies"
+      - "dependencie"

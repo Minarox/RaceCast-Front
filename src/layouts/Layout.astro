@@ -10,7 +10,7 @@ import Banner from "@assets/banner.webp"
 
 const title: string = "RaceCast"
 const description: string = "Diffusion en direct de la voiture de course de Kevin CORBIER."
-const audio = Astro.props.audio || false
+const audio = Astro.props['audio'] || false
 ---
 
 <!doctype html>

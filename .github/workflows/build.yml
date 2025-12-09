@@ -25,20 +25,21 @@ jobs:
               with:
                 fetch-depth: 1
 
-            - name: Install pnpm
-              uses: pnpm/action-setup@v4
+            - name: Install Bun
+              uses: oven-sh/setup-bun@v2
+              with:
+                bun-version: latest
 
             - name: Setup Node
               uses: actions/setup-node@v6
               with:
                 node-version: 20
-                cache: pnpm
 
             - name: Install dependencies
-              run: pnpm install
+              run: bun install
 
             - name: Check types
-              run: pnpm check
+              run: bun run check
 
             - name: Build website
-              run: pnpm build
+              run: bun run build

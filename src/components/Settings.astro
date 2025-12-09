@@ -4,7 +4,7 @@ import { Icon } from "astro-icon/components"
 import Loading from "@assets/loading.svg"
 import { Position } from "@types"
 
-const sidebar = Astro.props.sidebar || false
+const sidebar = Astro.props['sidebar'] || false
 ---
 
 <form id="settings-form">

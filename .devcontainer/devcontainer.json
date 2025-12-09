@@ -3,9 +3,7 @@
    "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
    "features": {
       "ghcr.io/devcontainers/features/git-lfs:1": {},
-      "ghcr.io/devcontainers-extra/features/pnpm:2": {
-         "version": "10.24.0"
-      },
+      "ghcr.io/devcontainers-extra/features/bun:1": {},
       "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
         "packages": "gnupg2"
     }
@@ -15,27 +13,14 @@
       "--name",
       "racecast_front"
    ],
-   "postStartCommand": "pnpm install",
+   "postStartCommand": "bun install",
    "forwardPorts": [4321],
    "customizations": {
       "vscode": {
          "extensions": [
             "astro-build.astro-vscode",
-            "github.vscode-github-actions",
-            "ecmel.vscode-html-css",
-            "vivaxy.vscode-conventional-commits",
-            "dbaeumer.vscode-eslint",
-            "vitest.explorer",
-            "esbenp.prettier-vscode",
-            "rvest.vs-code-prettier-eslint",
-            "DavidAnson.vscode-markdownlint"
-         ],
-         "settings": {
-            "markdownlint.config": {
-               "no-inline-html": false,
-               "first-line-h1": false
-            }
-         }
+            "oven.bun-vscode"
+         ]
       }
    }
 }

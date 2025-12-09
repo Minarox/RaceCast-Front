@@ -1,21 +1,47 @@
 {
-    "extends": "astro/tsconfigs/strictest",
-    "include": [".astro/types.d.ts", "**/*"],
-    "exclude": ["dist"],
-    "compilerOptions": {
-        "verbatimModuleSyntax": true,
+	"extends": "astro/tsconfigs/strictest",
+	"include": [".astro/types.d.ts", "**/*"],
+	"exclude": ["dist"],
+	"compilerOptions": {
+		// Environment setup & latest features
+		"lib": ["ESNext"],
+		"target": "ESNext",
+		"module": "Preserve",
+		"moduleDetection": "force",
+		"jsx": "react-jsx",
+		"allowJs": true,
+
+		// Bundler mode
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"noEmit": true,
+
+		// Best practices
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+
+		// Some stricter flags (disabled by default)
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noPropertyAccessFromIndexSignature": true,
+
+		// Custom
         "resolveJsonModule": true,
-        "baseUrl": ".",
-        "paths": {
+		"baseUrl": ".",
+		"paths": {
             "@assets/*": ["src/assets/*"],
             "@components/*": ["src/components/*"],
             "@layouts/*": ["src/layouts/*"],
             "@pages/*": ["src/pages/*"],
-            "@types": ["src/types.ts"],
+            "@types": ["src/types.ts"]
         },
         "types": [
             "./worker-configuration.d.ts",
             "node"
         ]
-    }
+	}
 }
