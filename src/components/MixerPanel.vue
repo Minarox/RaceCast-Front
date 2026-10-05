@@ -4,33 +4,35 @@
 
         <p v-if="!live.microphones.length" class="empty">Aucun micro diffusé pour l'instant.</p>
 
-        <div v-else class="strips">
-            <div v-for="microphone in live.microphones" :key="microphone.name" class="strip" :class="{ muted: settings(microphone.name).muted }">
-                <div class="row">
-                    <span class="name">{{ microphone.name }}</span>
-                    <span class="meter" :data-meter="microphone.name" aria-hidden="true"><span class="fill" /></span>
-                    <span class="db num" :data-db="microphone.name">—</span>
-                </div>
-                <div class="row">
-                    <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        step="1"
-                        :value="Math.round(settings(microphone.name).volume * 100)"
-                        :aria-label="`Volume de ${microphone.name}`"
-                        @input="setVolume(microphone.name, Number(($event.target as HTMLInputElement).value) / 100)"
-                    />
-                    <span class="percent num">{{ Math.round(settings(microphone.name).volume * 100) }}&nbsp;%</span>
-                    <button
-                        type="button"
-                        class="mute"
-                        :aria-pressed="settings(microphone.name).muted"
-                        :title="settings(microphone.name).muted ? `Rétablir ${microphone.name}` : `Couper ${microphone.name}`"
-                        @click="toggleMute(microphone.name)"
-                    >
-                        M
-                    </button>
+        <template v-else>
+            <div class="channels">
+                <div v-for="microphone in live.microphones" :key="microphone.name" class="strip" :class="{ muted: settings(microphone.name).muted }">
+                    <div class="row">
+                        <span class="name" :title="microphone.name">{{ microphone.name }}</span>
+                        <span class="meter" :data-meter="microphone.name" aria-hidden="true"><span class="fill" /></span>
+                        <span class="db num" :data-db="microphone.name">—</span>
+                    </div>
+                    <div class="row">
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            step="1"
+                            :value="Math.round(settings(microphone.name).volume * 100)"
+                            :aria-label="`Volume de ${microphone.name}`"
+                            @input="setVolume(microphone.name, Number(($event.target as HTMLInputElement).value) / 100)"
+                        />
+                        <span class="percent num">{{ Math.round(settings(microphone.name).volume * 100) }}&nbsp;%</span>
+                        <button
+                            type="button"
+                            class="mute"
+                            :aria-pressed="settings(microphone.name).muted"
+                            :title="settings(microphone.name).muted ? `Rétablir ${microphone.name}` : `Couper ${microphone.name}`"
+                            @click="toggleMute(microphone.name)"
+                        >
+                            M
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -60,7 +62,7 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </template>
 
         <p v-if="live.microphones.length && !mixer.enabled" class="hint">
             Le son est coupé tant qu'il n'est pas activé (bouton sur la vidéo ou dans l'en-tête) ; les niveaux s'affichent
@@ -148,14 +150,21 @@
         color: var(--text-5);
     }
 
-    .strips {
+    /* auto-fit collapses unused columns, so two microphones share the width. */
+    .channels {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 12px 24px;
     }
 
+    /*
+     * minmax(0, 1fr): an auto column would never shrink below the full
+     * microphone name, so the rows overflowed into the next strip; this way
+     * the name ellipsizes instead.
+     */
     .strip {
         display: grid;
+        grid-template-columns: minmax(0, 1fr);
         gap: 6px;
     }
 
@@ -245,6 +254,5 @@
     .master {
         padding-top: 10px;
         border-top: 1px solid var(--line);
-        grid-column: 1 / -1;
     }
 </style>
