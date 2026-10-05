@@ -42,7 +42,9 @@
                 :role="tabbed ? 'tabpanel' : undefined"
                 aria-label="Son"
             >
-                <MixerPanel />
+                <!-- Desktop folds the mixer into a dock under the telemetry. -->
+                <SoundDock v-if="layout === 'desktop'" />
+                <MixerPanel v-else />
             </section>
             <section
                 v-show="visible('telemetry')"
@@ -72,6 +74,7 @@
     import VideoStage from "@components/VideoStage.vue"
     import MapPanel from "@components/MapPanel.vue"
     import MixerPanel from "@components/MixerPanel.vue"
+    import SoundDock from "@components/SoundDock.vue"
     import TelemetryPanel from "@components/TelemetryPanel.vue"
 
     const props = defineProps<{ config: AppConfig }>()
@@ -126,7 +129,10 @@
         background: var(--surface);
     }
 
-    /* ── Desktop: video and mixer on the left, map and telemetry on the right ── */
+    /*
+     * ── Desktop: the video takes the whole left side; on the right, map,
+     * telemetry and the folded sound dock ──
+     */
 
     [data-layout="desktop"] .main {
         display: grid;
@@ -135,7 +141,7 @@
         grid-template-areas:
             "stage map"
             "stage telemetry"
-            "mixer telemetry";
+            "stage mixer";
         gap: 10px;
         padding: 0 10px 10px;
     }
@@ -151,12 +157,20 @@
         overflow: hidden;
     }
 
+    /* Leaflet's panes use z-indexes up to 1000: keep them inside the map. */
     [data-layout="desktop"] .panel-map {
         grid-area: map;
+        isolation: isolate;
     }
 
+    /* The dock draws its own bar, and its mixer unfolds over the telemetry. */
     [data-layout="desktop"] .panel-mixer {
         grid-area: mixer;
+        position: relative;
+        z-index: 5;
+        overflow: visible;
+        background: none;
+        box-shadow: none;
     }
 
     [data-layout="desktop"] .panel-telemetry {

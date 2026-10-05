@@ -69,10 +69,12 @@ at build; only `SITE_URL` is a build-time value. Never expose the LiveKit key/se
 ### UI decisions (made with the user, 2026-10-05; ask before changing them)
 
 Dark "nocturne" theme only (tokens in `src/styles/theme.css`, components never hardcode colours).
-Desktop: big video + thumbnails + mixer on the left, map and telemetry column on the right, fitting the
-screen. Phone/tablet portrait: video on top, tabs Carte / Son / Infos (tablet adds thumbnails).
-Mixer: horizontal strips, volume + mute + VU meter, master; no solo, no pan. Sound is enabled by a
-button over the video and in the header. Map: Leaflet (lazy-loaded), raster tiles darkened by a CSS
+Desktop: big video + thumbnails over the whole left side; on the right, map, telemetry and the sound
+dock (`SoundDock.vue`: a bar with mini VU meters and the master speaker, whose mixer unfolds upwards
+over the telemetry and folds on Escape or a click elsewhere), fitting the screen. Phone/tablet
+portrait: video on top, tabs Carte / Son / Infos (tablet adds thumbnails). Mixer: horizontal strips,
+volume + mute + VU meter, master; no solo, no pan. VU meters are animated by `useMeters`
+(`src/lib/meters.ts`) outside Vue. Sound is enabled by a button over the video and in the header. Map: Leaflet (lazy-loaded), raster tiles darkened by a CSS
 filter, auto-follow until dragged, session trail; no heading arrow. Telemetry thresholds are in
 `levels` (`src/lib/telemetry.ts`). Car offline: banner with the age of the last data, greyed values.
 

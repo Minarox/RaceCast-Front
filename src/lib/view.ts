@@ -19,7 +19,9 @@ export const view = reactive({
     /** Receive no video at all. */
     audioOnly: load<unknown>("audioOnly", false) === true,
     /** Panel shown under the video on phones and tablets. */
-    tab: (TABS.includes(storedTab as Tab) ? storedTab : "map") as Tab
+    tab: (TABS.includes(storedTab as Tab) ? storedTab : "map") as Tab,
+    /** Sound dock unfolded (desktop). */
+    soundOpen: load<unknown>("soundOpen", false) === true
 })
 
 watch(
@@ -29,6 +31,10 @@ watch(
 watch(
     () => view.tab,
     value => save("tab", value)
+)
+watch(
+    () => view.soundOpen,
+    value => save("soundOpen", value)
 )
 
 /** Camera in the big video slot. A picked camera that drops out falls back to the main one until it returns. */

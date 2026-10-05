@@ -72,69 +72,29 @@
 </template>
 
 <script setup lang="ts">
-    import { onBeforeUnmount, onMounted, ref } from "vue"
+    import { ref } from "vue"
     import { live } from "@lib/live"
     import {
         channelSettings as settings,
-        level,
         mixer,
         setMaster,
         setVolume,
         toggleMasterMute,
         toggleMute
     } from "@lib/mixer"
+    import { useMeters } from "@lib/meters"
     import Icon from "@components/Icon.vue"
 
     /*
      * One strip per microphone: name, VU meter (pre-fader, so a muted
      * microphone still shows activity), volume and mute; then the master.
-     *
-     * The meters are animated outside Vue: a requestAnimationFrame loop writes
-     * straight to the DOM, so 60 updates a second do not re-render anything.
+     * Shown in the "Son" tab on phones and tablets, and in the sound dock
+     * (SoundDock.vue) on desktop.
      */
 
     const root = ref<HTMLElement>()
 
-    const FLOOR_DB = -60
-    const FALL_DB_PER_S = 24
-
-    const shownLevel = new Map<string, number>()
-    let frame = 0
-    let last = performance.now()
-    let lastText = 0
-
-    function tick(at: number): void {
-        frame = requestAnimationFrame(tick)
-        const elapsed = (at - last) / 1000
-        last = at
-        // Skip the work while the panel is hidden (another tab on phones).
-        if (!root.value || root.value.offsetParent === null) return
-
-        const writeText = at - lastText > 250
-        if (writeText) lastText = at
-
-        for (const microphone of live.microphones) {
-            const name = microphone.name
-            const measured = Math.max(FLOOR_DB, level(name))
-            // Instant attack, steady fall: the meter reads like a hardware one.
-            const previous = shownLevel.get(name) ?? FLOOR_DB
-            const value = Math.max(measured, previous - FALL_DB_PER_S * elapsed)
-            shownLevel.set(name, value)
-
-            const meter = root.value.querySelector<HTMLElement>(`[data-meter="${CSS.escape(name)}"]`)
-            meter?.style.setProperty("--level", String((value - FLOOR_DB) / -FLOOR_DB))
-            if (writeText) {
-                const label = root.value.querySelector<HTMLElement>(`[data-db="${CSS.escape(name)}"]`)
-                if (label) label.textContent = mixer.enabled && value > FLOOR_DB ? `${Math.round(value)} dB` : "—"
-            }
-        }
-    }
-
-    onMounted(() => {
-        frame = requestAnimationFrame(tick)
-    })
-
-    onBeforeUnmount(() => cancelAnimationFrame(frame))
+    useMeters(root)
 </script>
 
 <style scoped>
