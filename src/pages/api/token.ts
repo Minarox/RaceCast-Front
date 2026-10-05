@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro"
-import { AccessToken } from "livekit-server-sdk"
+import { AccessToken, RoomConfiguration } from "livekit-server-sdk"
 import { LIVEKIT_API_KEY, LIVEKIT_API_SECRET, LIVEKIT_ROOM, LIVEKIT_URL } from "astro:env/server"
 import { VIEWER_PREFIX, type TokenResponse } from "@lib/viewer"
 
@@ -9,9 +9,21 @@ import { VIEWER_PREFIX, type TokenResponse } from "@lib/viewer"
  * The token only needs to be valid when joining: once connected, the LiveKit
  * server keeps refreshing it, and a viewer that loses the connection entirely
  * asks for a new one. Viewers are not hidden, so every client can count them.
+ * The token also carries the room's configuration, in case this join creates
+ * the room (see ROOM_TIMEOUT_S).
  */
 
 const TOKEN_TTL = "2h"
+
+/*
+ * Same timeouts as the car gives the room (PROTOCOL.md, "Room and
+ * participant"). After a day without the car the room is gone and the next
+ * viewer's join recreates it; the server applies this configuration only to a
+ * room created by that join, and the car cannot change the timeouts of a room
+ * that already exists. Without it, the room would close soon after the car
+ * leaves, taking the last known state with it.
+ */
+const ROOM_TIMEOUT_S = 86_400
 
 /*
  * Per-IP limit, generous on purpose: trackside spectators often share one
@@ -62,6 +74,10 @@ export const GET: APIRoute = async ({ clientAddress }) => {
         canPublishData: false,
         canUpdateOwnMetadata: false,
         hidden: false
+    })
+    token.roomConfig = new RoomConfiguration({
+        emptyTimeout: ROOM_TIMEOUT_S,
+        departureTimeout: ROOM_TIMEOUT_S
     })
 
     const body: TokenResponse = { url: LIVEKIT_URL, token: await token.toJwt() }

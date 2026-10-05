@@ -61,7 +61,7 @@ export const live = reactive({
     carOnline: false,
     /** Viewers in the room, this one included. */
     viewers: 1,
-    /** Track name of the car's main camera (participant attribute), or null. */
+    /** Track name of the car's main camera, or null (attribute absent: none designated). */
     mainCamera: null as string | null,
     /** Cameras published by the car: main camera first, then by name. */
     cameras: [] as CameraInfo[],

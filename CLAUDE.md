@@ -31,7 +31,9 @@ track when the file ends, and allows at most 3 `--publish`). Room metadata:
 Astro 7, `output: "server"`, `@astrojs/node` standalone. Server side is tiny:
 
 - `src/pages/api/token.ts`: subscribe-only viewer tokens (identity `viewer-<uuid>`, not hidden so
-  clients can count viewers), per-IP rate limit. The IP comes from `X-Forwarded-For`, which Astro only
+  clients can count viewers), per-IP rate limit. Tokens carry a `roomConfig` with the car's 24 h
+  timeouts (PROTOCOL.md): a viewer's join recreates the room after a day without the car, and the car
+  cannot fix the timeouts of an existing room. The IP comes from `X-Forwarded-For`, which Astro only
   trusts when the Host matches `security.allowedDomains` (built from `SITE_URL`).
 - `src/pages/index.astro`: reads runtime settings (car identity, map tiles) and passes them as props
   to the one client island, `LiveApp.vue` (`client:only="vue"`).
