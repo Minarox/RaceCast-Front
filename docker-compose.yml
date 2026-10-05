@@ -1,0 +1,22 @@
+services:
+    racecast:
+        build:
+            context: .
+            args:
+                # Baked in at build time: changing it means rebuilding the image.
+                SITE_URL: ${SITE_URL:-https://racecast.minarox.fr}
+        image: racecast-front
+        container_name: racecast-front
+        restart: unless-stopped
+
+        # LiveKit credentials and the optional map settings, read at runtime.
+        # Only what is set in .env is passed, so unset options keep the app's
+        # defaults (see .env.example).
+        env_file: .env
+        environment:
+            PORT: 4321
+
+        # Published on localhost only: put it behind the reverse proxy that
+        # already terminates TLS rather than exposing the Node server directly.
+        ports:
+            - "127.0.0.1:4321:4321"

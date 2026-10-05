@@ -1,0 +1,151 @@
+/*
+ * Design tokens for the RaceCast UI: the dark "nocturne" palette of the
+ * previous front end, plus status colours for the telemetry thresholds.
+ * Dark only, by choice: components use these properties and never hardcode a
+ * colour.
+ */
+
+:root {
+    color-scheme: dark;
+
+    /* Backgrounds, darkest to lightest */
+    --bg: #0e1018;
+    --surface: #161826;
+    --surface-2: #1a1c2a;
+    --surface-3: #1e2030;
+    --video-bg: #05060a;
+
+    /* Hairlines */
+    --line: #232532;
+    --line-2: #2f3242;
+    --line-3: #3f424d;
+
+    /* Text, brightest to dimmest */
+    --text: #e9e9ed;
+    --text-2: #cfd3e5;
+    --text-3: #b2b6ca;
+    --text-4: #9397ab;
+    --text-5: #75798c;
+
+    /* Accent */
+    --accent: #9184d9;
+    --accent-soft: #d2cefd;
+    --accent-line: #5d5294;
+    --accent-fill: rgba(145, 132, 217, 0.12);
+    --accent-fill-strong: rgba(145, 132, 217, 0.28);
+
+    /* Status */
+    --live: #ef4f5f;
+    --ok: #4cc38a;
+    --warn: #f0a33a;
+    --crit: #ef4f5f;
+    --stale: #75798c;
+
+    /* Overlays on top of video */
+    --scrim: rgba(8, 9, 14, 0.72);
+    --scrim-soft: rgba(8, 9, 14, 0.45);
+
+    /* Radii */
+    --r-xs: 4px;
+    --r-sm: 6px;
+    --r-md: 8px;
+    --r-lg: 12px;
+
+    /* Type */
+    --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    /* Minimum touch target */
+    --touch: 40px;
+
+    /* Safe areas (notched phones); 0 everywhere else */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: var(--font);
+    font-size: 16px;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+body {
+    min-height: 100dvh;
+    background-color: var(--bg);
+    overscroll-behavior: none;
+}
+
+a {
+    color: var(--accent-soft);
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-3) transparent;
+}
+
+::selection {
+    background: var(--accent-fill-strong);
+}
+
+/* Small uppercase monospace label, and tabular figures: used everywhere. */
+.lab {
+    font: 500 10.5px/1.2 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-4);
+}
+
+.num {
+    font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

@@ -1,0 +1,31 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# generated fonts
+public/__astro_font_generated__/
+
+# local Claude Code settings
+.claude/settings.local.json
+
+# dependencies
+node_modules/
+.pnpm-store/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env*
+!.env.example
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/

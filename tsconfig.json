@@ -1,0 +1,16 @@
+{
+    "extends": "astro/tsconfigs/strictest",
+    "include": [".astro/types.d.ts", "**/*"],
+    "exclude": ["dist"],
+    "compilerOptions": {
+        "verbatimModuleSyntax": true,
+        "paths": {
+            "@assets/*": ["./src/assets/*"],
+            "@components/*": ["./src/components/*"],
+            "@layouts/*": ["./src/layouts/*"],
+            "@lib/*": ["./src/lib/*"],
+            "@styles/*": ["./src/styles/*"]
+        },
+        "types": ["node"]
+    }
+}

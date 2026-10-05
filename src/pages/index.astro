@@ -1,0 +1,52 @@
+---
+import Layout from "@layouts/Layout.astro"
+import LiveApp from "@components/LiveApp.vue"
+import type { AppConfig } from "@lib/config"
+import {
+    LIVEKIT_CAR_IDENTITY,
+    TILE_ATTRIBUTION,
+    TILE_DARKEN,
+    TILE_MAX_ZOOM,
+    TILE_URL
+} from "astro:env/server"
+
+// Runtime settings the client needs, read per request from the server's
+// environment so the image does not have to be rebuilt to change them.
+const config: AppConfig = {
+    carIdentity: LIVEKIT_CAR_IDENTITY,
+    tiles: {
+        url: TILE_URL,
+        attribution: TILE_ATTRIBUTION,
+        maxZoom: TILE_MAX_ZOOM,
+        darken: TILE_DARKEN
+    }
+}
+---
+
+<Layout>
+    <LiveApp client:only="vue" config={config}>
+        <div slot="fallback" class="boot">
+            <img src="/favicon.svg" alt="" width="40" height="40" />
+            <p class="lab">RaceCast · chargement…</p>
+        </div>
+    </LiveApp>
+    <noscript>
+        <p class="noscript">Le direct RaceCast a besoin de JavaScript pour afficher la vidéo, le son et la carte.</p>
+    </noscript>
+</Layout>
+
+<style>
+    .boot {
+        min-height: 100dvh;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 14px;
+    }
+
+    .noscript {
+        padding: 24px;
+        text-align: center;
+        color: var(--text-3);
+    }
+</style>

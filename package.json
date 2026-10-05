@@ -1,0 +1,49 @@
+{
+  "name": "racecast-front",
+  "description": "Live web viewer for the RaceCast race car: cameras, audio mixer, map and telemetry.",
+  "author": {
+    "name": "Mathis Serrieres Maniecki",
+    "email": "contact@minarox.fr",
+    "url": "https://minarox.fr/"
+  },
+  "bugs": {
+    "url": "https://github.com/Minarox/RaceCast-Front/issues",
+    "email": "contact@minarox.fr"
+  },
+  "homepage": "https://github.com/Minarox/RaceCast-Front#readme",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Minarox/RaceCast-Front.git"
+  },
+  "private": true,
+  "type": "module",
+  "version": "2.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check && vue-tsc --noEmit",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node dist/server/entry.mjs",
+    "astro": "astro",
+    "icons": "node scripts/icons.mjs"
+  },
+  "packageManager": "pnpm@11.5.3",
+  "dependencies": {
+    "@astrojs/node": "^11.1.6",
+    "@astrojs/vue": "^7.0.3",
+    "astro": "^7.3.5",
+    "leaflet": "^1.9.4",
+    "livekit-client": "^2.22.3",
+    "livekit-server-sdk": "^2.19.1",
+    "vue": "^3.5.43"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@iconify-json/ph": "^1.2.2",
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "^24.19.1",
+    "typescript": "^6.0.3",
+    "vue-tsc": "^3.3.12"
+  }
+}

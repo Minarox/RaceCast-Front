@@ -1,0 +1,40 @@
+---
+import "@styles/theme.css"
+
+interface Props {
+    title?: string
+    description?: string
+}
+
+const {
+    title = "RaceCast",
+    description = "Direct de la voiture de course : caméras, son, position GPS et télémétrie."
+} = Astro.props
+
+const canonical = new URL(Astro.url.pathname, Astro.site)
+---
+
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
+        />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonical} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="theme-color" content="#0e1018" />
+        <meta name="color-scheme" content="dark" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:locale" content="fr_FR" />
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>
