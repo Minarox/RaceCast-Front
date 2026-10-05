@@ -27,6 +27,14 @@
                         {{ shown }}
                     </span>
                     <span class="grow" />
+                    <!-- Landscape has no header: the essentials ride along with the controls. -->
+                    <div v-if="layout === 'landscape'" class="strip num">
+                        <span class="live-dot" :class="{ on: live.carOnline }" />
+                        <span>{{ live.carOnline ? "En direct" : "Hors ligne" }}</span>
+                        <span v-if="speed !== null">{{ num(speed, 0, "km/h") }}</span>
+                        <span v-if="signal !== null">Signal {{ num(signal, 0, "%") }}</span>
+                        <span v-if="battery !== null">Batterie {{ num(battery, 0, "%") }}</span>
+                    </div>
                     <button
                         v-if="fullscreenAvailable && layout !== 'landscape' && !placeholder"
                         type="button"
@@ -36,14 +44,6 @@
                     >
                         <Icon :name="fullscreen ? 'arrows-in' : 'arrows-out'" />
                     </button>
-                </div>
-
-                <div v-if="layout === 'landscape'" class="strip num">
-                    <span class="live-dot" :class="{ on: live.carOnline }" />
-                    <span>{{ live.carOnline ? "En direct" : "Hors ligne" }}</span>
-                    <span v-if="speed !== null">{{ num(speed, 0, "km/h") }}</span>
-                    <span v-if="signal !== null">Signal {{ num(signal, 0, "%") }}</span>
-                    <span v-if="battery !== null">Batterie {{ num(battery, 0, "%") }}</span>
                 </div>
 
                 <div class="bottom">
@@ -398,14 +398,17 @@
         background: var(--text);
     }
 
+    /* Same height and backdrop as the camera label it shares the top row with. */
     .strip {
-        align-self: center;
+        flex: none;
         display: flex;
         align-items: center;
-        gap: 14px;
-        padding: 6px 14px;
-        border-radius: 999px;
-        font-size: 13px;
+        gap: 12px;
+        padding: 4px 10px;
+        border-radius: var(--r-sm);
+        font-size: 12.5px;
+        line-height: 1.2;
+        white-space: nowrap;
         color: var(--text);
         background: var(--scrim);
     }
