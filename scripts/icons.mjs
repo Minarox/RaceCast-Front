@@ -25,7 +25,10 @@ const wanted = [
     "video-camera-slash",
     "wifi-slash",
     "microphone",
-    "circle-notch"
+    "circle-notch",
+    "lightning-fill",
+    "plug",
+    "battery-medium"
 ]
 
 const missing = wanted.filter(n => !set.icons[n])

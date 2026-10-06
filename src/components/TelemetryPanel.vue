@@ -42,6 +42,11 @@
                     <span class="chip" :class="modemTone">{{ modemState }}</span>
                     {{ technology(modem.access_tech) }} · {{ text(modem.operator) }}
                 </p>
+                <!-- Only when the modem says so: unknown (null) is not an alert. -->
+                <p v-if="modem.ip_connected === false" class="alert" role="status">
+                    <Icon name="warning-circle" :size="15" />
+                    Données mobiles coupées
+                </p>
             </template>
             <p v-else class="empty">Aucune donnée du modem.</p>
 
@@ -56,8 +61,6 @@
                 <dd>{{ num(modem.lte_rssi_dbm, 0, "dBm") }}</dd>
                 <dt>Cellule · TAC</dt>
                 <dd>{{ text(modem.cell_id) }} · {{ text(modem.tac) }}</dd>
-                <dt>Données</dt>
-                <dd>{{ bool(modem.ip_connected, "connectées", "coupées") }}</dd>
             </template>
         </TelemetryCard>
 
@@ -81,6 +84,10 @@
                 <p class="sub num">
                     {{ num(ups.load_voltage_v, 2, "V") }} · {{ num(ups.current_a, 2, "A") }} ·
                     {{ num(ups.power_w, 1, "W") }}
+                    <span v-if="power" class="power" :class="power.tone" :title="power.title">
+                        <Icon :name="power.icon" :size="13" />
+                        {{ power.label }}
+                    </span>
                 </p>
             </template>
             <p v-else class="empty">Aucune donnée de la batterie.</p>
@@ -99,7 +106,11 @@
                     />
                 </div>
                 <p class="sub num">
-                    CPU {{ num(system.cpu_load_pct, 0, "%") }} · GPU {{ num(system.gpu_load_pct, 0, "%") }} ·
+                    <!--
+                        The video never runs on the GPU (decoder, VIC and NVENC are separate
+                        blocks), so its load stays at 0: the encoder clock is the video load.
+                    -->
+                    CPU {{ num(system.cpu_load_pct, 0, "%") }} · Encodeur {{ num(system.nvenc_mhz, 0, "MHz") }} ·
                     <span :class="levels.disk(system.disk_free_gb)">
                         Disque {{ num(system.disk_free_gb, 0, "Go") }}
                     </span>
@@ -112,16 +123,14 @@
                 <dd>{{ num(system.cpu_temp_c, 1) }} / {{ num(system.gpu_temp_c, 1, "°C") }}</dd>
                 <dt>Mémoire utilisée</dt>
                 <dd>{{ num(system.ram_used_mb === null ? null : system.ram_used_mb / 1024, 1, "Go") }}</dd>
-                <dt>Encodeur vidéo</dt>
-                <dd>{{ num(system.nvenc_mhz, 0, "MHz") }}</dd>
+                <dt>Charge GPU</dt>
+                <dd>{{ num(system.gpu_load_pct, 0, "%") }}</dd>
                 <dt>Espace libre</dt>
                 <dd :class="levels.disk(system.disk_free_gb)">{{ num(system.disk_free_gb, 1, "Go") }}</dd>
                 <dt>Mode d'alimentation</dt>
                 <dd>{{ text(system.power_mode) }}</dd>
                 <dt>Caméras · micros</dt>
                 <dd>{{ num(system.cameras) }} · {{ num(system.mics) }}</dd>
-                <dt>LiveKit</dt>
-                <dd>{{ bool(system.livekit_connected, "connecté", "déconnecté") }}</dd>
             </template>
         </TelemetryCard>
     </div>
@@ -133,7 +142,8 @@
     import { now } from "@lib/clock"
     import { history } from "@lib/history"
     import { levels, STALE_AFTER_MS } from "@lib/telemetry"
-    import { bool, num, text } from "@lib/format"
+    import { num, text } from "@lib/format"
+    import type { IconName } from "@assets/icons"
     import Icon from "@components/Icon.vue"
     import Sparkline from "@components/Sparkline.vue"
     import TelemetryCard from "@components/TelemetryCard.vue"
@@ -201,6 +211,28 @@
         const state = modem.value?.state
         return state ? (STATES[state]?.[1] ?? "warn") : "none"
     })
+
+    const POWER_STATES: Record<string, { label: string; title: string; icon: IconName; tone: string }> = {
+        charging: {
+            label: "En charge",
+            title: "Secteur branché, batterie en charge",
+            icon: "lightning-fill",
+            tone: "ok"
+        },
+        full: { label: "Branchée", title: "Secteur branché, batterie chargée", icon: "plug", tone: "plugged" },
+        discharging: {
+            label: "Sur batterie",
+            title: "Secteur débranché : le Jetson fonctionne sur sa batterie",
+            icon: "battery-medium",
+            tone: "battery"
+        }
+    }
+
+    /** Charging state; nothing when unknown (UPS unreadable, or a car that does not send it). */
+    const power = computed(() => {
+        const state = ups.value?.power_state
+        return state ? (POWER_STATES[state] ?? null) : null
+    })
 </script>
 
 <style scoped>
@@ -240,6 +272,42 @@
         gap: 6px;
         font-size: 13px;
         color: var(--text-3);
+    }
+
+    /* Charging state: small, pushed to the right end of the V · A · W line. */
+    .power {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .power.ok {
+        color: var(--ok);
+    }
+
+    .power.plugged {
+        color: var(--accent-soft);
+    }
+
+    .power.battery {
+        color: var(--text-4);
+    }
+
+    .alert {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 10px;
+        border-radius: var(--r-sm);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--crit);
+        background: rgba(239, 79, 95, 0.12);
+        box-shadow: inset 0 0 0 1px rgba(239, 79, 95, 0.35);
     }
 
     .empty {

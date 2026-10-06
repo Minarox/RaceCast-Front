@@ -24,11 +24,6 @@ export function text(value: string | null | undefined): string {
     return value ? value : DASH
 }
 
-export function bool(value: boolean | null | undefined, yes = "oui", no = "non"): string {
-    if (value === null || value === undefined) return DASH
-    return value ? yes : no
-}
-
 /** Age of a timestamp in words: "à l'instant", "il y a 12 s", "il y a 3 min", "il y a 2 h 05". */
 export function ago(from: number | null | undefined, now: number): string {
     if (from === null || from === undefined || !Number.isFinite(from)) return "jamais"

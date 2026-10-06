@@ -57,9 +57,17 @@ export interface Modem {
 export interface Ups {
     ts: string
     load_voltage_v: number | null
+    /** Battery current: positive while charging, negative while discharging. */
     current_a: number | null
+    /** Always positive: the direction is the sign of current_a. */
     power_w: number | null
+    /** Estimated from the voltage, which reads higher while charging. */
     percent: number | null
+    /**
+     * Plugged in = charging or full. Added after v1 shipped: an older car does
+     * not send it, so absent (like null) means unknown.
+     */
+    power_state?: "charging" | "full" | "discharging" | null
 }
 
 export interface SystemInfo {

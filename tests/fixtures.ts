@@ -43,7 +43,7 @@ export function telemetry(at = "2026-10-05T12:00:00.000Z", overrides: Partial<Te
             tac: "B4F2",
             ip_connected: true
         },
-        ups: { ts: at, load_voltage_v: 12.492, current_a: -1.2, power_w: 15, percent: 84 },
+        ups: { ts: at, load_voltage_v: 12.492, current_a: -1.2, power_w: 15, percent: 84, power_state: "discharging" },
         system: {
             ts: at,
             cpu_temp_c: 52.2,

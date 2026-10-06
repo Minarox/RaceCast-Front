@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
-import { ago, bool, heading, hour, num, position, text, time } from "@lib/format"
+import { ago, heading, hour, num, position, text, time } from "@lib/format"
 
-const NNBSP = " "
-const NBSP = " "
+const NNBSP = "\u202f"
+const NBSP = "\u00a0"
 
 describe("num", () => {
     it("formats French numbers with a fixed number of digits", () => {
@@ -23,17 +23,11 @@ describe("num", () => {
     })
 })
 
-describe("text and bool", () => {
+describe("text", () => {
     it("falls back to a dash", () => {
         expect(text("Orange F")).toBe("Orange F")
         expect(text("")).toBe("—")
         expect(text(null)).toBe("—")
-        expect(bool(null)).toBe("—")
-    })
-
-    it("uses the given words", () => {
-        expect(bool(true)).toBe("oui")
-        expect(bool(false, "connecté", "déconnecté")).toBe("déconnecté")
     })
 })
 

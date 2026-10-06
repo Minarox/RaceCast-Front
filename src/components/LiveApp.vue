@@ -127,7 +127,7 @@
     [data-layout="desktop"] .main {
         display: grid;
         grid-template-columns: minmax(0, 1fr) clamp(320px, 27vw, 420px);
-        grid-template-rows: clamp(220px, 36vh, 380px) minmax(0, 1fr) auto;
+        grid-template-rows: auto minmax(0, 1fr) auto;
         grid-template-areas:
             "stage map"
             "stage telemetry"
@@ -151,6 +151,15 @@
     [data-layout="desktop"] .panel-map {
         grid-area: map;
         isolation: isolate;
+    }
+
+    /*
+     * The map keeps a fixed height: the GPS details unfold under it and push
+     * the telemetry down, which scrolls, instead of squeezing the map.
+     */
+    [data-layout="desktop"] .panel-map :deep(.map-wrap) {
+        flex: none;
+        height: clamp(150px, 28vh, 300px);
     }
 
     /* The dock draws its own bar, and its mixer unfolds over the telemetry. */
