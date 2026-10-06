@@ -11,7 +11,7 @@
     "email": "contact@minarox.fr"
   },
   "homepage": "https://github.com/Minarox/RaceCast-Front#readme",
-  "license": "AGPL-3.0-only",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Minarox/RaceCast-Front.git"

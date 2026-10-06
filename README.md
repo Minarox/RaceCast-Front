@@ -83,6 +83,8 @@ token endpoint's rate limit uses the visitor IP from `X-Forwarded-For`, which is
 request's `Host` (or `X-Forwarded-Host`) is the `SITE_URL` host: have the proxy keep the original
 `Host` and set `X-Forwarded-For`.
 
-## Licence
+## License
 
-AGPL-3.0-only.
+Copyright 2026 Mathis Serrieres Maniecki.
+
+Licensed under the [Apache License, Version 2.0](LICENSE).
