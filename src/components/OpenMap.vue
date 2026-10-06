@@ -127,9 +127,9 @@
 
     function metadataHandler(event: any): void {
         const metadata: Metadata = event.detail
-        if (metadata.location.lat && metadata.location.lon) {
-            if (oldLocation[0] !== metadata.location.lon && oldLocation[1] !== metadata.location.lat) {
-                setLocation([metadata.location.lon, metadata.location.lat])
+        if (metadata.modem?.lat && metadata.modem?.lon) {
+            if (oldLocation[0] !== metadata.modem.lon && oldLocation[1] !== metadata.modem.lat) {
+                setLocation([metadata.modem.lon, metadata.modem.lat])
 
                 if (canFlash) {
                     canFlash = false
@@ -140,7 +140,7 @@
                     }, 3000)
                 }
 
-                oldLocation = [metadata.location.lon, metadata.location.lat]
+                oldLocation = [metadata.modem.lon, metadata.modem.lat]
             }
         }
     }

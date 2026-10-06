@@ -5,13 +5,12 @@
     "compilerOptions": {
         "verbatimModuleSyntax": true,
         "resolveJsonModule": true,
-        "baseUrl": ".",
         "paths": {
-            "@assets/*": ["src/assets/*"],
-            "@components/*": ["src/components/*"],
-            "@layouts/*": ["src/layouts/*"],
-            "@pages/*": ["src/pages/*"],
-            "@types": ["src/types.ts"],
+            "@assets/*": ["./src/assets/*"],
+            "@components/*": ["./src/components/*"],
+            "@layouts/*": ["./src/layouts/*"],
+            "@pages/*": ["./src/pages/*"],
+            "@types": ["./src/types.ts"],
         },
         "types": [
             "./worker-configuration.d.ts",

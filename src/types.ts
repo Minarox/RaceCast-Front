@@ -17,74 +17,50 @@ export interface Token {
     timestamp: number
 }
 
-export interface Location {
+export interface Modem {
     alt: number | null
     hdop: number | null
     lat: number | null
     lon: number | null
     sat: number | null
-    speed: number | null
+    signal: number | null
+    spd: number | null
+    tech: string | null
 }
 
-export const defaultLocation: Location = {
+export const defaultModem: Modem = {
     alt: null,
     hdop: null,
     lat: null,
     lon: null,
     sat: null,
-    speed: null
-}
-
-export interface Modem {
-    signal: number | null
-    tech: string[] | null
-}
-
-export const defaultModem: Modem = {
     signal: null,
+    spd: null,
     tech: null
 }
 
-export interface System {
-    fan: number | null
-    load: number | null
-    temp: number | null
-    power: number | null
-}
-
-export const defaultSystem: System = {
-    fan: null,
-    load: null,
-    temp: null,
-    power: null
-}
-
 export interface UPS {
-    capa: number | null
-    volt: number | null
-    charge: boolean
+    a: number | null
+    p: number | null
+    v: number | null
+    w: number | null
 }
 
 export const defaultUPS: UPS = {
-    capa: null,
-    volt: null,
-    charge: false
+    a: null,
+    p: null,
+    v: null,
+    w: null
 }
 
 export interface Metadata {
-    location: Location
     modem: Modem
-    system: System
-    temp: number | null
     timestamp: number | null
     ups: UPS
 }
 
 export const defaultMetadata: Metadata = {
-    location: defaultLocation,
     modem: defaultModem,
-    system: defaultSystem,
-    temp: null,
     timestamp: null,
     ups: defaultUPS
 }

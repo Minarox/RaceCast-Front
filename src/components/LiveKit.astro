@@ -52,11 +52,25 @@
         const tracks = Array.from(participant.trackPublications.values())
 
         let videoTracks = tracks.filter((track: RemoteTrackPublication) => track.kind === Track.Kind.Video)
-        cameras = videoTracks.sort((a: any, b: any) => a?.trackInfo?.name.localeCompare(b?.trackInfo?.name))
+        cameras = videoTracks.sort((a: any, b: any) => {
+            const nameA = a?.trackInfo?.name ?? ''
+            const nameB = b?.trackInfo?.name ?? ''
+            if (nameA === 'Route' && nameB === 'Route') return 0
+            if (nameA === 'Route') return -1
+            if (nameB === 'Route') return 1
+            return nameA.localeCompare(nameB)
+        })
         dispatchEvent(Event.CAMERAS, cameras)
 
         let audioTracks = tracks.filter((track: RemoteTrackPublication) => track.kind === Track.Kind.Audio)
-        microphones = audioTracks.sort((a: any, b: any) => a?.trackInfo?.name.localeCompare(b?.trackInfo?.name))
+        microphones = audioTracks.sort((a: any, b: any) => {
+            const nameA = a?.trackInfo?.name ?? ''
+            const nameB = b?.trackInfo?.name ?? ''
+            if (nameA === 'Radio' && nameB === 'Radio') return 0
+            if (nameA === 'Radio') return -1
+            if (nameB === 'Radio') return 1
+            return nameA.localeCompare(nameB)
+        })
         dispatchEvent(Event.MICROPHONES, microphones)
     }
 

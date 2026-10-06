@@ -7,27 +7,19 @@
             <span>{{ lastUpdate }}</span>
         </div>
         <div>
-            Utilisation :
-            <div v-if="!usage" class="loader" v-html="Loading" />
-            <span>{{ usage }}</span>
-        </div>
-        <div>
-            Température :
-            <div v-if="!internalTemp && !externalTemp" class="loader" v-html="Loading" />
-            <ul :class="{ hidden: !internalTemp && !externalTemp }">
-                <li v-if="internalTemp">{{ internalTemp }}</li>
-                <li v-if="externalTemp">{{ externalTemp }}</li>
-            </ul>
-        </div>
-        <div>
-            Connectivité :
-            <div v-if="!connectivity" class="loader" v-html="Loading" />
-            <span>{{ connectivity }}</span>
+            Consommation :
+            <div v-if="!consumption" class="loader" v-html="Loading" />
+            <span>{{ consumption }}</span>
         </div>
         <div>
             Batterie :
             <div v-if="!battery" class="loader" v-html="Loading" />
             <span>{{ battery }}</span>
+        </div>
+        <div>
+            Connectivité :
+            <div v-if="!connectivity" class="loader" v-html="Loading" />
+            <span>{{ connectivity }}</span>
         </div>
 
         <h2>GPS</h2>
@@ -98,11 +90,9 @@
     import Loading from "@assets/loading.svg?raw"
 
     const lastUpdate = ref('')
-    const usage = ref('')
-    const internalTemp = ref('')
-    const externalTemp = ref('')
-    const connectivity = ref('')
+    const consumption = ref('')
     const battery = ref('')
+    const connectivity = ref('')
     const latitude = ref('')
     const longitude = ref('')
     const altitude = ref('')
@@ -194,16 +184,14 @@
     function metadataHandler(event: any) {
         const metadata = event.detail
         lastUpdate.value = metadata?.timestamp ? new Date(metadata.timestamp * 1000).toLocaleString() : "Inconnu"
-        usage.value = metadata.system.load ? `${metadata.system.load}%${metadata.system.power ? ` (${metadata.system.power}W)` : ''}` : ''
-        internalTemp.value = metadata.system.temp ? `Interne : ${metadata.system.temp}°C${metadata.system.fan ? ` (${metadata.system.fan} RPM)` : ''}` : ''
-        externalTemp.value = metadata.temp ? `Externe : ${metadata.temp}°C` : ''
-        connectivity.value = metadata.modem.tech ? `${metadata.modem.tech.map((name: string) => name.toUpperCase()).join(", ")}${metadata.modem.signal ? ` (${metadata.modem.signal}%)` : ''}` : ''
-        battery.value = metadata.ups.capa ? `${metadata.ups.capa}%${metadata.ups.volt ? ` (${metadata.ups.volt}V)` : ''}${metadata.ups.charge ? " (En charge)" : ''}` : ''
-        latitude.value = metadata.location?.lat?.toString() || ''
-        longitude.value = metadata.location?.lon?.toString() || ''
-        altitude.value = metadata.location.alt ? `${metadata.location.alt} mètre${metadata.location.alt > 1 ? "s" : ''}` : ''
-        speed.value = metadata.location.speed !== null ? `${metadata.location.speed} km/h` : ''
-        precision.value = metadata.location.hdop ? `${metadata.location.hdop}${metadata.location.sat ? ` (${metadata.location.sat} satellite${metadata.location.sat > 1 ? "s" : ""})` : ''}` : ''
+        battery.value = metadata.ups.p ? `${metadata.ups.p}%` : ''
+        consumption.value = metadata.ups.w ? `${metadata.ups.w} W` : ''
+        connectivity.value = metadata.modem?.tech ? `${metadata.modem.tech}${metadata.modem.signal ? ` (${metadata.modem.signal}%)` : ''}` : ''
+        latitude.value = metadata.modem?.lat?.toString() || ''
+        longitude.value = metadata.modem?.lon?.toString() || ''
+        altitude.value = metadata.modem?.alt ? `${metadata.modem.alt} mètre${metadata.modem.alt > 1 ? "s" : ''}` : ''
+        speed.value = typeof metadata.modem?.spd === "number" ? `${metadata.modem.spd} km/h` : ''
+        precision.value = metadata.modem?.hdop ? `${metadata.modem.hdop}${metadata.modem.sat ? ` (${metadata.modem.sat} satellite${metadata.modem.sat > 1 ? "s" : ""})` : ''}` : ''
     }
 
     onMounted(() => {

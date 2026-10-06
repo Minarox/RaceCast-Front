@@ -39,6 +39,7 @@
         if (oldAudioTrack) {
             oldAudioTrack.track?.attach(player.value)
         }
+        player.value?.play()
     }
 
     function playHandler() {

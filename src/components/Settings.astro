@@ -65,6 +65,16 @@ const sidebar = Astro.props.sidebar || false
 			<div id="mic-volumes" class="split-layout">
 				<Image src={Loading} alt="Loading..." />
 			</div>
+
+			<h2>Vidéo</h2>
+			<div class="split-layout">
+				<label for="settings-fsr-enabled">FSR (amélioration image) :</label>
+				<input type="checkbox" id="settings-fsr-enabled" />
+			</div>
+			<div class="split-layout">
+				<label for="settings-fsr-sharpness">Netteté FSR :</label>
+				<input type="range" id="settings-fsr-sharpness" min="0" max="2" step="0.1" />
+			</div>
 		</section>
 
 		<footer>
@@ -105,6 +115,8 @@ const sidebar = Astro.props.sidebar || false
 	const showOtherCameras = document.getElementById("settings-other-cameras") as HTMLInputElement
 	const showSidebar = document.getElementById("settings-sidebar") as HTMLInputElement
 	const sidebarPosition = document.getElementById("settings-sidebar-position")! as unknown as HTMLSelectElement
+	const fsrEnabled = document.getElementById("settings-fsr-enabled") as HTMLInputElement
+	const fsrSharpness = document.getElementById("settings-fsr-sharpness") as HTMLInputElement
 
 	let settings = getSettings()
 	window.localStorage.setItem("settings", JSON.stringify(settings))
@@ -222,6 +234,9 @@ const sidebar = Astro.props.sidebar || false
 		if (!settings.sidebar.show) {
 			sidebarPosition.disabled = true
 		}
+
+		if (fsrEnabled)   fsrEnabled.checked  = settings.fsr.enabled
+		if (fsrSharpness) fsrSharpness.value   = String(settings.fsr.sharpness)
 	})
 
 	closeBtn.addEventListener("click", () => {
@@ -266,6 +281,9 @@ const sidebar = Astro.props.sidebar || false
 		}
 
 		settings.sidebar.position = sidebarPosition.value as Position
+
+		if (fsrEnabled)   settings.fsr.enabled   = fsrEnabled.checked
+		if (fsrSharpness) settings.fsr.sharpness  = parseFloat(fsrSharpness.value)
 
 		// const audioTracks = micVolumes.querySelectorAll('input[type="range"]')
 		// settings.micVolumes = {}

@@ -18,7 +18,7 @@
         if (chart) {
             const metadata: Metadata = event.detail
 
-            speedValues.push({ speed: metadata.location.speed, date: metadata.timestamp || new Date().getTime() / 1000 })
+            speedValues.push({ speed: metadata.modem?.spd || null, date: metadata.timestamp || new Date().getTime() / 1000 })
 
             if (speedValues.length > speedHistoryLimit) {
                 speedValues.shift()

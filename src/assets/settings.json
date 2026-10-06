@@ -14,5 +14,9 @@
         "position": "left",
         "sticky": false
     },
-    "volumes": []
+    "volumes": [],
+    "fsr": {
+        "enabled": false,
+        "sharpness": 1.0
+    }
 }
