@@ -16,7 +16,11 @@ services:
         environment:
             PORT: 4321
 
-        # Published on localhost only: put it behind the reverse proxy that
-        # already terminates TLS rather than exposing the Node server directly.
+        # Plain HTTP, for the reverse proxy that terminates TLS. The proxy runs
+        # on another machine of the LAN, so the port is published on every
+        # interface by default; set BIND_ADDRESS to the host's LAN address to
+        # narrow it, or to 127.0.0.1 for a proxy on this same host. Only the
+        # proxy should reach it: a client talking to it directly skips TLS and
+        # can forge X-Forwarded-For.
         ports:
-            - "127.0.0.1:4321:4321"
+            - "${BIND_ADDRESS:-0.0.0.0}:4321:4321"

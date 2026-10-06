@@ -169,8 +169,19 @@ Deployment, behind the reverse proxy that terminates TLS:
 docker compose up -d --build
 ```
 
-The container listens on `127.0.0.1:4321`. The proxy must keep the original `Host` and set
-`X-Forwarded-For`, which the token rate limit relies on. Rebuild (not just restart) after changing
+The site answers in plain HTTP on port 4321, published on every interface by default because the
+reverse proxy runs on another machine of the LAN (`BIND_ADDRESS` in `.env` narrows it to one address,
+e.g. `127.0.0.1` for a proxy on the same host). Only the proxy should reach that port: a client
+talking to it directly skips TLS and can forge `X-Forwarded-For`. Docker's published ports bypass
+`ufw`, so filter them in the `DOCKER-USER` chain:
+
+```bash
+# Drop connections to the site that do not come from the proxy (here 192.168.1.2).
+sudo iptables -I DOCKER-USER -p tcp -m conntrack --ctorigdstport 4321 ! -s 192.168.1.2 -j DROP
+```
+
+The proxy must keep the original `Host` and replace `X-Forwarded-For` with the client's address (not
+append to it), which the token rate limit relies on. Rebuild (not just restart) after changing
 `SITE_URL`.
 
 Without the car, run a local `livekit-server --dev` and publish test tracks with the
