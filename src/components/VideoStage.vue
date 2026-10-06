@@ -1,12 +1,6 @@
 <template>
     <div class="stage" :data-layout="layout">
-        <div
-            ref="hero"
-            class="hero"
-            @touchstart.passive="onTouchStart"
-            @touchend="onTouchEnd"
-            @click="onHeroClick"
-        >
+        <div ref="hero" class="hero" @touchstart.passive="onTouchStart" @touchend="onTouchEnd" @click="onHeroClick">
             <VideoView v-if="!placeholder && shown" :key="shown" :name="shown" />
 
             <div v-else-if="placeholder" class="placeholder">
@@ -139,7 +133,12 @@
             }
         }
         if (view.audioOnly) {
-            return { icon: "headphones", title: "Vidéo en pause", text: "Mode audio seul : aucune vidéo n'est reçue.", resume: true }
+            return {
+                icon: "headphones",
+                title: "Vidéo en pause",
+                text: "Mode audio seul : aucune vidéo n'est reçue.",
+                resume: true
+            }
         }
         return null
     })

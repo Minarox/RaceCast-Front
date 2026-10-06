@@ -100,7 +100,9 @@
                 </div>
                 <p class="sub num">
                     CPU {{ num(system.cpu_load_pct, 0, "%") }} · GPU {{ num(system.gpu_load_pct, 0, "%") }} ·
-                    <span :class="levels.disk(system.disk_free_gb)">Disque {{ num(system.disk_free_gb, 0, "Go") }}</span>
+                    <span :class="levels.disk(system.disk_free_gb)">
+                        Disque {{ num(system.disk_free_gb, 0, "Go") }}
+                    </span>
                 </p>
             </template>
             <p v-else class="empty">Aucune donnée du Jetson.</p>
@@ -165,7 +167,10 @@
     /** "lte+5gnr" → "5G NSA (LTE + NR)", "lte" → "4G". */
     function technology(raw: string | null): string {
         if (!raw) return "—"
-        const parts = raw.toLowerCase().split(/[+|,\s]+/).filter(Boolean)
+        const parts = raw
+            .toLowerCase()
+            .split(/[+|,\s]+/)
+            .filter(Boolean)
         if (parts.includes("lte") && parts.includes("5gnr")) return "5G NSA"
         if (parts.length === 1 && TECHNOLOGIES[parts[0]!]) return TECHNOLOGIES[parts[0]!]!
         return raw.toUpperCase()

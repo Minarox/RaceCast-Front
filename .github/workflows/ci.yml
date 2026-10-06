@@ -1,0 +1,90 @@
+# Checks of every pull request to main. Also runs on main itself, which fills the caches that pull
+# requests reuse (a pull request can read the caches of its base branch).
+#
+# This covers leaked secrets, formatting, lints, types, the unit tests and the production build. The unit
+# tests replace LiveKit, Web Audio and the browser's media with fakes; video, sound and layouts are still
+# checked by hand against the car or a local LiveKit server.
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  ASTRO_TELEMETRY_DISABLED: 1
+
+jobs:
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history: the scan covers every commit of the pull request (or of the push).
+          fetch-depth: 0
+      - uses: trufflesecurity/trufflehog@v3.98.1
+        with:
+          # Built-in detectors plus the LiveKit ones (.github/trufflehog.yml). Any finding, verified or
+          # not, fails the job.
+          extra_args: --config .github/trufflehog.yml
+
+  format:
+    name: Formatting
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      # pnpm's version comes from package.json (packageManager).
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: ESLint, warnings as errors
+        run: pnpm lint
+
+  check:
+    name: Types, tests and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Types (astro check, vue-tsc)
+        run: pnpm check
+
+      - name: Unit tests
+        run: pnpm test
+
+      # Settings are read at runtime, so the build needs no credentials.
+      - name: Production build
+        run: pnpm build

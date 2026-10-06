@@ -9,8 +9,8 @@
             <div v-if="tabbed" class="tabs" role="tablist" aria-label="Panneaux">
                 <button
                     v-for="tab in tabs"
-                    :key="tab.id"
                     :id="`tab-${tab.id}`"
+                    :key="tab.id"
                     type="button"
                     role="tab"
                     :aria-selected="view.tab === tab.id"
@@ -64,9 +64,9 @@
     import type { AppConfig } from "@lib/config"
     import type { IconName } from "@assets/icons"
     import { live, setWantedCameras, start } from "@lib/live"
-    import { layout, showsAllCameras, watchLayout } from "@lib/layout"
+    import { layout, watchLayout } from "@lib/layout"
     import { shown, view, type Tab } from "@lib/view"
-    import { unplayable } from "@lib/codecs"
+    import { wantedCameras } from "@lib/subscriptions"
     import { startClock } from "@lib/clock"
     import Icon from "@components/Icon.vue"
     import AppHeader from "@components/AppHeader.vue"
@@ -96,17 +96,7 @@
         return tabbed.value ? view.tab === panel : true
     }
 
-    /*
-     * Only the videos on screen are received: every camera on desktop and
-     * tablet (big video + thumbnails), the one shown on a phone, none in
-     * audio-only mode or when this browser cannot decode them.
-     */
-    const wanted = computed<string[]>(() => {
-        if (view.audioOnly) return []
-        const playable = live.cameras.filter(camera => !unplayable(camera.mimeType)).map(camera => camera.name)
-        if (showsAllCameras(layout.value)) return playable
-        return shown.value && playable.includes(shown.value) ? [shown.value] : []
-    })
+    const wanted = computed<string[]>(() => wantedCameras(live.cameras, layout.value, shown.value, view.audioOnly))
 
     watch(wanted, names => setWantedCameras(names), { immediate: true })
 </script>

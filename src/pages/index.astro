@@ -2,13 +2,7 @@
 import Layout from "@layouts/Layout.astro"
 import LiveApp from "@components/LiveApp.vue"
 import type { AppConfig } from "@lib/config"
-import {
-    LIVEKIT_CAR_IDENTITY,
-    TILE_ATTRIBUTION,
-    TILE_DARKEN,
-    TILE_MAX_ZOOM,
-    TILE_URL
-} from "astro:env/server"
+import { LIVEKIT_CAR_IDENTITY, TILE_ATTRIBUTION, TILE_DARKEN, TILE_MAX_ZOOM, TILE_URL } from "astro:env/server"
 
 // Runtime settings the client needs, read per request from the server's
 // environment so the image does not have to be rebuilt to change them.

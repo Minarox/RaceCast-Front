@@ -89,9 +89,7 @@ export interface Telemetry {
     system?: SystemInfo
 }
 
-export type ParseResult =
-    | { ok: true; telemetry: Telemetry }
-    | { ok: false; version: number | null }
+export type ParseResult = { ok: true; telemetry: Telemetry } | { ok: false; version: number | null }
 
 /** Parses the room metadata. An empty string (no document yet) is not an error. */
 export function parseTelemetry(raw: string): ParseResult | null {

@@ -6,10 +6,17 @@
 
         <template v-else>
             <div class="channels">
-                <div v-for="microphone in live.microphones" :key="microphone.name" class="strip" :class="{ muted: settings(microphone.name).muted }">
+                <div
+                    v-for="microphone in live.microphones"
+                    :key="microphone.name"
+                    class="strip"
+                    :class="{ muted: settings(microphone.name).muted }"
+                >
                     <div class="row">
                         <span class="name" :title="microphone.name">{{ microphone.name }}</span>
-                        <span class="meter" :data-meter="microphone.name" aria-hidden="true"><span class="fill" /></span>
+                        <span class="meter" :data-meter="microphone.name" aria-hidden="true">
+                            <span class="fill" />
+                        </span>
                         <span class="db num" :data-db="microphone.name">—</span>
                     </div>
                     <div class="row">
@@ -27,7 +34,11 @@
                             type="button"
                             class="mute"
                             :aria-pressed="settings(microphone.name).muted"
-                            :title="settings(microphone.name).muted ? `Rétablir ${microphone.name}` : `Couper ${microphone.name}`"
+                            :title="
+                                settings(microphone.name).muted
+                                    ? `Rétablir ${microphone.name}`
+                                    : `Couper ${microphone.name}`
+                            "
                             @click="toggleMute(microphone.name)"
                         >
                             M
@@ -65,8 +76,8 @@
         </template>
 
         <p v-if="live.microphones.length && !mixer.enabled" class="hint">
-            Le son est coupé tant qu'il n'est pas activé (bouton sur la vidéo ou dans l'en-tête) ; les niveaux s'affichent
-            ensuite.
+            Le son est coupé tant qu'il n'est pas activé (bouton sur la vidéo ou dans l'en-tête) ; les niveaux
+            s'affichent ensuite.
         </p>
     </div>
 </template>
@@ -74,14 +85,7 @@
 <script setup lang="ts">
     import { ref } from "vue"
     import { live } from "@lib/live"
-    import {
-        channelSettings as settings,
-        mixer,
-        setMaster,
-        setVolume,
-        toggleMasterMute,
-        toggleMute
-    } from "@lib/mixer"
+    import { channelSettings as settings, mixer, setMaster, setVolume, toggleMasterMute, toggleMute } from "@lib/mixer"
     import { useMeters } from "@lib/meters"
     import Icon from "@components/Icon.vue"
 

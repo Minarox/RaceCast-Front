@@ -47,7 +47,10 @@ export const shown = computed<string | null>(() => {
 
 /** The main camera exists and is not the one shown. */
 export const awayFromMain = computed<boolean>(
-    () => live.mainCamera !== null && shown.value !== live.mainCamera && live.cameras.some(c => c.name === live.mainCamera)
+    () =>
+        live.mainCamera !== null &&
+        shown.value !== live.mainCamera &&
+        live.cameras.some(c => c.name === live.mainCamera)
 )
 
 export function pick(name: string): void {

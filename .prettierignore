@@ -1,0 +1,12 @@
+# Generated or vendored
+dist/
+.astro/
+node_modules/
+pnpm-lock.yaml
+src/assets/icons.ts
+
+# Hand-wrapped prose and tables, and YAML kept in the emitter's style
+*.md
+*.yml
+*.yaml
+LICENSE

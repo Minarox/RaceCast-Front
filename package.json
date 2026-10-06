@@ -22,6 +22,11 @@
   "scripts": {
     "dev": "astro dev",
     "check": "astro check && vue-tsc --noEmit",
+    "lint": "eslint --max-warnings 0 .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "build": "astro build",
     "preview": "astro preview",
     "start": "node dist/server/entry.mjs",
@@ -40,10 +45,24 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@eslint/js": "^10.0.1",
     "@iconify-json/ph": "^1.2.2",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^24.19.1",
+    "@typescript-eslint/parser": "8.71.0",
+    "@vue/test-utils": "^2.5.1",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "^3.2.1",
+    "eslint-plugin-vue": "^10.11.1",
+    "globals": "^17.13.0",
+    "jsdom": "^30.1.2",
+    "prettier": "^3.9.9",
+    "prettier-plugin-astro": "^1.1.0",
     "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^5.0.3",
+    "vue-eslint-parser": "^10.4.1",
     "vue-tsc": "^3.3.12"
   }
 }

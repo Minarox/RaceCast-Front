@@ -12,9 +12,7 @@
         </div>
 
         <div class="gps" :class="{ stale: gpsStale }">
-            <p class="speed num">
-                {{ num(gps?.speed_kmh ?? null) }}<span class="unit">km/h</span>
-            </p>
+            <p class="speed num">{{ num(gps?.speed_kmh ?? null) }}<span class="unit">km/h</span></p>
             <p class="fix">
                 <span class="chip" :class="fixTone">{{ fixLabel }}</span>
                 <span v-if="gps?.satellites !== null && gps?.satellites !== undefined" class="num">
@@ -167,7 +165,13 @@
         }).addTo(map)
 
         line = L.polyline([], { color: color("--accent"), weight: 3, opacity: 0.85, interactive: false }).addTo(map)
-        marker = L.circleMarker(start ?? [0, 0], { radius: 7, weight: 2, fillOpacity: 1, interactive: false, ...markerStyle() })
+        marker = L.circleMarker(start ?? [0, 0], {
+            radius: 7,
+            weight: 2,
+            fillOpacity: 1,
+            interactive: false,
+            ...markerStyle()
+        })
         if (start) marker.addTo(map)
 
         // A drag by the viewer stops following; zooming does not.

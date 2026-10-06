@@ -17,9 +17,17 @@ Repository files (code, comments, docs, commits) are in English; the interface t
 
 ## Commands
 
-pnpm, Node 24. `pnpm check` (astro check + vue-tsc, strictest TS) must pass before a task is done;
-`pnpm build` then `pnpm start` runs the production server. There is no test suite. CI runs check and
-build on pull requests. Deployment: `docker compose up -d --build` behind the operator's reverse proxy.
+pnpm, Node 24. Before a task is done, everything the CI (`.github/workflows/ci.yml`) runs must pass:
+`pnpm format:check` (Prettier; `pnpm format` fixes), `pnpm lint` (ESLint, warnings as errors),
+`pnpm check` (astro check + vue-tsc, strictest TS) and `pnpm test` (Vitest). `pnpm build` then
+`pnpm start` runs the production server. Deployment: `docker compose up -d --build` behind the
+operator's reverse proxy.
+
+Unit tests live in `tests/` (not under `src/pages/`, where Astro would route them), run in jsdom on
+Astro's Vite config, and replace LiveKit (`tests/lib/live.test.ts` has a fake Room), Web Audio and
+`astro:env/server` with fakes; never read the real `.env`. Add or update a test with every behaviour
+change. Logic worth testing goes in `src/lib/` as plain functions (e.g. `wantedCameras` in
+`subscriptions.ts`) rather than inside components.
 
 For local work without the car: `livekit-server --dev` plus the `lk` CLI as a fake car
 (`lk --dev room join --identity car --publish x.ivf …`; `.ivf` may hold AV1; `lk` unpublishes a file
@@ -49,9 +57,9 @@ at build; only `SITE_URL` is a build-time value. Never expose the LiveKit key/se
   `videoTrack(name)`. Viewers vs car: `LIVEKIT_CAR_IDENTITY`, or else "the participant whose identity
   does not start with `viewer-`".
 - Subscriptions are manual (`autoSubscribe: false`): microphones always; cameras only those the UI
-  shows, set through `setWantedCameras()` from `LiveApp.vue` (all on desktop/tablet, the shown one on
-  phone, none in audio-only mode or when AV1 cannot be decoded). There is no simulcast: each video is
-  ~1.2 Mbit/s for the viewer.
+  shows: `LiveApp.vue` passes `wantedCameras()` (`subscriptions.ts`: all on desktop/tablet, the shown
+  one on phone, none in audio-only mode or when AV1 cannot be decoded) to `setWantedCameras()`. There
+  is no simulcast: each video is ~1.2 Mbit/s for the viewer.
 - `mixer.ts`: Web Audio graph per microphone, track → analyser (pre-fader VU) → gain → master. Each
   track is also attached to a muted, unrendered `<audio>`: Chrome only feeds remote WebRTC audio into
   Web Audio while an element plays it. The AudioContext starts only from a user gesture

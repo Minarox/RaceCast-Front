@@ -153,11 +153,14 @@ Requires Node 24 and pnpm. Copy `.env.example` to `.env` and fill in the LiveKit
 
 ```bash
 pnpm install
-pnpm dev        # http://localhost:4321
-pnpm check      # astro check + vue-tsc
-pnpm build      # production build into ./dist
-pnpm start      # run the built server
-pnpm icons      # regenerate src/assets/icons.ts from @iconify-json/ph
+pnpm dev            # http://localhost:4321
+pnpm check          # types: astro check + vue-tsc
+pnpm lint           # ESLint, warnings as errors
+pnpm format         # Prettier (pnpm format:check only reports)
+pnpm test           # unit tests (pnpm test:watch while working)
+pnpm build          # production build into ./dist
+pnpm start          # run the built server
+pnpm icons          # regenerate src/assets/icons.ts from @iconify-json/ph
 ```
 
 Deployment, behind the reverse proxy that terminates TLS:
@@ -184,12 +187,23 @@ lk --dev room join --identity car --attribute main_camera=cam-front.ivf \
 ## Contributing
 
 Development happens on `dev`, and changes reach `main` through pull requests. Each pull request is checked
-by [GitHub Actions](.github/workflows/build.yml): type checking (`astro check` and `vue-tsc`) and a
-production build. Every push also gets a [TruffleHog](https://github.com/trufflesecurity/trufflehog) secret
-scan ([`secret.yml`](.github/workflows/secret.yml)). Dependabot proposes dependency updates monthly.
+by [GitHub Actions](.github/workflows/ci.yml): a [TruffleHog](https://github.com/trufflesecurity/trufflehog)
+secret scan of the new commits (with LiveKit detectors), formatting (Prettier), ESLint with warnings as
+errors, types (`astro check`, `vue-tsc`), the unit tests and a production build. Dependabot proposes
+dependency updates monthly.
 
-There is no automated test against a live room: video, sound and layouts are checked by hand, against
-the car or a local LiveKit server.
+The unit tests ([Vitest](https://vitest.dev), in `tests/`) cover the logic and the components without a
+browser or a server:
+
+- formatting, the telemetry format and its thresholds, the history and the trail;
+- the LiveKit side against a fake SDK: telling the car from the viewers, which tracks get subscribed,
+  the microphones handed to the mixer, the clock offset, reconnection with backoff;
+- the mixer against a fake Web Audio graph, and the stored preferences;
+- the token endpoint: grants, identity, lifetime, room timeouts, rate limit;
+- the video stage, the status banner, the sparklines and the sound dock.
+
+There is no automated test against a live room: video, sound and layouts are still checked by hand,
+against the car or a local LiveKit server.
 
 ## Repository layout
 
@@ -202,6 +216,8 @@ the car or a local LiveKit server.
 | `src/assets/` | generated icon set |
 | `scripts/` | icon generator |
 | `public/` | favicon |
+| `tests/` | unit tests (Vitest), with their fakes and fixtures |
+| `.github/` | CI workflow, TruffleHog detectors, Dependabot |
 
 ## Documentation
 
