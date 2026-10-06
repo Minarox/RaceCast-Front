@@ -100,8 +100,8 @@ Browser support depends on AV1 decoding:
 | GPS (under the map) | speed, fix, satellites; altitude, course, HDOP, position, GNSS time in the details | grey without a fix |
 | Car | recording state, cameras and microphones with their streaming state | |
 | Network | signal quality, technology (5G NSA, 4G…), operator, modem state; LTE and NR radio values in the details | signal below 30 % / 15 % |
-| Battery | charge, voltage, current, power | charge below 25 % / 10 % |
-| Jetson | hottest junction temperature, CPU/GPU load, free disk; temperatures, RAM, encoder clock, power mode in the details | junction above 80 / 90 °C, free disk below 10 / 2 GB |
+| Battery | charge, voltage, current, power, and whether it is charging, plugged in (full) or on battery | charge below 25 % / 10 % |
+| Jetson | hottest junction temperature, CPU load, video encoder clock, free disk; temperatures, GPU load (idle: the video never uses the GPU), RAM, power mode in the details | junction above 80 / 90 °C, free disk below 10 / 2 GB |
 
 - Ten-minute **sparklines** for signal, battery and temperature, accumulated in the browser.
 - Each section shows the **age of its sample**. Ages correct for a clock offset between the car and the
