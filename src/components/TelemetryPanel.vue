@@ -42,6 +42,11 @@
                     <span class="chip" :class="modemTone">{{ modemState }}</span>
                     {{ technology(modem.access_tech) }} · {{ text(modem.operator) }}
                 </p>
+                <!-- Only when the modem says so: unknown (null) is not an alert. -->
+                <p v-if="modem.ip_connected === false" class="alert" role="status">
+                    <Icon name="warning-circle" :size="15" />
+                    Données mobiles coupées
+                </p>
             </template>
             <p v-else class="empty">Aucune donnée du modem.</p>
 
@@ -56,8 +61,6 @@
                 <dd>{{ num(modem.lte_rssi_dbm, 0, "dBm") }}</dd>
                 <dt>Cellule · TAC</dt>
                 <dd>{{ text(modem.cell_id) }} · {{ text(modem.tac) }}</dd>
-                <dt>Données</dt>
-                <dd>{{ bool(modem.ip_connected, "connectées", "coupées") }}</dd>
             </template>
         </TelemetryCard>
 
@@ -128,8 +131,6 @@
                 <dd>{{ text(system.power_mode) }}</dd>
                 <dt>Caméras · micros</dt>
                 <dd>{{ num(system.cameras) }} · {{ num(system.mics) }}</dd>
-                <dt>LiveKit</dt>
-                <dd>{{ bool(system.livekit_connected, "connecté", "déconnecté") }}</dd>
             </template>
         </TelemetryCard>
     </div>
@@ -141,7 +142,7 @@
     import { now } from "@lib/clock"
     import { history } from "@lib/history"
     import { levels, STALE_AFTER_MS } from "@lib/telemetry"
-    import { bool, num, text } from "@lib/format"
+    import { num, text } from "@lib/format"
     import type { IconName } from "@assets/icons"
     import Icon from "@components/Icon.vue"
     import Sparkline from "@components/Sparkline.vue"
@@ -294,6 +295,19 @@
 
     .power.battery {
         color: var(--text-4);
+    }
+
+    .alert {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 10px;
+        border-radius: var(--r-sm);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--crit);
+        background: rgba(239, 79, 95, 0.12);
+        box-shadow: inset 0 0 0 1px rgba(239, 79, 95, 0.35);
     }
 
     .empty {

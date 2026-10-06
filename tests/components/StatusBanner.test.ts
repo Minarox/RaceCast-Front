@@ -49,7 +49,7 @@ describe("StatusBanner", () => {
     it("gives the age of the last data when the car is offline", () => {
         live.carOnline = false
         live.telemetry = { ts: "2026-10-05T11:57:00Z" }
-        expect(mount(StatusBanner).text()).toContain("Voiture hors ligne · dernière mise à jour il y a 3 min")
+        expect(mount(StatusBanner).text()).toContain("Voiture hors ligne · dernière mise à jour il y a 3\u00a0min")
     })
 
     it("says when no data ever came", () => {
@@ -61,10 +61,10 @@ describe("StatusBanner", () => {
         live.connection = "waiting"
         live.retryAt = NOW + 5_000
         const wrapper = mount(StatusBanner)
-        expect(wrapper.text()).toContain("nouvelle tentative dans 5 s")
+        expect(wrapper.text()).toContain("nouvelle tentative dans 5\u00a0s")
         now.value = NOW + 2_000
         await nextTick()
-        expect(wrapper.text()).toContain("dans 3 s")
+        expect(wrapper.text()).toContain("dans 3\u00a0s")
         await wrapper.find("button.retry").trigger("click")
         expect(liveModule.retryNow).toHaveBeenCalledOnce()
     })

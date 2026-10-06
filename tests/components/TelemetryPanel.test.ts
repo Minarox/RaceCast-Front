@@ -63,7 +63,45 @@ describe("battery charging state", () => {
     })
 })
 
+describe("network card", () => {
+    function network() {
+        return mount(TelemetryPanel)
+            .findAll(".card")
+            .find(c => c.find("h2").text() === "Réseau")!
+    }
+
+    function withModem(ipConnected: boolean | null): void {
+        const doc = telemetry(AT)
+        doc.modem = { ...doc.modem!, ip_connected: ipConnected }
+        live.telemetry = doc
+    }
+
+    it("raises an alert only when mobile data is off", () => {
+        withModem(false)
+        expect(network().find(".alert").text()).toBe("Données mobiles coupées")
+    })
+
+    it("says nothing about data while it flows, or when unknown", () => {
+        withModem(true)
+        expect(network().find(".alert").exists()).toBe(false)
+        withModem(null)
+        expect(network().find(".alert").exists()).toBe(false)
+    })
+
+    it("no longer lists the data state in the details", () => {
+        withModem(true)
+        expect(network().find("dl").text()).not.toContain("Données")
+    })
+})
+
 describe("Jetson card", () => {
+    it("does not list the car's LiveKit link, which the header already shows", () => {
+        const card = mount(TelemetryPanel)
+            .findAll(".card")
+            .find(c => c.find("h2").text() === "Jetson")!
+        expect(card.find("dl").text()).not.toContain("LiveKit")
+    })
+
     it("shows the encoder clock instead of the idle GPU, which stays in the details", () => {
         const card = mount(TelemetryPanel)
             .findAll(".card")
