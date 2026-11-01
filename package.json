@@ -35,7 +35,7 @@
   },
   "packageManager": "pnpm@11.5.3",
   "dependencies": {
-    "@astrojs/node": "^11.1.6",
+    "@astrojs/node": "^11.1.9",
     "@astrojs/vue": "^7.0.3",
     "astro": "^7.3.5",
     "leaflet": "^1.9.4",
