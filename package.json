@@ -35,9 +35,9 @@
   },
   "packageManager": "pnpm@11.5.3",
   "dependencies": {
-    "@astrojs/node": "^11.1.6",
+    "@astrojs/node": "^11.1.12",
     "@astrojs/vue": "^7.0.3",
-    "astro": "^7.3.5",
+    "astro": "^7.4.7",
     "leaflet": "^1.9.4",
     "livekit-client": "^2.22.3",
     "livekit-server-sdk": "^2.19.1",
